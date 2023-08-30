@@ -1,0 +1,25 @@
+.createOrderPersonalInfoFormContainer{
+    flex:1;
+    padding: 30px;
+    .personalInfoFormTitle{
+        display: flex;
+        align-items: center;
+        font-size: 25px;
+        svg{
+            margin-right: 10px;
+        }
+    }
+    .personalInfoFormInputWrapper{
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        span{
+            font-size: 19px;
+            margin-right: 10px;
+        }
+        div{
+            width: 70%;
+        }
+    }
+}

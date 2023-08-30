@@ -1,0 +1,20 @@
+.topbarContainer{
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    span{
+        font-size: 20px;
+    }
+    .profilePicture{
+        display: flex;
+        align-items: center;
+        .profilePictureWrapper{
+            padding: 10px;
+            background-color: gray;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    }
+}

@@ -1,0 +1,36 @@
+.sidebarContainer {
+    flex: 1;
+    background-color: #182537;
+    color: white;
+    min-height: 100vh;
+    padding: 10px 10px;
+    .sapoLogoWrapper {
+        width: 60%;
+        padding: 5px;
+        img {
+            max-width: 100%;
+        }
+    }
+    hr {
+        border: 0;
+        margin: 0;
+        border-top: 1px solid #15202c;
+        border-bottom: 1px solid #263d53;
+    }
+    .sidebarItemsWrapper {
+        padding-top: 5px;
+        .sidebarItem {
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+            padding: 15px 10px;
+            svg {
+                margin-right: 5px;
+            }
+        }
+        .sidebarItem.selected {
+            background-color: #0088ff;
+        }
+    }
+}
