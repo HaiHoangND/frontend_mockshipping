@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 
 export const Sidebar = () => {
   const pathname = useLocation().pathname.split("/");
-  console.log(pathname);
 
   return (
     <div className="sidebarContainer">

@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./createOrderProductTable.scss";
 import * as XLSX from "xlsx";
 import { convertCurrency } from "../../utils/formatStrings";
+import { AddProductModal } from "../addProductModal/AddProductModal";
 
 export const CreateOrderProductTable = () => {
   const [products, setProducts] = useState([]);
-  console.log(products);
+  const fileInputRef = useRef(null);
+
+  const handleUploadExcel = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleClearProducts = () => {
+    setProducts([]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // This clears the selected file
+    }
+  };
 
   const handleFileUpload = (e) => {
     const reader = new FileReader();
@@ -19,9 +31,23 @@ export const CreateOrderProductTable = () => {
       setProducts(parsedData);
     };
   };
+
+  const handleAddProduct = (inputs, imageURL) => {
+    console.log(imageURL);
+  }
+
   return (
     <div>
-      <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
+      <div className="uploadExcelBtn">
+        <button onClick={handleUploadExcel}>Tải lên file .xlsx</button>
+        <button onClick={handleClearProducts}>Xóa sản phẩm</button>
+        <input
+          type="file"
+          accept=".xlsx, .xls"
+          onChange={handleFileUpload}
+          ref={fileInputRef}
+        />
+      </div>
       <table>
         <thead>
           <tr>
@@ -33,8 +59,9 @@ export const CreateOrderProductTable = () => {
             <th>Mô tả sản phẩm</th>
           </tr>
         </thead>
+
         <tbody>
-          {products.length > 0 &&
+          {products.length > 0 ? (
             products.map((product, index) => (
               <tr key={index}>
                 <td>
@@ -52,7 +79,14 @@ export const CreateOrderProductTable = () => {
                 <td>{convertCurrency(product.price)}</td>
                 <td>{product.description}</td>
               </tr>
-            ))}
+            ))
+          ) : (
+            <tr>
+              <td style={{ textAlign: "center" }} colSpan={6}>
+                <AddProductModal handleAddProduct={handleAddProduct}/>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
