@@ -1,0 +1,119 @@
+.topBar {
+    width: 90vw;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+    .leftTopBar {
+        font-weight: bold;
+    }
+
+    .rightTopBar {
+        position: absolute;
+        right: 0;
+    }
+}
+
+.orderContainer {
+    margin: 0 auto;
+    width: 90vw;
+
+    .topMenu {
+        width: 100%;
+
+        .topMenuTitle {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .topMenuButton {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+
+            .sidebarItem {
+                width: 30vw;
+                margin-top: 5px;
+                text-align: center;
+                padding: 10px;
+            }
+
+            .sidebarItem.selected {
+                background-color: #0088ff;
+                color: white;
+            }
+        }
+
+        .topMenuDate {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    }
+
+    .orderList {
+        margin-top: 30px;
+        margin-bottom: 30px;
+
+        .orderListItem {
+            .orderTop {
+                display: flex;
+                flex-direction: row;
+
+                .orderDate {
+                    width: 20%;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 20px;
+
+                    .orderDay {
+                        font-size: 20px;
+                        font-weight: bold;
+                    }
+                }
+
+                .orderInfo {
+                    width: 50%;
+                    display: flex;
+                    flex-direction: column;
+
+                    .orderWarehouse {
+                        font-weight: bold;
+                    }
+                }
+
+                .orderCurrentStatus {
+                    width: 30%;
+                    text-align: center;
+                }
+            }
+
+            .orderChangeStatus button {
+                width: 90vw;
+                background-color: #0088ff;
+            }
+        }
+    }
+
+    .botBar {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+
+        .botBarItem {
+            flex-grow: 0;
+            flex-shrink: 0;
+            width: 30vw;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+        }
+
+    }
+}

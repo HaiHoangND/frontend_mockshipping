@@ -1,0 +1,21 @@
+:root {
+    background-color: white !important;
+}
+
+.main-container {
+    background-color: white;
+    margin-top: 100px;
+
+    .sapo-logo {
+        width: 300px;
+        height: 110px;
+        background-image: url(https://sapo.dktcdn.net/sso-service/images/Sapo-logo.svg);
+        background-size: cover;
+        position: absolute;
+        left: 25vw;
+        top: 40vh;
+        animation: fadeIn 5s;
+    }
+
+
+}
