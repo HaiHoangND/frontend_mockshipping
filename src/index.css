@@ -29,6 +29,7 @@ body {
 
 .bodyContainer{
   display: flex;
+  background-color: #f0f1f1;
 }
 .contentContainer{
   flex:8;

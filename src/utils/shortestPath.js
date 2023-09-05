@@ -48,9 +48,10 @@ function createGraph(nodesData) {
           path.unshift(node);
           node = previous.get(node);
         }
-        const pathWithDistricts = path.map(
-          (nodeId) => nodes.get(nodeId).district
-        );
+        const pathWithDistricts = path.map((nodeId) => ({
+          id: nodeId,
+          district: nodes.get(nodeId).district,
+        }));
 
         return pathWithDistricts;
       }

@@ -1,15 +1,21 @@
 import { Person } from "@mui/icons-material";
 import "./topbar.scss";
+import { useAuthUser } from "react-auth-kit";
 
 export const Topbar = () => {
+  const authUser = useAuthUser();
+  const username = authUser().username;
+  const profilePicture = authUser().profilePicture
   return (
     <div className="topbarContainer">
       <div></div>
       <div className="profilePicture">
         <div className="profilePictureWrapper">
-          <Person />
+          {profilePicture ? 
+            <img src={profilePicture}/>
+          :<Person />}
         </div>
-        Long Trần
+        {username}
       </div>
     </div>
   );

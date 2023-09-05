@@ -25,7 +25,13 @@ export const CreateOrderPersonalInfoForm = ({ person, onInputsChange }) => {
         <span>
           Tên <b style={{ color: "red" }}>(*)</b> :
         </span>
-        <TextField label="Tên" placeholder="Trần Phi Long" size="small" />
+        <TextField
+          label="Tên"
+          placeholder="Trần Phi Long"
+          size="small"
+          name="name"
+          onChange={handleInputsChange}
+        />
       </div>
       <div className="personalInfoFormInputWrapper">
         <span>
@@ -60,11 +66,23 @@ export const CreateOrderPersonalInfoForm = ({ person, onInputsChange }) => {
         <span>
           Số điện thoại <b style={{ color: "red" }}>(*)</b> :
         </span>
-        <TextField label="Sđt" placeholder="0123456789" size="small" />
+        <TextField
+          label="Sđt"
+          placeholder="0123456789"
+          size="small"
+          name="phone"
+          onChange={handleInputsChange}
+        />
       </div>
       <div className="personalInfoFormInputWrapper">
         <span>Email :</span>
-        <TextField label="Email" placeholder="example@email.com" size="small" />
+        <TextField
+          label="Email"
+          placeholder="example@email.com"
+          size="small"
+          name="email"
+          onChange={handleInputsChange}
+        />
       </div>
     </div>
   );

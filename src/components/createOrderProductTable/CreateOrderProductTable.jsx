@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./createOrderProductTable.scss";
 import * as XLSX from "xlsx";
 import { convertCurrency } from "../../utils/formatStrings";
 import { AddProductModal } from "../addProductModal/AddProductModal";
 
-export const CreateOrderProductTable = () => {
+export const CreateOrderProductTable = ({ onProductPriceChange, onProductWeightChange, onProductChange }) => {
   const [products, setProducts] = useState([]);
   const fileInputRef = useRef(null);
 
@@ -29,12 +29,25 @@ export const CreateOrderProductTable = () => {
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
       setProducts(parsedData);
+      onProductChange(parsedData)
     };
   };
 
   const handleAddProduct = (inputs, imageURL) => {
     console.log(imageURL);
-  }
+  };
+  useEffect(() => {
+    let productWeight = 0;
+    let productPrice = 0;
+    for (const product of products) {
+      if (product.weight && product.price) {
+        productWeight = productWeight + product.weight * product.quantity;
+        productPrice = productPrice + product.price * product.quantity;
+      }
+    }
+    onProductWeightChange(productWeight);
+    onProductPriceChange(productPrice);
+  }, [products]);
 
   return (
     <div>
@@ -83,7 +96,7 @@ export const CreateOrderProductTable = () => {
           ) : (
             <tr>
               <td style={{ textAlign: "center" }} colSpan={6}>
-                <AddProductModal handleAddProduct={handleAddProduct}/>
+                <AddProductModal handleAddProduct={handleAddProduct} />
               </td>
             </tr>
           )}

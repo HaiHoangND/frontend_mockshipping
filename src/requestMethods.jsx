@@ -17,7 +17,7 @@ const getCookie = (name) => {
 };
 
 const token = getCookie("_auth");
-
+console.log(token);
 export const publicRequest = axios.create({
   baseURL: BASE_URL,
 });
