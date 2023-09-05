@@ -60,9 +60,8 @@ const addWarehouse = async () => {
   }
 };
 
-// addWarehouse()
 
-const register = async () => {
+const registerCoordinator = async () => {
   await axios.post("http://localhost:8080/api/register",{
     fullName: "Tran Phi Long",
     email: "longtp6@gmail.com",
@@ -76,4 +75,18 @@ const register = async () => {
   })
 }
 
-// register()
+const registerShipper = async () => {
+  await axios.post("http://localhost:8080/api/register",{
+    fullName: "Tran Phi Long",
+    email: "longtp126@gmail.com",
+    password: "12345678",
+    role: "SHIPPER",
+    address: "string",
+    gender: "string",
+    phone: "string",
+    warehouseID: 4,
+    workingStatus: true
+  })
+}
+
+registerShipper()

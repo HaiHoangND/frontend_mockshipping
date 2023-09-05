@@ -6,6 +6,7 @@ import CreateOrder from "./pages/coordinator/createOrder/CreateOrder";
 import Login from "./pages/login/login";
 import ShipperAllOrders from "./pages/shipper/shippingOrder/ShipperAllOrders";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
+import CoordinatorShipperList from "./pages/coordinator/coordinatorShipperList/CoordinatorShipperList";
 
 function App() {
   const isAuthenticated = useIsAuthenticated();
@@ -42,6 +43,10 @@ function App() {
         <Route
           path="/coordinator/createOrder"
           element={<CoordinatorRoute Component={CreateOrder} />}
+        />
+        <Route
+          path="/coordinator/shipperList"
+          element={<CoordinatorRoute Component={CoordinatorShipperList} />}
         />
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
       </Routes>

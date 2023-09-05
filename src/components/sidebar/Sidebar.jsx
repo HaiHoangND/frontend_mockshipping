@@ -37,13 +37,17 @@ export const Sidebar = () => {
             <Add /> Tạo đơn hàng
           </div>
         </Link>
-        <div
-          className={
-            pathname[2] === "employees" ? "sidebarItem selected" : "sidebarItem"
-          }
-        >
-          <Group /> Danh sách nhân viên
-        </div>
+        <Link to="/coordinator/shipperList">
+          <div
+            className={
+              pathname[2] === "shipperList"
+                ? "sidebarItem selected"
+                : "sidebarItem"
+            }
+          >
+            <Group /> Danh sách nhân viên
+          </div>
+        </Link>
       </div>
     </div>
   );
