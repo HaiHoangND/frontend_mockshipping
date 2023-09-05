@@ -71,15 +71,15 @@ export const OrderListTable = () => {
               <td>{order.sender.name}</td>
               <td>{order.receiver.name}</td>
               <td>
-                {getArrayLastItem(order.orderStatusList).shipper.fullName}
+                {order.orderStatusList.length === 0 ? "Chưa phân công" :getArrayLastItem(order.orderStatusList).shipper.fullName}
               </td>
               <td>{convertCurrency(productsPrice(order.products))}</td>
               <td>{convertDateTime(order.createdAt)}</td>
               <td>
                 <DeliveryStatus
-                  name={getArrayLastItem(order.orderStatusList).status}
+                  name={order.orderStatusList.length === 0 ? "Đã tạo đơn" :getArrayLastItem(order.orderStatusList).status}
                 >
-                  {getArrayLastItem(order.orderStatusList).status}
+                  {order.orderStatusList.length === 0 ? "Đã tạo đơn" :getArrayLastItem(order.orderStatusList).status}
                 </DeliveryStatus>
               </td>
             </tr>

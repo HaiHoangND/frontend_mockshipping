@@ -49,7 +49,7 @@ export const CreateOrderPersonalInfoForm = ({ person, onInputsChange }) => {
         <span></span>
         <TextField
           select
-          defaultValue="Quận"
+          defaultValue="Ba Dinh"
           helperText="Chọn quận"
           size="small"
           name="district"

@@ -1,21 +1,75 @@
 export const districts = [
-  { id: 4, district: "Ba Dinh", lat: 21.0382206, lon: 105.8270152 },
-  { id: 5, district: "Hoan Kiem", lat: 21.0304996, lon: 105.854389 },
-  { id: 6, district: "Dong Da", lat: 21.0146852, lon: 105.8235426 },
-  { id: 7, district: "Thanh Xuan", lat: 20.9944171, lon: 105.8171316 },
-  { id: 8, district: "Hai Ba Trung", lat: 21.0064704, lon: 105.8578519 },
-  { id: 9, district: "Cau Giay", lat: 21.0064704, lon: 105.8578519 },
-  { id: 10, district: "Nam Tu Liem", lat: 21.0173512, lon: 105.7613329 },
-  { id: 11, district: "Bac Tu Liem", lat: 21.0712548, lon: 105.7644855 },
-  { id: 12, district: "Tay Ho", lat: 21.0683576, lon: 105.8240984 },
+  {
+    id: 4,
+    district: "Ba Dinh",
+    lat: 21.0382206,
+    lon: 105.8270152,
+    name: "Kho Ba Đình",
+  },
+  {
+    id: 5,
+    district: "Hoan Kiem",
+    lat: 21.0304996,
+    lon: 105.854389,
+    name: "Kho Hoàn Kiếm",
+  },
+  {
+    id: 6,
+    district: "Dong Da",
+    lat: 21.0146852,
+    lon: 105.8235426,
+    name: "Kho Đống Đa",
+  },
+  {
+    id: 7,
+    district: "Thanh Xuan",
+    lat: 20.9944171,
+    lon: 105.8171316,
+    name: "Kho Thanh Xuân",
+  },
+  {
+    id: 8,
+    district: "Hai Ba Trung",
+    lat: 21.0064704,
+    lon: 105.8578519,
+    name: "Kho Hai Bà Trưng",
+  },
+  {
+    id: 9,
+    district: "Cau Giay",
+    lat: 21.0064704,
+    lon: 105.8578519,
+    name: "Kho Cầu Giấy",
+  },
+  {
+    id: 10,
+    district: "Nam Tu Liem",
+    lat: 21.0173512,
+    lon: 105.7613329,
+    name: "Kho Nam Từ Liêm",
+  },
+  {
+    id: 11,
+    district: "Bac Tu Liem",
+    lat: 21.0712548,
+    lon: 105.7644855,
+    name: "Kho Bắc Từ Liêm",
+  },
+  {
+    id: 12,
+    district: "Tay Ho",
+    lat: 21.0683576,
+    lon: 105.8240984,
+    name: "Kho Tây Hồ",
+  },
   // Add other nodes here...
 ];
 
 function createGraph(nodesData) {
   const nodes = new Map();
 
-  function addNode(id, lat, lon, district) {
-    nodes.set(id, { id, lat, lon, district, neighbors: new Map() });
+  function addNode(id, lat, lon, district, name) {
+    nodes.set(id, { id, lat, lon, district, name, neighbors: new Map() });
   }
 
   function addEdge(node1, node2) {
@@ -51,6 +105,7 @@ function createGraph(nodesData) {
         const pathWithDistricts = path.map((nodeId) => ({
           id: nodeId,
           district: nodes.get(nodeId).district,
+          name: nodes.get(nodeId).name,
         }));
 
         return pathWithDistricts;
@@ -98,7 +153,7 @@ function createGraph(nodesData) {
 
   // Initialize the graph by adding nodes based on the provided data
   nodesData.forEach((node) => {
-    addNode(node.id, node.lat, node.lon, node.district);
+    addNode(node.id, node.lat, node.lon, node.district, node.name);
   });
 
   return {
@@ -152,4 +207,4 @@ export const findBestRoute = (districts, startNode, endNode) => {
   return optimalPath;
 };
 
-findBestRoute(districts, 4, 12);
+console.log(findBestRoute(districts, 4, 12))

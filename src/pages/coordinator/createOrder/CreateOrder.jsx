@@ -69,62 +69,67 @@ const CreateOrder = () => {
   };
 
   const handleCreateOrder = async () => {
-    // Create sender
-    const sender = await userRequest.post("/sender", {
-      name: senderInfo.name,
-      address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
-      phone: senderInfo.phone,
-    });
-    // Create receiver
-    const receiver = await userRequest.post("/receiver", {
-      name: senderInfo.name,
-      address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
-      phone: senderInfo.phone,
-    });
-    // Create order
-    const shippingOrder = await publicRequest.post("/shippingOrder", {
-      orderCode: v4(),
-      senderId: sender.data.id,
-      receiverId: receiver.data.id,
-      serviceFee: productPrice + calculateServiceFee(),
-    });
-    // Create routes
-    await userRequest.post("/orderRoute", {
-      address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
-      warehouseId: 2,
-      shippingOrder: shippingOrder.data.id,
-      routeId: 1,
-    });
-    for (const route of optimalRoute) {
-      const routeId = optimalRoute.indexOf(route) + 1;
-      await userRequest.post("/orderRoute", {
-        address: route.district,
-        warehouseId: route.id,
-        shippingOrder: shippingOrder.data.id,
-        routeId,
+    try {
+      // Create sender
+      const sender = await publicRequest.post("/sender", {
+        name: senderInfo.name,
+        address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
+        phone: senderInfo.phone,
       });
-    }
-    await userRequest.post("/orderRoute", {
-      address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
-      warehouseId: 3,
-      shippingOrder: shippingOrder.data.id,
-      routeId: optimalRoute.length + 2,
-    });
-    // Create products
-    for (const product of products) {
-      await userRequest.post("/product", {
-        name: product.name,
-        quantity: product.quantity,
-        price: product.price,
-        image: product.image,
-        weight: product.weight,
-        description: product.description,
-        shippingOrderId: shippingOrder.data.id,
+      // Create receiver
+      const receiver = await publicRequest.post("/receiver", {
+        name: senderInfo.name,
+        address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
+        phone: senderInfo.phone,
       });
-    }
+      console.log(receiver.data);
+      // Create order
+      const shippingOrder = await publicRequest.post("/order", {
+        orderCode: v4(),
+        senderId: sender.data.data.id,
+        receiverId: receiver.data.data.id,
+        serviceFee: productPrice + calculateServiceFee(),
+      });
+      // Create routes
+      await publicRequest.post("/orderRoute", {
+        address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
+        warehouseId: 2,
+        shippingOrderId: shippingOrder.data.data.id,
+        routeId: 1,
+      });
+      for (const route of optimalRoute) {
+        const routeId = optimalRoute.indexOf(route) + 2;
+        await publicRequest.post("/orderRoute", {
+          address: route.name,
+          warehouseId: route.id,
+          shippingOrderId: shippingOrder.data.data.id,
+          routeId,
+        });
+      }
+      await publicRequest.post("/orderRoute", {
+        address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
+        warehouseId: 3,
+        shippingOrderId: shippingOrder.data.data.id,
+        routeId: optimalRoute.length + 2,
+      });
+      // Create products
+      for (const product of products) {
+        await publicRequest.post("/product", {
+          name: product.name,
+          quantity: product.quantity,
+          price: product.price,
+          image: product.image,
+          weight: product.weight,
+          description: product.description,
+          shippingOrderId: shippingOrder.data.data.id,
+        });
+      }
 
-    useToastSuccess("Order created");
-    // navigate("/coordinate");
+      useToastSuccess("Order created");
+      // navigate("/coordinate");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="bodyContainer">
@@ -159,7 +164,7 @@ const CreateOrder = () => {
                 <East />
                 {optimalRoute.map((route, index) => (
                   <div className="middleWarehouse" key={index}>
-                    <span>{route.district}</span>
+                    <span>{route.name}</span>
                     <East />
                   </div>
                 ))}
