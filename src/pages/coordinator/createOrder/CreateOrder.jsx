@@ -88,7 +88,7 @@ const CreateOrder = () => {
         orderCode: v4(),
         senderId: sender.data.data.id,
         receiverId: receiver.data.data.id,
-        serviceFee: productPrice + calculateServiceFee(),
+        serviceFee: calculateServiceFee(),
       });
       // Create routes
       await publicRequest.post("/orderRoute", {

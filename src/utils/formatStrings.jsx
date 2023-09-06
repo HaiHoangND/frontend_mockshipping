@@ -20,3 +20,14 @@ export const convertDateTime = (dateTime) => {
   const formattedDate = `${day}/${month}/${year}`;
   return formattedDate;
 };
+
+export const formatDateTimeDetail = (dateTime) => {
+  const [year, month, day, hours, minutes] = dateTime;
+
+  const formattedMonth = String(month).padStart(2, "0");
+  const formattedDay = String(day).padStart(2, "0");
+  const formattedHours = String(hours).padStart(2, "0");
+  const formattedMinutes = String(minutes).padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes} ${year}/${formattedMonth}/${formattedDay}`;
+};

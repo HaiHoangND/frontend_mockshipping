@@ -59,7 +59,6 @@
                 width: 140px;
                 font-size: 15px;
                 margin-top: 10px;
-
             }
         }
     }
@@ -81,7 +80,7 @@
     }
 }
 
-.orderDetailPersonalInfos{
+.orderDetailPersonalInfos {
     background-color: white;
     padding: 25px;
     margin: 30px 20px;
@@ -97,12 +96,12 @@
             margin-right: 10px;
         }
     }
-    .orderDetailPersonalInfosWrapper{
+    .orderDetailPersonalInfosWrapper {
         display: flex;
     }
 }
 
-.orderDetailProductTableWrapper{
+.orderDetailProductTableWrapper {
     background-color: white;
     padding: 25px;
     margin: 30px 20px;
@@ -116,6 +115,146 @@
         margin-bottom: 20px;
         svg {
             margin-right: 10px;
+        }
+    }
+}
+.orderDetailJourneyContainer {
+    background-color: white;
+    padding: 25px;
+    margin: 30px 20px;
+    box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    h3 {
+        display: flex;
+        align-items: center;
+        font-size: 40px;
+        margin: 0;
+        margin-bottom: 20px;
+        svg {
+            margin-right: 10px;
+        }
+    }
+    .orderDetailJourneyContent {
+        display: flex;
+        .orderDetailShipperDetail {
+            flex: 2;
+            font-size: 20px;
+            border-right: 1px solid black;
+            .shipperDetailTitle {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+                font-size: 24px;
+                span {
+                    margin-left: 10px;
+                }
+            }
+            .shipperDetailItem {
+                display: flex;
+                align-items: center;
+                margin-bottom: 9px;
+                span {
+                    margin-right: 10px;
+                    flex: 1;
+                }
+            }
+        }
+        .orderDetailJourney {
+            flex: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .orderDetailStatusItemsWrapper {
+                .orderDetailStatusItem {
+                    display: flex;
+                    margin-bottom: 30px;
+                    opacity: 0.7;
+                    .statusTime {
+                        display: flex;
+                        width: 110px;
+                        text-align: center;
+                        align-items: center;
+                    }
+                    .statusCircle {
+                        padding: 10px;
+                        margin: 0px 30px;
+                        border: 2px solid gray;
+                        border-radius: 50%;
+                        background-color: gray;
+                        color: rgba(128, 128, 128, 0.5);
+                    }
+
+                    .statusDetailWrapper {
+                        padding-left: 10px;
+                        .statusDetailTitle {
+                            font-weight: 400;
+                        }
+                        .statusDetailSub {
+                            font-weight: 300;
+                            font-style: italic;
+                        }
+                    }
+                }
+                .orderDetailStatusItem:nth-child(1) {
+                    opacity: 1;
+                    .statusCircle {
+                        background-color: #14ae5c;
+                        border-color: #14ae5c;
+                        color: white;
+                    }
+                }
+                .orderDetailStatusItem:nth-child(1) {
+                    opacity: 1;
+                    .statusCircle.delivering {
+                        background-color: #ffcd29;
+                        border-color: #ffcd29;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.orderDetailSummaryContainer{
+    background-color: white;
+    padding: 25px;
+    margin: 30px 20px;
+    box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    h3 {
+        display: flex;
+        align-items: center;
+        font-size: 40px;
+        margin: 0;
+        margin-bottom: 20px;
+        svg {
+            margin-right: 10px;
+        }
+    }
+    .orderDetailSummaryFeeContainer{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 25px;
+        padding: 10px;
+    }
+    .cancelOrderBtn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 15px;
+        button{
+            width: 100%;
+            padding: 10px 0px;
+            background-color: #f24822;
+            border-radius: 10px;
+            font-size: 20px;
+            color:white;
+            transition: all ease 0.2s;
+            &:hover{
+                background-color: #d23f1e;
+            }
         }
     }
 }
