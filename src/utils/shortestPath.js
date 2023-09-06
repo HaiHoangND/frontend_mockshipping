@@ -207,4 +207,3 @@ export const findBestRoute = (districts, startNode, endNode) => {
   return optimalPath;
 };
 
-console.log(findBestRoute(districts, 4, 12))
