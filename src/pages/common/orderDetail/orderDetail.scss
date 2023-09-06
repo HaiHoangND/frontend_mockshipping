@@ -1,0 +1,121 @@
+.orderDetailStatus {
+    background-color: white;
+    padding: 25px;
+    margin: 30px 20px;
+    box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    h3 {
+        display: flex;
+        align-items: center;
+        font-size: 40px;
+        margin: 0;
+        margin-bottom: 20px;
+        svg {
+            margin-right: 10px;
+        }
+    }
+    .orderDetailStatusBubblesWrapper {
+        display: flex;
+        .lineWrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .line {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                margin-top: 0px;
+                div {
+                    border: 1px solid black;
+                    width: 100%;
+                }
+            }
+            div {
+                display: inline-block;
+                text-align: center;
+                width: 100px;
+                font-size: 15px;
+                margin-top: -50px;
+                color: transparent;
+            }
+        }
+        .statusBubble {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            svg {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 15px;
+                font-size: 100px;
+                border: 2px solid black;
+                border-radius: 50%;
+            }
+            div {
+                display: inline-block;
+                text-align: center;
+                width: 140px;
+                font-size: 15px;
+                margin-top: 10px;
+
+            }
+        }
+    }
+}
+
+.statusBubble.orderCreate {
+    svg {
+        background-color: gray;
+    }
+}
+.statusBubble.inProgress {
+    svg {
+        background-color: #ffcd29;
+    }
+}
+.statusBubble.success {
+    svg {
+        background-color: #14ae5c;
+    }
+}
+
+.orderDetailPersonalInfos{
+    background-color: white;
+    padding: 25px;
+    margin: 30px 20px;
+    box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    h3 {
+        display: flex;
+        align-items: center;
+        font-size: 40px;
+        margin: 0;
+        margin-bottom: 20px;
+        svg {
+            margin-right: 10px;
+        }
+    }
+    .orderDetailPersonalInfosWrapper{
+        display: flex;
+    }
+}
+
+.orderDetailProductTableWrapper{
+    background-color: white;
+    padding: 25px;
+    margin: 30px 20px;
+    box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    h3 {
+        display: flex;
+        align-items: center;
+        font-size: 40px;
+        margin: 0;
+        margin-bottom: 20px;
+        svg {
+            margin-right: 10px;
+        }
+    }
+}

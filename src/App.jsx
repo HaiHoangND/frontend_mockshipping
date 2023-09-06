@@ -7,6 +7,7 @@ import Login from "./pages/login/login";
 import ShipperAllOrders from "./pages/shipper/shippingOrder/ShipperAllOrders";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import CoordinatorShipperList from "./pages/coordinator/coordinatorShipperList/CoordinatorShipperList";
+import OrderDetail from "./pages/common/orderDetail/OrderDetail";
 
 function App() {
   const isAuthenticated = useIsAuthenticated();
@@ -30,7 +31,11 @@ function App() {
     <HashRouter>
       <ToastContainer />
       <Routes>
-        <Route exact path="/" element={<CoordinatorRoute Component={CoordinatorDashboard} />} />
+        <Route
+          exact
+          path="/"
+          element={<CoordinatorRoute Component={CoordinatorDashboard} />}
+        />
         <Route path="/shipper" element={<ShipperAllOrders />} />
         <Route path="/shipper/shipping" element={<ShipperAllOrders />} />
         <Route path="/shipper/success" element={<ShipperAllOrders />} />
@@ -48,7 +53,7 @@ function App() {
           path="/coordinator/shipperList"
           element={<CoordinatorRoute Component={CoordinatorShipperList} />}
         />
-        {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
+        <Route path="/orderDetail/:orderCode" element={<OrderDetail />} />
       </Routes>
     </HashRouter>
   );
