@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import "./updateOrderEmployeeModal.scss";
 import { useAuthUser } from "react-auth-kit";
-import { getArrayLastItem } from "../../utils/getLastArrayItem";
+import { getArrayLastItem, getIndexOfItem } from "../../utils/getLastArrayItem";
 import { InputLabel, MenuItem, Select } from "@mui/material";
 import { publicRequest } from "../../requestMethods";
 import { useNavigate } from "react-router-dom";
@@ -48,7 +48,10 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
       return true;
     }
 
-    if (getArrayLastItem(order.orderStatusList).status === "Đã đưa tiền cho chủ shop") {
+    if (
+      getArrayLastItem(order.orderStatusList).status ===
+      "Đã đưa tiền cho chủ shop"
+    ) {
       return true;
     }
 
@@ -70,9 +73,21 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
       const res = await publicRequest.post("/orderStatus", {
         shippingOrderId: order.id,
         shipperId: selectedShipper,
-        orderRouteId: order.orderRoutes[0].id,
-        status: order.orderStatusList.length === 0 ? "Đang lấy hàng" : "Đang giao hàng",
-        arriving: order.orderStatusList.length === 0 ? true : !getArrayLastItem(order.orderStatusList).arriving,
+        orderRouteId:
+          order.orderStatusList.length === 0
+            ? order.orderRoutes[0].id
+            : getIndexOfItem(
+                order.orderRoutes,
+                getArrayLastItem(order.orderStatusList).orderRoute.id
+              ) + 1,
+        status:
+          order.orderStatusList.length === 0
+            ? "Đang lấy hàng"
+            : "Đang giao hàng",
+        arriving:
+          order.orderStatusList.length === 0
+            ? true
+            : !getArrayLastItem(order.orderStatusList).arriving,
       });
       if (res.data.type === "success") {
         navigate(0);
@@ -80,7 +95,6 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     } catch (error) {
       console.log(error);
     }
-    
   };
 
   return (
@@ -150,7 +164,9 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
                   </div>
 
                   <div className="confirmModalBtns mt-4">
-                    <button type="button" onClick={handleUpdateEmployee}>Xác nhận</button>
+                    <button type="button" onClick={handleUpdateEmployee}>
+                      Xác nhận
+                    </button>
                     <button type="button" onClick={closeModal}>
                       Hủy
                     </button>
