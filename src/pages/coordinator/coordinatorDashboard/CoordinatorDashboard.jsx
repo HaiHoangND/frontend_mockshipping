@@ -61,7 +61,7 @@ const CoordinatorDashboard = () => {
             <div className="coordinatorOverviewTile">
               <div className="left">
                 <span>Nhân viên có sẵn</span>
-                <div className="bigNumber">{stats.AvailableShippers}</div>
+                <div className="bigNumber">{stats.Shippers}</div>
               </div>
               <div className="right">
                 <PeopleAlt

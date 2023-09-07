@@ -211,12 +211,20 @@
                         color: white;
                     }
                 }
+                .orderDetailStatusItem:nth-child(1) {
+                    opacity: 1;
+                    .statusCircle.canceled {
+                        background-color: #f24822;
+                        border-color: #f24822;
+                        color: white;
+                    }
+                }
             }
         }
     }
 }
 
-.orderDetailSummaryContainer{
+.orderDetailSummaryContainer {
     background-color: white;
     padding: 25px;
     margin: 30px 20px;
@@ -232,29 +240,43 @@
             margin-right: 10px;
         }
     }
-    .orderDetailSummaryFeeContainer{
+    .orderDetailSummaryFeeContainer {
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-size: 25px;
         padding: 10px;
     }
-    .cancelOrderBtn{
+    .cancelOrderBtn {
         display: flex;
         align-items: center;
         justify-content: center;
         margin-top: 15px;
-        button{
-            width: 100%;
-            padding: 10px 0px;
-            background-color: #f24822;
-            border-radius: 10px;
-            font-size: 20px;
-            color:white;
-            transition: all ease 0.2s;
-            &:hover{
-                background-color: #d23f1e;
-            }
+        width: 100%;
+        padding: 10px 0px;
+        background-color: #f24822;
+        border-radius: 10px;
+        font-size: 20px;
+        color: white;
+        transition: all ease 0.2s;
+        &:hover {
+            background-color: #d23f1e;
+        }
+    }
+    .changeStatusOrderBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 15px;
+        width: 100%;
+        padding: 10px 0px;
+        background-color: #0d99ff;
+        border-radius: 10px;
+        font-size: 20px;
+        color: white;
+        transition: all ease 0.2s;
+        &:hover {
+            background-color: #0a7dcf;
         }
     }
 }

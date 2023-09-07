@@ -11,19 +11,25 @@ import {
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
 
 const DeliveryStatus = styled.div`
   padding: 10px 3px;
   border-radius: 15px;
   text-align: center;
+  color: white;
   background-color: ${(props) =>
     props.name === "Đang giao hàng"
       ? "#ffcd29"
       : props.name === "Đang lấy hàng"
       ? "#ffcd29"
+      : props.name === "Lấy hàng thành công"
+      ? "#ffcd29"
       : props.name === "Giao hàng thành công"
       ? "#14ae5c"
-      : props.name === "Đã hủy"
+      : props.name === "Đã đưa tiền cho chủ shop"
+      ? "#14ae5c"
+      : props.name === "Đơn hủy"
       ? "#f24822"
       : "gray"};
 `;
@@ -31,12 +37,32 @@ const DeliveryStatus = styled.div`
 export const OrderListTable = () => {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
+  const authUser = useAuthUser();
+  const warehouseId = authUser().warehouseId;
+  const role = authUser().role;
+
+  console.log(orders);
   const getOrders = async () => {
-    const res = await publicRequest.get(`/order?pageNumber=${page}&pageSize=5`);
-    if (res.data.type === "success") {
-      useToastSuccess(res.data.message);
-      setOrders(res.data.data.content);
-    } else return useToastError("Something went wrong!");
+    let res;
+    try {
+      if (role === "ADMIN") {
+        res = await publicRequest.get(`/order?pageNumber=${page}&pageSize=5`);
+        if (res.data.type === "success") {
+          useToastSuccess(res.data.message);
+          setOrders(res.data.data.content);
+        } else return useToastError("Something went wrong!");
+      } else if (role === "COORDINATOR") {
+        res = await publicRequest.get(
+          `/warehouse/getAllShippingOrders?warehouseId=${warehouseId}`
+        );
+        if (res.data.type === "success") {
+          useToastSuccess(res.data.message);
+          setOrders(res.data.data);
+        } else return useToastError("Something went wrong!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +77,7 @@ export const OrderListTable = () => {
   };
 
   return (
-    <div>
+      <div>
       <table>
         <thead>
           <tr>
@@ -65,7 +91,7 @@ export const OrderListTable = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {orders.reverse().map((order) => (
             <tr key={order.id}>
               <td>
                 <Link to={`/orderDetail/${order.orderCode}`} target="_blank">
@@ -108,7 +134,7 @@ export const OrderListTable = () => {
         </button>
         <div className="w-9 text-center">{page}</div>
         <button
-            disabled={orders?.length < 15}
+          disabled={orders?.length < 15}
           className="paginationButton"
           onClick={handleNextPagination}
         >
