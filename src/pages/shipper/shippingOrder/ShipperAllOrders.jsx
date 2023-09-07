@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { publicRequest, userRequest } from "../../../requestMethods";
 import "./ShipperAllOrders.scss";
-import { getArrayLastItem } from '../../../utils/getLastArrayItem';
+import { getArrayLastItem, getIndexOfItem } from '../../../utils/getLastArrayItem';
 import { useAuthUser } from 'react-auth-kit';
 
 const ShipperAllOrders = () => {
@@ -46,6 +46,7 @@ const ShipperAllOrders = () => {
     }
 
     const handleUpdateFinalStatus = () => {
+        console.log('isacc', isAccepted)
         if (isAccepted) {
             handleChangeStatus(index);
             getOrders(type);
@@ -68,7 +69,7 @@ const ShipperAllOrders = () => {
 
     useEffect(() => {
         getOrders(type);
-    }, [])
+    }, [type])
 
     useEffect(() => {
         handleUpdateFinalStatus();
@@ -84,34 +85,43 @@ const ShipperAllOrders = () => {
             let status = '';
             let nextLocation = '';
             let nextOrderRouteId;
-            let checkArriving = true;
-            // let currentNextLocation = lastestStatus.nextLocation;
+            let checkArriving = lastestStatus.arriving;
             let currentOrderRouteId = lastestStatus.orderRoute.routeId;
+            let currentOrderRouteIndex = getIndexOfItem(order[index].orderRoutes, lastestStatus.orderRoute.id);
+            console.log(routeLength);
+            console.log(currentOrderRouteIndex);
             console.log(currentOrderRouteId);
             if (currentOrderRouteId === routeLength) {
                 nextLocation = '';
                 status = "Giao hàng thành công"
                 nextOrderRouteId = currentOrderRouteId;
-            } else if (checkArriving && currentOrderRouteId === 1) {
-                nextLocation = lastestStatus.nextLocation;
-                status = "Lấy hàng thành công"
-                nextOrderRouteId = currentOrderRouteId;
-            }
-            else {
+            } else if (checkArriving) {
+                if (currentOrderRouteId === 1) {
+                    nextLocation = lastestStatus.nextLocation;
+                    status = "Lấy hàng thành công"
+                    nextOrderRouteId = currentOrderRouteIndex;
+                } else {
+                    nextLocation = order[index].orderRoutes[currentOrderRouteId].address;
+                    status = "Đang giao hàng"
+                    nextOrderRouteId = currentOrderRouteIndex + 1;
+                }
+            } else {
                 nextLocation = order[index].orderRoutes[currentOrderRouteId].address;
                 status = "Đang giao hàng"
-                nextOrderRouteId = currentOrderRouteId + 1;
+                nextOrderRouteId = currentOrderRouteIndex + 1;
             }
             try {
                 const res = await publicRequest.post("/orderStatus", {
                     shippingOrderId: order[index].id,
                     shipperId: lastestStatus.shipper.id,
                     nextLocation: nextLocation,
-                    orderRouteId: nextOrderRouteId,
+                    orderRouteId: order[index].orderRoutes[nextOrderRouteId].id,
                     status: status,
                     arriving: !lastestStatus.arriving
                 });
-                console.log(res);
+                console.log(currentOrderRouteIndex);
+                console.log(nextOrderRouteId);
+                // console.log(order[index].orderRoutes);
             } catch (error) {
                 console.log(error)
             }
