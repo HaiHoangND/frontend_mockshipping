@@ -9,8 +9,23 @@ import { OrderListTable } from "../../../components/orderListTable/OrderListTabl
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import "./coordinatorDashboard.scss";
+import { useEffect, useState } from "react";
+import { publicRequest } from "../../../requestMethods";
+import { useAuthUser } from "react-auth-kit";
 
 const CoordinatorDashboard = () => {
+  const authUser = useAuthUser();
+  const warehouseId = authUser().warehouseId;
+  const [stats, setStats] = useState({});
+
+  const getStats = async () => {
+    const res = await publicRequest.get(`/warehouse/statistic?warehouseId=${warehouseId}`);
+    setStats(res.data.data[0]);
+  };
+  useEffect(() => {
+    getStats();
+  }, []);
+
   return (
     <div className="bodyContainer">
       <Sidebar />
@@ -24,7 +39,7 @@ const CoordinatorDashboard = () => {
             <div className="coordinatorOverviewTile">
               <div className="left">
                 <span>Tổng đơn hàng</span>
-                <div className="bigNumber">63</div>
+                <div className="bigNumber">{stats.ShippingOrders}</div>
               </div>
               <div className="right">
                 <AllInboxRounded
@@ -35,7 +50,7 @@ const CoordinatorDashboard = () => {
             <div className="coordinatorOverviewTile">
               <div className="left">
                 <span>Đang vận chuyển</span>
-                <div className="bigNumber">20</div>
+                <div className="bigNumber">{stats.Delivering}</div>
               </div>
               <div className="right">
                 <LocalShippingRounded
@@ -46,7 +61,7 @@ const CoordinatorDashboard = () => {
             <div className="coordinatorOverviewTile">
               <div className="left">
                 <span>Nhân viên có sẵn</span>
-                <div className="bigNumber">10</div>
+                <div className="bigNumber">{stats.AvailableShippers}</div>
               </div>
               <div className="right">
                 <PeopleAlt

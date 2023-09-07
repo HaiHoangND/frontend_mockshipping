@@ -9,6 +9,10 @@ import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import CoordinatorShipperList from "./pages/coordinator/coordinatorShipperList/CoordinatorShipperList";
 import OrderDetail from "./pages/shipper/orderDetail/OrderDetail";
 
+import AdminDashboard from "./pages/admin/adminDashboard/AdminDashboard";
+
+import OrderDetail from "./pages/common/orderDetail/OrderDetail";
+
 function App() {
   const isAuthenticated = useIsAuthenticated();
   const auth = isAuthenticated();
@@ -31,10 +35,14 @@ function App() {
     <HashRouter>
       <ToastContainer />
       <Routes>
-        <Route exact path="/" element={<CoordinatorRoute Component={CoordinatorDashboard} />} />
-        {/* <Route path="/shipper" element={<ShipperAllOrders />} />
+        <Route
+          exact
+          path="/"
+          element={<CoordinatorRoute Component={CoordinatorDashboard} />}
+        />
+        <Route path="/shipper" element={<ShipperAllOrders />} />
         <Route path="/shipper/shipping" element={<ShipperAllOrders />} />
-        <Route path="/shipper/success" element={<ShipperAllOrders />} /> */}
+        <Route path="/shipper/success" element={<ShipperAllOrders />} />
 
         <Route path="/login" element={<Login />} />
         <Route
@@ -50,14 +58,12 @@ function App() {
           element={<CoordinatorRoute Component={CoordinatorShipperList} />}
         />
         <Route
-          path="/shipper"
-          element={<ShipperRoute Component={ShipperAllOrders} />}
-        />
-        <Route
-          path="/shipper/orderDetail/:shippingOrderCode"
-          element={<ShipperRoute Component={OrderDetail} />}
+          path="/admin"
+          element={<AdminRoute Component={AdminDashboard} />}
         />
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
+
+        <Route path="/orderDetail/:orderCode" element={<OrderDetail />} />
       </Routes>
     </HashRouter>
   );

@@ -1,0 +1,21 @@
+.orderDetailPersonalInfoContainer{
+    flex:1;
+    padding: 30px;
+    .orderDetailPersonalInfoFormTitle{
+        display: flex;
+        align-items: center;
+        font-size: 25px;
+        svg{
+            margin-right: 10px;
+        }
+    }
+    .orderDetailPersonalInfoItem{
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        span{
+            margin-right: 15px;
+        }
+    }
+}

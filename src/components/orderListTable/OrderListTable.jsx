@@ -10,6 +10,7 @@ import {
 } from "../../utils/formatStrings";
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import { styled } from "styled-components";
+import { Link } from "react-router-dom";
 
 const DeliveryStatus = styled.div`
   padding: 10px 3px;
@@ -49,7 +50,6 @@ export const OrderListTable = () => {
     setPage((prev) => prev - 1);
   };
 
-  console.log(orders);
   return (
     <div>
       <table>
@@ -67,19 +67,31 @@ export const OrderListTable = () => {
         <tbody>
           {orders.map((order) => (
             <tr key={order.id}>
-                <td>{order.orderCode}</td>
+              <td>
+                <Link to={`/orderDetail/${order.orderCode}`} target="_blank">
+                  {order.orderCode}
+                </Link>
+              </td>
               <td>{order.sender.name}</td>
               <td>{order.receiver.name}</td>
               <td>
-                {order.orderStatusList.length === 0 ? "Chưa phân công" :getArrayLastItem(order.orderStatusList).shipper.fullName}
+                {order.orderStatusList.length === 0
+                  ? "Chưa phân công"
+                  : getArrayLastItem(order.orderStatusList).shipper.fullName}
               </td>
               <td>{convertCurrency(productsPrice(order.products))}</td>
               <td>{convertDateTime(order.createdAt)}</td>
               <td>
                 <DeliveryStatus
-                  name={order.orderStatusList.length === 0 ? "Đã tạo đơn" :getArrayLastItem(order.orderStatusList).status}
+                  name={
+                    order.orderStatusList.length === 0
+                      ? "Đã tạo đơn"
+                      : getArrayLastItem(order.orderStatusList).status
+                  }
                 >
-                  {order.orderStatusList.length === 0 ? "Đã tạo đơn" :getArrayLastItem(order.orderStatusList).status}
+                  {order.orderStatusList.length === 0
+                    ? "Đã tạo đơn"
+                    : getArrayLastItem(order.orderStatusList).status}
                 </DeliveryStatus>
               </td>
             </tr>
@@ -96,7 +108,7 @@ export const OrderListTable = () => {
         </button>
         <div className="w-9 text-center">{page}</div>
         <button
-          //   disabled={orders?.length < 15}
+            disabled={orders?.length < 15}
           className="paginationButton"
           onClick={handleNextPagination}
         >
