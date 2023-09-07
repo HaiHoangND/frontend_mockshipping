@@ -62,7 +62,7 @@ function App() {
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
 
         <Route path="/orderDetail/:orderCode" element={<OrderDetail />} />
-        <Route path="/shipper/orderDetail/:orderCode" element={<ShipperOrderDetail />} />
+        <Route path="/shipper/shipperOrderDetail/:orderCode" element={<ShipperOrderDetail />} />
 
       </Routes>
     </HashRouter>

@@ -17,7 +17,7 @@ const ShipperAllOrders = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isAccepted, setAccepted] = useState(false);
     const authUser = useAuthUser()
-    
+
 
     const getStatusColor = (name) => {
         switch (name) {
@@ -199,7 +199,7 @@ const ShipperAllOrders = () => {
                 {order.map((order, index) => (
                     <div className='orderList' key={order.id}>
                         <div className='orderListItem'>
-                            <Link to={`/shipper/orderDetail/${order.orderCode}`}>
+                            <Link to={`/shipper/shipperOrderDetail/${order.orderCode}`}>
                                 <div className='orderTop'>
                                     <div className='orderDate'>
                                         <div className='orderDay'>{order.createdAt[2]}/{order.createdAt[1]}</div>
