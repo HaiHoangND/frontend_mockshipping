@@ -39,7 +39,6 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
   };
 
   const isDisabled = () => {
-    console.log(getArrayLastItem(order.orderStatusList).status);
     if (order.orderStatusList.length === 0) {
       return false;
     }
@@ -73,7 +72,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
         shipperId: selectedShipper,
         orderRouteId: order.orderRoutes[0].id,
         status: order.orderStatusList.length === 0 ? "Đang lấy hàng" : "Đang giao hàng",
-        arriving: !getArrayLastItem(order.orderStatusList).arriving,
+        arriving: order.orderStatusList.length === 0 ? true : !getArrayLastItem(order.orderStatusList).arriving,
       });
       if (res.data.type === "success") {
         navigate(0);

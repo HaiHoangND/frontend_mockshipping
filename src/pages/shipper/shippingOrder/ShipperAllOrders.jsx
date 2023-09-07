@@ -6,6 +6,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { publicRequest, userRequest } from "../../../requestMethods";
 import "./ShipperAllOrders.scss";
 import { getArrayLastItem } from '../../../utils/getLastArrayItem';
+import { useAuthUser } from 'react-auth-kit';
 
 const ShipperAllOrders = () => {
     // const pathname = useLocation().pathname.split("/");
@@ -15,6 +16,8 @@ const ShipperAllOrders = () => {
     const [index, setIndex] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isAccepted, setAccepted] = useState(false);
+    const authUser = useAuthUser()
+    
 
     const getStatusColor = (name) => {
         switch (name) {
@@ -53,11 +56,11 @@ const ShipperAllOrders = () => {
     const getOrders = async (tab) => {
         console.log(tab);
         if (tab === 'Chưa hoàn thành') {
-            const res = await userRequest.get(`/user/getFilterShippingOrders?shipperId=${17}&statusFilter=unSuccessful`);
+            const res = await userRequest.get(`/user/getFilterShippingOrders?shipperId=${authUser().id}&statusFilter=unSuccessful`);
             console.log(res);
             setOrder(res.data.data);
         } else {
-            const res = await userRequest.get(`/user/getFilterShippingOrders?shipperId=${17}&statusFilter=successful`);
+            const res = await userRequest.get(`/user/getFilterShippingOrders?shipperId=${authUser().id}&statusFilter=successful`);
             console.log(res);
             setOrder(res.data.data);
         }
