@@ -76,10 +76,12 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
         orderRouteId:
           order.orderStatusList.length === 0
             ? order.orderRoutes[0].id
-            : getIndexOfItem(
-                order.orderRoutes,
-                getArrayLastItem(order.orderStatusList).orderRoute.id
-              ) + 1,
+            : order.orderRoutes[
+                getIndexOfItem(
+                  order.orderRoutes,
+                  getArrayLastItem(order.orderStatusList).orderRoute.id
+                ) + 1
+              ].id,
         status:
           order.orderStatusList.length === 0
             ? "Đang lấy hàng"
