@@ -92,7 +92,7 @@ export const OrderListTable = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.reverse().map((order) => (
+          {orders.map((order) => (
             <tr key={order.id}>
               <td>
                 <Link to={`/orderDetail/${order.orderCode}`} target="_blank">
@@ -135,7 +135,7 @@ export const OrderListTable = () => {
         </button>
         <div className="w-9 text-center">{page}</div>
         <button
-          disabled={orders?.length < 15}
+          disabled={orders?.length < 5}
           className="paginationButton"
           onClick={handleNextPagination}
         >
