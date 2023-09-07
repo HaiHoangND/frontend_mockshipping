@@ -9,6 +9,7 @@ import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import "./adminDashboard.scss";
 import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
+import {ProfitChart} from "../../../components/profitChart/ProfitChart"
 
 const AdminDashboard = () => {
   return (
@@ -22,6 +23,7 @@ const AdminDashboard = () => {
               <h3>
                 <TrendingUp fontSize="inherit" /> Doanh thu
               </h3>
+              <ProfitChart/>
             </div>
             <div className="adminOverviewStatistic">
               <div className="adminStatisticOrders">

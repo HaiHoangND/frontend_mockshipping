@@ -12,6 +12,7 @@ import ShipperOrderDetail from "./pages/shipper/orderDetail/ShipperOrderDetail";
 import AdminDashboard from "./pages/admin/adminDashboard/AdminDashboard";
 
 import OrderDetail from "./pages/common/orderDetail/OrderDetail";
+import WarehouseList from "./pages/admin/warehouseList/WarehouseList";
 
 function App() {
   const isAuthenticated = useIsAuthenticated();
@@ -58,6 +59,10 @@ function App() {
         <Route
           path="/admin"
           element={<AdminRoute Component={AdminDashboard} />}
+        />
+        <Route
+          path="/admin/warehouses"
+          element={<AdminRoute Component={WarehouseList} />}
         />
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
 
