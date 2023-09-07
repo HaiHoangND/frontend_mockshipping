@@ -10,12 +10,13 @@ import "./shipperOrderDetail.scss";
 import { Fragment, useState, useEffect } from 'react';
 import { publicRequest, userRequest } from "../../../requestMethods";
 import { getArrayLastItem } from '../../../utils/getLastArrayItem';
+import { convertCurrency } from '../../../utils/formatStrings';
 
 
 const ShipperOrderDetail = () => {
-    // const pathname = useLocation().pathname.split("/");
+    const shippingOrderCode = useLocation().pathname.split("/")[3];
     const [orderInfo, setOrderInfo] = useState([]);
-    const { shippingOrderCode } = useParams();
+    // const { shippingOrderCode } = useParams();
     const [isOpen, setIsOpen] = useState(false);
     const [isAccepted, setAccepted] = useState(false);
     const [statusButton, setStatusButton] = useState('');
@@ -26,7 +27,7 @@ const ShipperOrderDetail = () => {
         let sumOfOrderPrice = 0;
         if (array && array.length !== 0) {
             for (let i = 0; i < array.length; ++i) {
-                sumOfOrderPrice += array[i].price;
+                sumOfOrderPrice += array[i].price * array[i].quantity;
             }
             console.log(sumOfOrderPrice);
         }
@@ -38,7 +39,9 @@ const ShipperOrderDetail = () => {
         const res = await userRequest.get(`/order/getByCode?orderCode=${shippingOrderCode}`);
         console.log(res);
         setOrderInfo(res.data.data);
-        setStatusButton(getArrayLastItem(res.data.data.orderStatusList.status));
+        if (res) {
+            setStatusButton(getArrayLastItem(res.data.data.orderStatusList.status));
+        }
     };
 
     useEffect(() => {
@@ -176,7 +179,7 @@ const ShipperOrderDetail = () => {
                     <div className='backTitle'>Chi tiết đơn hàng</div>
                 </div>
             </div>
-            {orderInfo &&
+            {orderInfo && orderInfo.length !== 0 &&
                 <div className='orderDetailContainer'>
                     <div className='orderInfo'>
                         <div className='orderTitle'>Giao tới</div>
@@ -204,14 +207,16 @@ const ShipperOrderDetail = () => {
                         <div className='orderTitle'>Mặt hàng</div>
                         {orderInfo && orderInfo.products && orderInfo.products.map((orderDetail, index) => (
                             <div className='orderItemList' key={index}>
-                                <div className='orderImage'>{orderDetail.image}</div>
+                                <div className='orderImage'>
+                                    <img src={orderDetail.image} />
+                                </div>
                                 <div className='orderDetailInfo'>
                                     <div className='orderItemName'>
                                         {orderDetail.name}
                                     </div>
-                                    <div className='orderItemQuantity'>Số lượng: {orderDetail.quanity}</div>
+                                    <div className='orderItemQuantity'>Số lượng: {orderDetail.quantity}</div>
                                     <div className='orderItemWeight'>Cân nặng: {orderDetail.weight}kg</div>
-                                    <div className='orderItemPrice'>{orderDetail.price}đ</div>
+                                    <div className='orderItemPrice'>{convertCurrency(orderDetail.price)}</div>
                                 </div>
                             </div>
                         ))}
@@ -222,18 +227,18 @@ const ShipperOrderDetail = () => {
                         <div className='paymentInfo'>
                             <div className='paymentTitle'>Giá trị mặt hàng</div>
                             <div className='paymentPrice'>{orderInfo && orderInfo.products &&
-                                getSumOfItemPrice(orderInfo.products)
+                                convertCurrency(getSumOfItemPrice(orderInfo.products))
                             }</div>
                         </div>
                         <div className='paymentInfo'>
                             <div className='paymentTitle'>Phí dịch vụ</div>
-                            <div className='paymentPrice'>{orderInfo?.serviceFee}</div>
+                            <div className='paymentPrice'>{convertCurrency(orderInfo?.serviceFee)}</div>
                         </div>
                     </div>
                     <div className='totalPayment'>
                         <div className='paymentTitle'>Tổng tiền phải thu</div>
                         <div className='paymentTotalPrice'>{orderInfo && orderInfo.products &&
-                            orderInfo?.serviceFee + getSumOfItemPrice(orderInfo.products)}
+                            convertCurrency(orderInfo?.serviceFee + getSumOfItemPrice(orderInfo.products))}
 
                         </div>
 
