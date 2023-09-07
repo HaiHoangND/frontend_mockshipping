@@ -1,4 +1,4 @@
-import { Add, Group, Home, Logout } from "@mui/icons-material";
+import { Add, Group, Home, Logout, ReceiptLong, Warehouse } from "@mui/icons-material";
 import "./sidebar.scss";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthUser, useSignOut } from "react-auth-kit";
@@ -69,6 +69,17 @@ export const Sidebar = () => {
                 }
               >
                 <Home /> Trang chủ
+              </div>
+            </Link>
+            <Link to="/admin/warehouses">
+              <div
+                className={
+                  pathname[1] === "admin" && pathname[2] === "warehouses"
+                    ? "sidebarItem selected"
+                    : "sidebarItem"
+                }
+              >
+                <Warehouse /> Danh sách nhà kho
               </div>
             </Link>
           </>

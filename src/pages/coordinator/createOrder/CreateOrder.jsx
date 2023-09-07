@@ -78,9 +78,9 @@ const CreateOrder = () => {
       });
       // Create receiver
       const receiver = await publicRequest.post("/receiver", {
-        name: senderInfo.name,
-        address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
-        phone: senderInfo.phone,
+        name: receiverInfo.name,
+        address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
+        phone: receiverInfo.phone,
       });
       console.log(receiver.data);
       // Create order
