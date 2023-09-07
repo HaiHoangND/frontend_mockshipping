@@ -1,0 +1,101 @@
+.topOrderMenu {
+    background-color: rgb(228, 228, 228);
+
+    .backToAllOrders {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        margin-top: 30px;
+        height: 60px;
+        align-items: center;
+        width: 90vw;
+
+
+        .backTitle {
+            margin: 0 auto;
+            font-size: 25px;
+        }
+    }
+}
+
+.orderDetailContainer {
+    width: 90vw;
+    margin: 0 auto;
+
+    .orderInfo {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        margin-top: 20px;
+
+        .orderTitle {
+            font-weight: bold;
+        }
+
+        .orderItem {
+            margin-top: 10px;
+        }
+
+        .orderItemList {
+            padding: 20px;
+            display: flex;
+            flex-direction: row;
+            border-bottom: 1px solid grey;
+
+            .orderImage {
+                width: 25vw;
+                height: 25vw;
+                border: 1px solid #0088ff;
+            }
+
+            .orderDetailInfo {
+                margin-left: 20px;
+                width: 65vw;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .orderItemName {
+                    font-size: 20px;
+                }
+
+                .orderItemPrice {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .orderPayment {
+        border-bottom: 1px solid grey;
+        margin-top: 30px;
+
+        .orderTitle {
+            font-weight: bold;
+        }
+
+        .paymentInfo {
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+
+    .totalPayment {
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 30px;
+
+        .paymentTotalPrice {
+            font-weight: bold;
+        }
+    }
+}
+
+.orderChangeStatus button {
+    width: 90vw;
+    background-color: #0088ff;
+}

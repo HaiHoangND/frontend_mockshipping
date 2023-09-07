@@ -7,6 +7,7 @@ import Login from "./pages/login/login";
 import ShipperAllOrders from "./pages/shipper/shippingOrder/ShipperAllOrders";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import CoordinatorShipperList from "./pages/coordinator/coordinatorShipperList/CoordinatorShipperList";
+import OrderDetail from "./pages/shipper/orderDetail/OrderDetail";
 
 function App() {
   const isAuthenticated = useIsAuthenticated();
@@ -31,9 +32,9 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route exact path="/" element={<CoordinatorRoute Component={CoordinatorDashboard} />} />
-        <Route path="/shipper" element={<ShipperAllOrders />} />
+        {/* <Route path="/shipper" element={<ShipperAllOrders />} />
         <Route path="/shipper/shipping" element={<ShipperAllOrders />} />
-        <Route path="/shipper/success" element={<ShipperAllOrders />} />
+        <Route path="/shipper/success" element={<ShipperAllOrders />} /> */}
 
         <Route path="/login" element={<Login />} />
         <Route
@@ -47,6 +48,14 @@ function App() {
         <Route
           path="/coordinator/shipperList"
           element={<CoordinatorRoute Component={CoordinatorShipperList} />}
+        />
+        <Route
+          path="/shipper"
+          element={<ShipperRoute Component={ShipperAllOrders} />}
+        />
+        <Route
+          path="/shipper/orderDetail/:shippingOrderCode"
+          element={<ShipperRoute Component={OrderDetail} />}
         />
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
       </Routes>

@@ -1,25 +1,7 @@
-.topBar {
-    width: 90vw;
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-
-    .leftTopBar {
-        font-weight: bold;
-    }
-
-    .rightTopBar {
-        position: absolute;
-        right: 0;
-    }
-}
-
 .orderContainer {
     margin: 0 auto;
     width: 90vw;
+    position: relative;
 
     .topMenu {
         width: 100%;
@@ -36,16 +18,9 @@
             display: flex;
             flex-direction: row;
 
-            .sidebarItem {
-                width: 30vw;
-                margin-top: 5px;
-                text-align: center;
-                padding: 10px;
-            }
-
-            .sidebarItem.selected {
-                background-color: #0088ff;
-                color: white;
+            button {
+                width: 50%;
+                height: 40px
             }
         }
 
@@ -66,10 +41,14 @@
                 flex-direction: row;
 
                 .orderDate {
-                    width: 20%;
+                    background-color: rgb(228, 228, 228);
+                    margin-right: 15px;
+                    margin-bottom: 20px;
+                    text-align: center;
+                    width: 15%;
                     display: flex;
                     flex-direction: column;
-                    padding: 20px;
+                    padding: 15px;
 
                     .orderDay {
                         font-size: 20px;
@@ -78,24 +57,31 @@
                 }
 
                 .orderInfo {
-                    width: 50%;
+                    width: 45%;
                     display: flex;
                     flex-direction: column;
 
-                    .orderWarehouse {
+                    .userAddress {
                         font-weight: bold;
                     }
                 }
 
                 .orderCurrentStatus {
-                    width: 30%;
+                    width: 40%;
+                    height: 35px;
+                    border-radius: 20px;
+                    padding: 5px;
                     text-align: center;
+                    background-color: rgb(228, 228, 228);
+                    color: white;
                 }
             }
 
             .orderChangeStatus button {
                 width: 90vw;
                 background-color: #0088ff;
+                color: white;
+                border-radius: 15px;
             }
         }
     }
@@ -104,11 +90,14 @@
         display: flex;
         flex-direction: row;
         width: 100%;
+        position: absolute;
+        top: 688px;
 
         .botBarItem {
+
             flex-grow: 0;
             flex-shrink: 0;
-            width: 30vw;
+            width: 45vw;
             display: flex;
             flex-direction: column;
             text-align: center;
