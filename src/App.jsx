@@ -7,7 +7,7 @@ import Login from "./pages/login/login";
 import ShipperAllOrders from "./pages/shipper/shippingOrder/ShipperAllOrders";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import CoordinatorShipperList from "./pages/coordinator/coordinatorShipperList/CoordinatorShipperList";
-import OrderDetail from "./pages/shipper/orderDetail/OrderDetail";
+import ShipperOrderDetail from "./pages/shipper/orderDetail/ShipperOrderDetail";
 
 import AdminDashboard from "./pages/admin/adminDashboard/AdminDashboard";
 
@@ -41,8 +41,6 @@ function App() {
           element={<CoordinatorRoute Component={CoordinatorDashboard} />}
         />
         <Route path="/shipper" element={<ShipperAllOrders />} />
-        <Route path="/shipper/shipping" element={<ShipperAllOrders />} />
-        <Route path="/shipper/success" element={<ShipperAllOrders />} />
 
         <Route path="/login" element={<Login />} />
         <Route
@@ -64,6 +62,8 @@ function App() {
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
 
         <Route path="/orderDetail/:orderCode" element={<OrderDetail />} />
+        <Route path="/shipper/orderDetail/:orderCode" element={<ShipperOrderDetail />} />
+
       </Routes>
     </HashRouter>
   );

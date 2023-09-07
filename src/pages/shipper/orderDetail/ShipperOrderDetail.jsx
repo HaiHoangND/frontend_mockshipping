@@ -6,13 +6,13 @@ import { Button } from '@mui/material';
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 
-import "./OrderDetail.scss";
+import "./shipperOrderDetail.scss";
 import { Fragment, useState, useEffect } from 'react';
 import { publicRequest, userRequest } from "../../../requestMethods";
 import { getArrayLastItem } from '../../../utils/getLastArrayItem';
 
 
-const OrderDetail = () => {
+const ShipperOrderDetail = () => {
     // const pathname = useLocation().pathname.split("/");
     const [orderInfo, setOrderInfo] = useState([]);
     const { shippingOrderCode } = useParams();
@@ -253,4 +253,4 @@ const OrderDetail = () => {
     );
 };
 
-export default OrderDetail;
+export default ShipperOrderDetail;
