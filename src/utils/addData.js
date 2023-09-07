@@ -60,9 +60,11 @@ const addWarehouse = async () => {
   }
 };
 
+addWarehouse();
+
 
 const registerCoordinator = async () => {
-  await axios.post("http://localhost:8080/api/register",{
+  await axios.post("http://localhost:8080/api/register", {
     fullName: "Tran Phi Long",
     email: "longtp6@gmail.com",
     password: "12345678",
@@ -76,7 +78,7 @@ const registerCoordinator = async () => {
 }
 
 const registerShipper = async () => {
-  await axios.post("http://localhost:8080/api/register",{
+  await axios.post("http://localhost:8080/api/register", {
     fullName: "Tran Phi Long",
     email: "longtp126@gmail.com",
     password: "12345678",
@@ -89,4 +91,4 @@ const registerShipper = async () => {
   })
 }
 
-registerShipper()
+// registerShipper()

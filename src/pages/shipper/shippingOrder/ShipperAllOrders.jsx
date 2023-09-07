@@ -65,7 +65,7 @@ const ShipperAllOrders = () => {
 
     useEffect(() => {
         getOrders(type);
-    }, [type])
+    }, [])
 
     useEffect(() => {
         handleUpdateFinalStatus();
@@ -94,9 +94,9 @@ const ShipperAllOrders = () => {
                 status = "Đang lấy hàng"
                 nextOrderRouteId = currentOrderRouteId;
             } else if (checkArriving && currentOrderRouteId === 1) {
-                nextLocation = order[index].orderRoutes[currentOrderRouteId].address;
+                nextLocation = lastestStatus.nextLocation;
                 status = "Lấy hàng thành công"
-                nextOrderRouteId = currentOrderRouteId + 1;
+                nextOrderRouteId = currentOrderRouteId;
             }
             else {
                 nextLocation = order[index].orderRoutes[currentOrderRouteId].address;

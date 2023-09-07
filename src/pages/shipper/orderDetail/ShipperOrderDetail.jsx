@@ -67,7 +67,6 @@ const ShipperOrderDetail = () => {
             // let currentNextLocation = lastestStatus.nextLocation;
             let currentOrderRouteId = lastestStatus.orderRoute.routeId;
             console.log(currentOrderRouteId);
-            console.log(orderInfo.orderRoutes[1]);
             if (currentOrderRouteId === routeLength) {
                 nextLocation = '';
                 status = "Giao hàng thành công"
@@ -86,8 +85,6 @@ const ShipperOrderDetail = () => {
                 status = "Đang giao hàng"
                 nextOrderRouteId = currentOrderRouteId + 1;
             }
-            console.log(routeLength);
-            console.log(lastestStatus);
             try {
                 const res = await publicRequest.post("/orderStatus", {
                     shippingOrderId: orderInfo.id,
