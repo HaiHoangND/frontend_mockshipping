@@ -1,0 +1,15 @@
+.updateEmployeeModalBtn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: -10px;
+    background-color: #0d99ff;
+    padding: 10px;
+    color: white;
+    border-radius: 15px;
+    transition: all ease 0.2s;
+    width: 100%;
+    &:hover {
+        background-color: #0a7dcf;
+    }
+}

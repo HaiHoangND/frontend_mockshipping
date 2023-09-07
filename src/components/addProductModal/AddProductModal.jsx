@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { InputAdornment, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Fragment, useRef, useState } from "react";
 import { v4 } from "uuid";
