@@ -444,8 +444,10 @@ const OrderDetail = () => {
                 confirmFunction={handleCancelOrder}
                 parameters={order}
               />
-              {getArrayLastItem(order.orderStatusList).status ===
-                "Quản lý đã nhận tiền" && role === "ADMIN" ? (
+              {order.orderStatusList.length !== 0 &&
+              getArrayLastItem(order.orderStatusList).status ===
+                "Quản lý đã nhận tiền" &&
+              role === "ADMIN" ? (
                 <WarningModal
                   InitiateComponent={ChangeStatusBtn}
                   warningContent={
