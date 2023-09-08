@@ -1,6 +1,6 @@
-import { Home, KeyboardReturn, WarningAmber } from '@mui/icons-material';
+import { KeyboardReturn, WarningAmber } from '@mui/icons-material';
 import { Button, TextField } from '@mui/material';
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { publicRequest, userRequest } from "../../../requestMethods";
@@ -10,7 +10,6 @@ import { useAuthUser, useSignOut } from 'react-auth-kit';
 
 
 const ShipperAllOrders = () => {
-    // const pathname = useLocation().pathname.split("/");
     const tabs = ['Chưa hoàn thành', 'Hoàn thành'];
     const [type, setType] = useState('Chưa hoàn thành');
     const [order, setOrder] = useState([]);
@@ -24,15 +23,15 @@ const ShipperAllOrders = () => {
     const getStatusColor = (name) => {
         switch (name) {
             case 'Đang lấy hàng':
-                return 'grey'; // Lớp CSS cho nút 1 - màu đỏ
+                return 'grey';
             case 'Lấy hàng thành công':
-                return '#f5a41d'; // Lớp CSS cho nút 2 - màu xanh
+                return '#f5a41d';
             case 'Đang giao hàng':
-                return '#f1c40f'; // Lớp CSS cho nút 3 - màu xanh lá cây
+                return '#f1c40f';
             case 'Đơn hàng bị hủy':
                 return '#dc3545'
             default:
-                return '#07bc0c'; // Lớp CSS mặc định cho các nút khác
+                return '#07bc0c';
         }
     };
 
