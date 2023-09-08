@@ -111,14 +111,14 @@ const ShipperAllOrders = () => {
                 nextOrderRouteId = currentOrderRouteIndex + 1;
             }
             try {
-                const res = await publicRequest.post("/orderStatus", {
-                    shippingOrderId: order[index].id,
-                    shipperId: lastestStatus.shipper.id,
-                    nextLocation: nextLocation,
-                    orderRouteId: order[index].orderRoutes[nextOrderRouteId].id,
-                    status: status,
-                    arriving: !lastestStatus.arriving
-                });
+                // const res = await publicRequest.post("/orderStatus", {
+                //     shippingOrderId: order[index].id,
+                //     shipperId: lastestStatus.shipper.id,
+                //     nextLocation: nextLocation,
+                //     orderRouteId: order[index].orderRoutes[nextOrderRouteId].id,
+                //     status: status,
+                //     arriving: !lastestStatus.arriving
+                // });
                 console.log(currentOrderRouteIndex);
                 console.log(nextOrderRouteId);
                 // console.log(order[index].orderRoutes);
