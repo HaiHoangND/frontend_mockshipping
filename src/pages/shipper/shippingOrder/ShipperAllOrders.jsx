@@ -91,10 +91,10 @@ const ShipperAllOrders = () => {
             console.log(routeLength);
             console.log(currentOrderRouteIndex);
             console.log(currentOrderRouteId);
-            if (currentOrderRouteId === routeLength) {
+            if (currentOrderRouteIndex === routeLength - 2) {
                 nextLocation = '';
                 status = "Giao hàng thành công"
-                nextOrderRouteId = currentOrderRouteId;
+                nextOrderRouteId = currentOrderRouteId + 1;
             } else if (checkArriving) {
                 if (currentOrderRouteId === 1) {
                     nextLocation = lastestStatus.nextLocation;
@@ -103,7 +103,7 @@ const ShipperAllOrders = () => {
                 } else {
                     nextLocation = order[index].orderRoutes[currentOrderRouteId].address;
                     status = "Đang giao hàng"
-                    nextOrderRouteId = currentOrderRouteIndex + 1;
+                    nextOrderRouteId = currentOrderRouteIndex;
                 }
             } else {
                 nextLocation = order[index].orderRoutes[currentOrderRouteId].address;
