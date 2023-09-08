@@ -44,22 +44,16 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     }
 
     // Check if the last status is "Đơn hủy"
-    if (getArrayLastItem(order.orderStatusList).status === "Đơn hủy") {
+    if (order.orderStatusList[0].status === "Đơn hủy") {
       return true;
     }
 
-    if (
-      getArrayLastItem(order.orderStatusList).status ===
-      "Đã đưa tiền cho chủ shop"
-    ) {
+    if (order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop") {
       return true;
     }
 
     // Check if the warehouseId matches
-    if (
-      authUser().warehouseId ===
-      getArrayLastItem(order.orderStatusList).warehouse?.id
-    ) {
+    if (authUser().warehouseId === order.orderStatusList[0].warehouse?.id) {
       return false;
     }
 

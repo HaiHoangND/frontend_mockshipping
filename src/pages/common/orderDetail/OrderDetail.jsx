@@ -84,8 +84,7 @@ const OrderDetail = () => {
         shipperId: authUser().id,
         orderRouteId: getArrayLastItem(order.orderRoutes).id,
         status:
-          getArrayLastItem(order.orderStatusList).status ===
-          "Giao hàng thành công"
+          order.orderStatusList[0].status === "Giao hàng thành công"
             ? "Quản lý đã nhận tiền"
             : "Đã đưa tiền cho chủ shop",
         arriving: false,
@@ -140,7 +139,7 @@ const OrderDetail = () => {
       return true;
     } else if (
       order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" &&
-      role === "COORDINATOR"
+      (role === "COORDINATOR" || role === "ADMIN")
     ) {
       return true;
     } else {
