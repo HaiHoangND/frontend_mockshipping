@@ -44,22 +44,16 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     }
 
     // Check if the last status is "Đơn hủy"
-    if (getArrayLastItem(order.orderStatusList).status === "Đơn hủy") {
+    if (order.orderStatusList[0].status === "Đơn hủy") {
       return true;
     }
 
-    if (
-      getArrayLastItem(order.orderStatusList).status ===
-      "Đã đưa tiền cho chủ shop"
-    ) {
+    if (order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop") {
       return true;
     }
 
     // Check if the warehouseId matches
-    if (
-      authUser().warehouseId ===
-      getArrayLastItem(order.orderStatusList).warehouse?.id
-    ) {
+    if (authUser().warehouseId === order.orderStatusList[0].warehouse?.id) {
       return false;
     }
 
@@ -76,7 +70,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
       if (
         getIndexOfItem(
           order.orderRoutes,
-          getArrayLastItem(order.orderStatusList).orderRoute.id
+          order.orderStatusList[0].orderRoute.id
         ) ===
         order.orderRoutes.length - 2
       ) {
@@ -86,11 +80,12 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
           order.orderRoutes[
             getIndexOfItem(
               order.orderRoutes,
-              getArrayLastItem(order.orderStatusList).orderRoute.id
+              order.orderStatusList[0].orderRoute.id
             ) + 1
           ].id;
       }
     }
+    console.log(nextOrderRouteId);
 
     try {
       const res = await publicRequest.post("/orderStatus", {
@@ -104,7 +99,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
         arriving:
           order.orderStatusList.length === 0
             ? true
-            : !getArrayLastItem(order.orderStatusList).arriving,
+            : !order.orderStatusList[0].arriving,
       });
       if (res.data.type === "success") {
         navigate(0);
