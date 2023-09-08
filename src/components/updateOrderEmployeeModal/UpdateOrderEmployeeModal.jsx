@@ -69,19 +69,34 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
   console.log(selectedShipper);
 
   const handleUpdateEmployee = async () => {
+    let nextOrderRouteId;
+    if (order.orderStatusList.length === 0) {
+      nextOrderRouteId = order.orderRoutes[0].id;
+    } else {
+      if (
+        getIndexOfItem(
+          order.orderRoutes,
+          getArrayLastItem(order.orderStatusList).orderRoute.id
+        ) ===
+        order.orderRoutes.length - 2
+      ) {
+        nextOrderRouteId = getArrayLastItem(order.orderRoutes).id;
+      } else {
+        nextOrderRouteId =
+          order.orderRoutes[
+            getIndexOfItem(
+              order.orderRoutes,
+              getArrayLastItem(order.orderStatusList).orderRoute.id
+            ) + 1
+          ].id;
+      }
+    }
+
     try {
       const res = await publicRequest.post("/orderStatus", {
         shippingOrderId: order.id,
         shipperId: selectedShipper,
-        orderRouteId:
-          order.orderStatusList.length === 0
-            ? order.orderRoutes[0].id
-            : order.orderRoutes[
-                getIndexOfItem(
-                  order.orderRoutes,
-                  getArrayLastItem(order.orderStatusList).orderRoute.id
-                ) + 1
-              ].id,
+        orderRouteId: nextOrderRouteId,
         status:
           order.orderStatusList.length === 0
             ? "Đang lấy hàng"
