@@ -5,11 +5,11 @@
 .main-container {
     background-color: white;
     height: 100vh;
-    // margin-top: 100px;
     background: url(https://sapo.dktcdn.net/sso-service/images/background-bottom-pos-app.svg) no-repeat;
     background-size: cover;
 
-    .MuiGrid-root {
+
+    .left-logo {
         display: flex;
         align-items: center;
         justify-items: center;
@@ -27,13 +27,15 @@
     }
 
 
+
+
+
 }
 
 @media screen and (max-width: 900px)and (min-height:1000px) {
     main {
         .MuiPaper-root {
             height: 35vh !important;
-            margin-top: -15vh;
         }
     }
 
@@ -51,7 +53,6 @@
     main {
         .MuiPaper-root {
             height: 55vh !important;
-            margin-top: 29vh;
         }
     }
 
@@ -69,7 +70,6 @@
     main {
         .MuiPaper-root {
             height: 40vh !important;
-            margin-top: 0;
         }
     }
 

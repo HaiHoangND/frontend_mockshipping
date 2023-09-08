@@ -80,24 +80,15 @@ export default function Login() {
         >
           <CssBaseline />
           <Grid
+            className="left-logo"
             item
             xs={2}
             sm={3}
             md={7}
-            sx={{
-              // backgroundImage:
-              //   "url(https://sapo.dktcdn.net/sso-service/images/background-bottom-pos-app.svg)",
-              // backgroundRepeat: "no-repeat",
-              // backgroundColor: (t) =>
-              //   t.palette.mode === "light"
-              //     ? t.palette.grey[50]
-              //     : t.palette.grey[900],
-              // backgroundSize: "cover",
-              // backgroundPosition: "center",
-            }}
           ><div className="sapo-logo"></div></Grid>
 
           <Grid
+            className="right-side"
             item
             xs={8}
             sm={6}
