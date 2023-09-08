@@ -41,7 +41,7 @@ function App() {
           path="/"
           element={<CoordinatorRoute Component={CoordinatorDashboard} />}
         />
-        <Route path="/shipper" element={<ShipperAllOrders />} />
+        <Route path="/shipper" element={< ShipperRoute Component={ShipperAllOrders} />} />
 
         <Route path="/login" element={<Login />} />
         <Route
@@ -66,8 +66,8 @@ function App() {
         />
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
 
-        <Route path="/orderDetail/:orderCode" element={<OrderDetail />} />
-        <Route path="/shipper/shipperOrderDetail/:orderCode" element={<ShipperOrderDetail />} />
+        <Route path="/orderDetail/:orderCode" element={<ShipperRoute Component={OrderDetail} />} />
+        <Route path="/shipper/shipperOrderDetail/:orderCode" element={<ShipperRoute Component={ShipperOrderDetail} />} />
 
       </Routes>
     </HashRouter>

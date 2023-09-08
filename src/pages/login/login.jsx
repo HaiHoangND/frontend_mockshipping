@@ -99,23 +99,27 @@ export default function Login() {
             square
           >
             <Box
+              className="form-box"
               sx={{
                 my: 8,
                 mx: 4,
-                height: '30vh',
+                height: '25vh',
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
               }}
             >
-              <Typography component="h1" variant="h5">
+              <Typography
+                className="form-title"
+                component="h1" variant="h5">
                 Đăng nhập
               </Typography>
               <Box
+                className="form-input-text"
                 component="form"
                 noValidate
                 onSubmit={handleSubmit}
-                sx={{ mt: 1, height: '30vh' }}
+                sx={{ mt: 1 }}
               >
                 <TextField
                   size="small"
@@ -151,7 +155,6 @@ export default function Login() {
                 >
                   Sign In
                 </Button>
-                <Copyright sx={{ mt: 5 }} />
               </Box>
             </Box>
           </Grid>

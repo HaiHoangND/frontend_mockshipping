@@ -1,4 +1,4 @@
-import { Home, CalendarToday, Settings, WarningAmber } from '@mui/icons-material';
+import { Home, KeyboardReturn, WarningAmber } from '@mui/icons-material';
 import { Button, TextField } from '@mui/material';
 import { Link, useLocation } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
@@ -6,7 +6,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { publicRequest, userRequest } from "../../../requestMethods";
 import "./ShipperAllOrders.scss";
 import { getArrayLastItem, getIndexOfItem } from '../../../utils/getLastArrayItem';
-import { useAuthUser } from 'react-auth-kit';
+import { useAuthUser, useSignOut } from 'react-auth-kit';
+
 
 const ShipperAllOrders = () => {
     // const pathname = useLocation().pathname.split("/");
@@ -16,7 +17,8 @@ const ShipperAllOrders = () => {
     const [index, setIndex] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isAccepted, setAccepted] = useState(false);
-    const authUser = useAuthUser()
+    const authUser = useAuthUser();
+    const signOut = useSignOut();
 
 
     const getStatusColor = (name) => {
@@ -27,6 +29,8 @@ const ShipperAllOrders = () => {
                 return '#f5a41d'; // Lớp CSS cho nút 2 - màu xanh
             case 'Đang giao hàng':
                 return '#f1c40f'; // Lớp CSS cho nút 3 - màu xanh lá cây
+            case 'Đơn hàng bị hủy':
+                return '#dc3545'
             default:
                 return '#07bc0c'; // Lớp CSS mặc định cho các nút khác
         }
@@ -91,7 +95,7 @@ const ShipperAllOrders = () => {
             if (currentOrderRouteIndex === routeLength - 1 && checkArriving) {
                 nextLocation = '';
                 status = "Giao hàng thành công"
-                nextOrderRouteId = currentOrderRouteIndex ;
+                nextOrderRouteId = currentOrderRouteIndex;
                 console.log("thành công");
             } else if (checkArriving) {
                 if (currentOrderRouteId === 1) {
@@ -201,52 +205,49 @@ const ShipperAllOrders = () => {
                                 key={tab}>{tab}</button>
                         ))}
                     </div>
-                    <div className='topMenuDate'>Tomorrow</div>
+                    <div className='topMenuDate'>Danh sách đơn hàng</div>
                 </div>
-                {order.map((order, index) => (
-                    <div className='orderList' key={order.id}>
-                        <div className='orderListItem'>
-                            <Link to={`/shipper/shipperOrderDetail/${order.orderCode}`}>
-                                <div className='orderTop'>
-                                    <div className='orderDate'>
-                                        <div className='orderDay'>{order.createdAt[2]}/{order.createdAt[1]}</div>
-                                        <div className='orderMonth'>{order.createdAt[0]}</div>
+                <div className='orderScroll'>
+                    {order.map((order, index) => (
+                        <div className='orderList' key={order.id}>
+                            <div className='orderListItem'>
+                                <Link to={`/shipper/shipperOrderDetail/${order.orderCode}`}>
+                                    <div className='orderTop'>
+                                        <div className='orderDate'>
+                                            <div className='orderDay'>{order.createdAt[2]}/{order.createdAt[1]}</div>
+                                            <div className='orderMonth'>{order.createdAt[0]}</div>
+                                        </div>
+                                        <div className='orderInfo'>
+                                            <div className='userAddress'>{order.receiver.address}</div>
+                                            <div className='userName'>{order.receiver.name}</div>
+                                            <div className='userPhone'>{order.receiver.phone}</div>
+                                        </div>
+                                        <div className='orderCurrentStatus'
+                                            style={{ backgroundColor: getStatusColor(getArrayLastItem(order.orderStatusList).status) }}>
+                                            {getArrayLastItem(order.orderStatusList).status}</div>
                                     </div>
-                                    <div className='orderInfo'>
-                                        <div className='userAddress'>{order.receiver.address}</div>
-                                        <div className='userName'>{order.receiver.name}</div>
-                                        <div className='userPhone'>{order.receiver.phone}</div>
-                                    </div>
-                                    <div className='orderCurrentStatus'
-                                        style={{ backgroundColor: getStatusColor(getArrayLastItem(order.orderStatusList).status) }}>
-                                        {getArrayLastItem(order.orderStatusList).status}</div>
+                                </Link>
+                                <div className='orderChangeStatus'>
+                                    <Button variant="contained "
+                                        onClick={() => handleVerified(index)}
+                                        disabled={type === 'Hoàn thành' ? true : false}
+                                        style={type === 'Hoàn thành' ? {
+                                            backgroundColor: 'grey'
+                                        } : {}}
+                                    >Chuyển trạng thái</Button>
                                 </div>
-                            </Link>
-                            <div className='orderChangeStatus'>
-                                <Button variant="contained "
-                                    onClick={() => handleVerified(index)}
-                                    disabled={type === 'Hoàn thành' ? true : false}
-                                    style={type === 'Hoàn thành' ? {
-                                        backgroundColor: 'grey'
-                                    } : {}}
-                                >Chuyển trạng thái</Button>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+
 
                 <div className='botBar'>
-                    <Link to="/shipper">
-                        <div className='botBarItem'>
-                            <Home /> Trang chủ
-                        </div>
-                    </Link>
-                    <Link to="/shipper">
-                        <div className='botBarItem'>
-                            <CalendarToday /> Đơn hàng
-                        </div>
-                    </Link>
+                    <div className='botBarItem' onClick={() => signOut()}>
+                        <KeyboardReturn /> Đăng xuất
+                    </div>
                 </div>
+
             </div>
 
         </>
