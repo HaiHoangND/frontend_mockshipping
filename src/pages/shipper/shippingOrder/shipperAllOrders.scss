@@ -5,6 +5,7 @@
 
     .topMenu {
         width: 100%;
+        height: 15vh;
 
         .topMenuTitle {
             text-align: center;
@@ -31,73 +32,82 @@
         }
     }
 
-    .orderList {
-        margin-top: 30px;
-        margin-bottom: 30px;
+    .orderScroll {
+        overflow-y: auto;
+        overflow-x: none;
+        max-height: 70vh;
 
-        .orderListItem {
-            .orderTop {
-                display: flex;
-                flex-direction: row;
+        .orderList {
+            margin-top: 30px;
+            margin-bottom: 30px;
 
-                .orderDate {
-                    background-color: rgb(228, 228, 228);
-                    margin-right: 15px;
-                    margin-bottom: 20px;
-                    text-align: center;
-                    width: 15%;
+            .orderListItem {
+                .orderTop {
                     display: flex;
-                    flex-direction: column;
-                    padding: 15px;
+                    flex-direction: row;
 
-                    .orderDay {
-                        font-size: 20px;
-                        font-weight: bold;
+                    .orderDate {
+                        background-color: rgb(228, 228, 228);
+                        margin-right: 15px;
+                        margin-bottom: 20px;
+                        text-align: center;
+                        width: 15%;
+                        display: flex;
+                        flex-direction: column;
+                        padding: 15px;
+
+                        .orderDay {
+                            font-size: 20px;
+                            font-weight: bold;
+                        }
+                    }
+
+                    .orderInfo {
+                        width: 45%;
+                        display: flex;
+                        flex-direction: column;
+
+                        .userAddress {
+                            font-weight: bold;
+                        }
+                    }
+
+                    .orderCurrentStatus {
+                        width: 40%;
+                        height: 35px;
+                        border-radius: 20px;
+                        padding: 5px;
+                        text-align: center;
+                        background-color: rgb(228, 228, 228);
+                        color: white;
                     }
                 }
 
-                .orderInfo {
-                    width: 45%;
-                    display: flex;
-                    flex-direction: column;
-
-                    .userAddress {
-                        font-weight: bold;
-                    }
-                }
-
-                .orderCurrentStatus {
-                    width: 40%;
-                    height: 35px;
-                    border-radius: 20px;
-                    padding: 5px;
-                    text-align: center;
-                    background-color: rgb(228, 228, 228);
+                .orderChangeStatus button {
+                    width: 90vw;
+                    background-color: #0088ff;
                     color: white;
+                    border-radius: 15px;
                 }
-            }
-
-            .orderChangeStatus button {
-                width: 90vw;
-                background-color: #0088ff;
-                color: white;
-                border-radius: 15px;
             }
         }
     }
+
 
     .botBar {
         display: flex;
         flex-direction: row;
         width: 100%;
-        position: absolute;
-        top: 688px;
+        height: 10vh;
+        position: fixed;
+        bottom: 0;
+        cursor: pointer;
+        align-items: center;
 
         .botBarItem {
-
             flex-grow: 0;
             flex-shrink: 0;
-            width: 45vw;
+            width: 90vw;
             display: flex;
             flex-direction: column;
             text-align: center;
