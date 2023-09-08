@@ -25,12 +25,6 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        SapoDelivery
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
     </Typography>
   );
 }
@@ -70,44 +64,45 @@ export default function Login() {
         },
       });
       if (res.data.role === "COORDINATOR") return navigate("/coordinator");
-      else if(res.data.role === "SHIPPER") return navigate("/shipper")
-      else if(res.data.role === "ADMIN") return navigate("/admin")
+      else if (res.data.role === "SHIPPER") return navigate("/shipper")
+      else if (res.data.role === "ADMIN") return navigate("/admin")
     }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <div className="main-container">
-        <div className="sapo-logo"></div>
+
         <Grid
           container
           component="main"
-          sx={{ height: "50vh", width: "70vw", margin: "auto" }}
+          sx={{ height: '100vh' }}
         >
           <CssBaseline />
           <Grid
             item
-            xs={false}
-            sm={4}
+            xs={2}
+            sm={3}
             md={7}
             sx={{
-              backgroundImage:
-                "url(https://sapo.dktcdn.net/sso-service/images/background-bottom-pos-app.svg)",
-              backgroundRepeat: "no-repeat",
-              backgroundColor: (t) =>
-                t.palette.mode === "light"
-                  ? t.palette.grey[50]
-                  : t.palette.grey[900],
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              // backgroundImage:
+              //   "url(https://sapo.dktcdn.net/sso-service/images/background-bottom-pos-app.svg)",
+              // backgroundRepeat: "no-repeat",
+              // backgroundColor: (t) =>
+              //   t.palette.mode === "light"
+              //     ? t.palette.grey[50]
+              //     : t.palette.grey[900],
+              // backgroundSize: "cover",
+              // backgroundPosition: "center",
             }}
-          />
+          ><div className="sapo-logo"></div></Grid>
 
           <Grid
             item
-            xs={12}
-            sm={8}
-            md={5}
+            xs={8}
+            sm={6}
+            md={4}
+            sx={{ my: 20, height: '60vh' }}
             component={Paper}
             elevation={6}
             square
@@ -116,21 +111,23 @@ export default function Login() {
               sx={{
                 my: 8,
                 mx: 4,
+                height: '30vh',
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
               }}
             >
               <Typography component="h1" variant="h5">
-                Sign in
+                Đăng nhập
               </Typography>
               <Box
                 component="form"
                 noValidate
                 onSubmit={handleSubmit}
-                sx={{ mt: 1 }}
+                sx={{ mt: 1, height: '30vh' }}
               >
                 <TextField
+                  size="small"
                   margin="normal"
                   required
                   fullWidth
@@ -143,6 +140,7 @@ export default function Login() {
                   value={user.email}
                 />
                 <TextField
+                  size="small"
                   margin="normal"
                   required
                   fullWidth
@@ -154,10 +152,6 @@ export default function Login() {
                   onChange={(e) => onInputChange(e)}
                   value={user.password}
                 />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                />
                 <Button
                   type="submit"
                   fullWidth
@@ -166,18 +160,6 @@ export default function Login() {
                 >
                   Sign In
                 </Button>
-                {/* <Grid container>
-                                    <Grid item xs>
-                                        <Link href="#" variant="body2">
-                                            Forgot password?
-                                        </Link>
-                                    </Grid>
-                                    <Grid item>
-                                        <Link href="#" variant="body2">
-                                            {"Don't have an account? Sign Up"}
-                                        </Link>
-                                    </Grid>
-                                </Grid> */}
                 <Copyright sx={{ mt: 5 }} />
               </Box>
             </Box>
