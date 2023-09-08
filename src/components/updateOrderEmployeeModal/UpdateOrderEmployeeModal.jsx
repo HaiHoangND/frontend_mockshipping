@@ -76,7 +76,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
       if (
         getIndexOfItem(
           order.orderRoutes,
-          getArrayLastItem(order.orderStatusList).orderRoute.id
+          order.orderStatusList[0].orderRoute.id
         ) ===
         order.orderRoutes.length - 2
       ) {
@@ -86,11 +86,12 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
           order.orderRoutes[
             getIndexOfItem(
               order.orderRoutes,
-              getArrayLastItem(order.orderStatusList).orderRoute.id
+              order.orderStatusList[0].orderRoute.id
             ) + 1
           ].id;
       }
     }
+    console.log(nextOrderRouteId);
 
     try {
       const res = await publicRequest.post("/orderStatus", {
@@ -104,7 +105,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
         arriving:
           order.orderStatusList.length === 0
             ? true
-            : !getArrayLastItem(order.orderStatusList).arriving,
+            : !order.orderStatusList[0].arriving,
       });
       if (res.data.type === "success") {
         navigate(0);

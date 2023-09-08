@@ -46,7 +46,6 @@ const ShipperAllOrders = () => {
     }
 
     const handleUpdateFinalStatus = () => {
-        console.log('isacc', isAccepted)
         if (isAccepted) {
             handleChangeStatus(index);
             getOrders(type);
@@ -58,11 +57,11 @@ const ShipperAllOrders = () => {
         console.log(tab);
         if (tab === 'Chưa hoàn thành') {
             const res = await userRequest.get(`/user/getFilterShippingOrders?shipperId=${authUser().id}&statusFilter=unSuccessful`);
-            console.log(res);
+            console.log(res.data);
             setOrder(res.data.data);
         } else {
             const res = await userRequest.get(`/user/getFilterShippingOrders?shipperId=${authUser().id}&statusFilter=successful`);
-            console.log(res);
+            console.log(res.data);
             setOrder(res.data.data);
         }
     };
@@ -80,21 +79,20 @@ const ShipperAllOrders = () => {
     const handleChangeStatus = async (index) => {
         if (index !== null) {
             let lastestStatus = getArrayLastItem(order[index].orderStatusList);
-            console.log(lastestStatus);
             let routeLength = order[index].orderRoutes.length;
             let status = '';
             let nextLocation = '';
             let nextOrderRouteId;
             let checkArriving = lastestStatus.arriving;
+            console.log(checkArriving);
+            console.log(lastestStatus);
             let currentOrderRouteId = lastestStatus.orderRoute.routeId;
             let currentOrderRouteIndex = getIndexOfItem(order[index].orderRoutes, lastestStatus.orderRoute.id);
-            console.log(routeLength);
-            console.log(currentOrderRouteIndex);
-            console.log(currentOrderRouteId);
-            if (currentOrderRouteIndex === routeLength - 2) {
+            if (currentOrderRouteIndex === routeLength - 1 && checkArriving) {
                 nextLocation = '';
                 status = "Giao hàng thành công"
-                nextOrderRouteId = currentOrderRouteId + 1;
+                nextOrderRouteId = currentOrderRouteIndex ;
+                console.log("thành công");
             } else if (checkArriving) {
                 if (currentOrderRouteId === 1) {
                     nextLocation = lastestStatus.nextLocation;
@@ -111,17 +109,20 @@ const ShipperAllOrders = () => {
                 nextOrderRouteId = currentOrderRouteIndex + 1;
             }
             try {
-                // const res = await publicRequest.post("/orderStatus", {
-                //     shippingOrderId: order[index].id,
-                //     shipperId: lastestStatus.shipper.id,
-                //     nextLocation: nextLocation,
-                //     orderRouteId: order[index].orderRoutes[nextOrderRouteId].id,
-                //     status: status,
-                //     arriving: !lastestStatus.arriving
-                // });
-                console.log(currentOrderRouteIndex);
-                console.log(nextOrderRouteId);
+                const res = await publicRequest.post("/orderStatus", {
+                    shippingOrderId: order[index].id,
+                    shipperId: lastestStatus.shipper.id,
+                    nextLocation: nextLocation,
+                    orderRouteId: order[index].orderRoutes[nextOrderRouteId].id,
+                    status: status,
+                    arriving: !lastestStatus.arriving
+                });
+                // console.log(currentOrderRouteIndex);
+                // console.log(nextOrderRouteId);
                 // console.log(order[index].orderRoutes);
+                // console.log(order[index].orderRoutes[nextOrderRouteId].id);
+                // console.log(nextOrderRouteId);
+                // console.log(currentOrderRouteId);
             } catch (error) {
                 console.log(error)
             }
