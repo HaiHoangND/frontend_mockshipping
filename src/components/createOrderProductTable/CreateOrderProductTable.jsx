@@ -4,7 +4,11 @@ import * as XLSX from "xlsx";
 import { convertCurrency } from "../../utils/formatStrings";
 import { AddProductModal } from "../addProductModal/AddProductModal";
 
-export const CreateOrderProductTable = ({ onProductPriceChange, onProductWeightChange, onProductChange }) => {
+export const CreateOrderProductTable = ({
+  onProductPriceChange,
+  onProductWeightChange,
+  onProductChange,
+}) => {
   const [products, setProducts] = useState([]);
   const fileInputRef = useRef(null);
 
@@ -14,6 +18,7 @@ export const CreateOrderProductTable = ({ onProductPriceChange, onProductWeightC
 
   const handleClearProducts = () => {
     setProducts([]);
+    onProductChange([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // This clears the selected file
     }
@@ -28,13 +33,36 @@ export const CreateOrderProductTable = ({ onProductPriceChange, onProductWeightC
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
-      setProducts(parsedData);
-      onProductChange(parsedData)
+      setProducts((prevProducts) => [...prevProducts, ...parsedData]);
+      onProductChange((prevProducts) => [...prevProducts, ...parsedData]);
     };
   };
 
   const handleAddProduct = (inputs, imageURL) => {
-    console.log(imageURL);
+    console.log(inputs, imageURL);
+    setProducts((prevProducts) => [
+      ...prevProducts,
+      {
+        image: imageURL,
+        name: inputs.name,
+        price: parseInt(inputs.price),
+        quantity: parseInt(inputs.quantity),
+        description: inputs.description,
+        weight: parseFloat(inputs.weight),
+      },
+    ]);
+
+    onProductChange((prevProducts) => [
+      ...prevProducts,
+      {
+        image: imageURL,
+        name: inputs.name,
+        price: parseInt(inputs.price),
+        quantity: parseInt(inputs.quantity),
+        description: inputs.description,
+        weight: parseFloat(inputs.weight),
+      },
+    ]);
   };
   useEffect(() => {
     let productWeight = 0;
@@ -74,7 +102,7 @@ export const CreateOrderProductTable = ({ onProductPriceChange, onProductWeightC
         </thead>
 
         <tbody>
-          {products.length > 0 ? (
+          {products.length > 0 &&
             products.map((product, index) => (
               <tr key={index}>
                 <td>
@@ -92,14 +120,12 @@ export const CreateOrderProductTable = ({ onProductPriceChange, onProductWeightC
                 <td>{convertCurrency(product.price)}</td>
                 <td>{product.description}</td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td style={{ textAlign: "center" }} colSpan={6}>
-                <AddProductModal handleAddProduct={handleAddProduct} />
-              </td>
-            </tr>
-          )}
+            ))}
+          <tr>
+            <td style={{ textAlign: "center" }} colSpan={6}>
+              <AddProductModal handleAddProduct={handleAddProduct} />
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

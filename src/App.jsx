@@ -20,6 +20,10 @@ function App() {
   const authUser = useAuthUser();
   const role = authUser()?.role;
 
+  const CommonRoute = ({ Component }) => {
+    return auth ? <Component /> : <Navigate to="/login" />;
+  };
+
   const CoordinatorRoute = ({ Component }) => {
     return role === "COORDINATOR" ? <Component /> : <Navigate to="/login" />;
   };
@@ -64,11 +68,15 @@ function App() {
           path="/admin/warehouses"
           element={<AdminRoute Component={WarehouseList} />}
         />
-        {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
 
-        <Route path="/orderDetail/:orderCode" element={<OrderDetail />} />
-        <Route path="/shipper/shipperOrderDetail/:orderCode" element={<ShipperOrderDetail />} />
-
+        <Route
+          path="/orderDetail/:orderCode"
+          element={<CommonRoute Component={OrderDetail} />}
+        />
+        <Route
+          path="/shipper/shipperOrderDetail/:orderCode"
+          element={<ShipperRoute Component={ShipperOrderDetail} />}
+        />
       </Routes>
     </HashRouter>
   );

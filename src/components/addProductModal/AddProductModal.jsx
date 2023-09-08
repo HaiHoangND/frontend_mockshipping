@@ -5,6 +5,7 @@ import { Fragment, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { storage } from "../../firebase";
 import "./addProductModal.scss";
+import { useToastShow } from "../../utils/toastSettings";
 
 export const AddProductModal = ({ handleAddProduct }) => {
   let [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,13 @@ export const AddProductModal = ({ handleAddProduct }) => {
     setIsOpen(true);
   }
 
+  const handleInputsChange = (e) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const handleChooseImg = () => {
     fileInputRef.current.click();
   };
@@ -34,6 +42,7 @@ export const AddProductModal = ({ handleAddProduct }) => {
     setImgURL(uploadedImgURL);
   };
   const addProduct = async () => {
+    useToastShow("Đang thêm sản phẩm")
     await handleUploadImg();
     handleAddProduct(inputs, imgURL);
   };
@@ -85,6 +94,7 @@ export const AddProductModal = ({ handleAddProduct }) => {
                           multiline
                           maxRows={4}
                           placeholder="Áo khoác da"
+                          onChange={handleInputsChange}
                         />
                       </div>
                       <div className="createProductModalInputWrapper">
@@ -94,6 +104,7 @@ export const AddProductModal = ({ handleAddProduct }) => {
                           multiline
                           maxRows={4}
                           placeholder="5"
+                          onChange={handleInputsChange}
                         />
                       </div>
                       <div className="createProductModalInputWrapper ">
@@ -101,6 +112,7 @@ export const AddProductModal = ({ handleAddProduct }) => {
                           label="Cân nặng"
                           name="weight"
                           placeholder="3.2"
+                          onChange={handleInputsChange}
                         />
                       </div>
                       <div className="createProductModalInputWrapper col-span-2">
@@ -108,6 +120,7 @@ export const AddProductModal = ({ handleAddProduct }) => {
                           label="Đơn giá"
                           name="price"
                           placeholder="23000"
+                          onChange={handleInputsChange}
                         />
                       </div>
                       <div className="createProductModalInputWrapper col-span-2">
@@ -116,12 +129,15 @@ export const AddProductModal = ({ handleAddProduct }) => {
                           label="Mô tả sản phẩm"
                           multiline
                           maxRows={5}
+                          onChange={handleInputsChange}
                         />
                       </div>
                     </div>
 
                     <div className="createProductModalUploadImage">
-                      <button onClick={handleChooseImg}>Chọn hình ảnh sản phẩm</button>
+                      <button onClick={handleChooseImg}>
+                        Chọn hình ảnh sản phẩm
+                      </button>
                       <input
                         type="file"
                         onChange={(e) => setImgFile(e.target.files[0])}

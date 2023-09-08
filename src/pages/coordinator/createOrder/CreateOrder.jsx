@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
+  const [isValid, setIsValid] = useState(false);
   const [senderInfo, setSenderInfo] = useState();
   const [receiverInfo, setReceiverInfo] = useState();
   const [optimalRoute, setOptimalRoute] = useState([]);
@@ -45,14 +46,37 @@ const CreateOrder = () => {
     if (productWeight > 5) return routeFee + (routeFee * 30) / 100;
     else return routeFee;
   };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleGetOptimalRoute = () => {
     if (
+      !senderInfo?.name ||
+      !receiverInfo?.name ||
+      !receiverInfo?.phone ||
+      !senderInfo?.phone ||
+      !senderInfo?.email ||
+      !receiverInfo?.email ||
       !senderInfo?.district ||
       !receiverInfo?.district ||
       !receiverInfo?.detailedAddress ||
       !senderInfo?.detailedAddress
-    )
+    ) {
       return useToastError("Xin hãy điền đầy đủ địa chỉ!");
+    } else if (
+      senderInfo?.phone !== parseInt(senderInfo?.phone).toString() ||
+      receiverInfo?.phone !== parseInt(receiverInfo?.phone).toString()
+    ) {
+      return useToastError("Số điện thoại sai định dạng");
+    } else if (
+      !validateEmail(senderInfo?.email) ||
+      !validateEmail(senderInfo?.email)
+    ) {
+      return useToastError("Email sai định dạng");
+    }
     const senderAddressId = districts.find(
       (item) => item.district === senderInfo.district
     )?.id;
@@ -70,67 +94,79 @@ const CreateOrder = () => {
 
   const handleCreateOrder = async () => {
     try {
-      // Create sender
-      const sender = await publicRequest.post("/sender", {
-        name: senderInfo.name,
-        address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
-        phone: senderInfo.phone,
-      });
-      // Create receiver
-      const receiver = await publicRequest.post("/receiver", {
-        name: receiverInfo.name,
-        address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
-        phone: receiverInfo.phone,
-      });
-      console.log(receiver.data);
-      // Create order
-      const shippingOrder = await publicRequest.post("/order", {
-        orderCode: v4(),
-        senderId: sender.data.data.id,
-        receiverId: receiver.data.data.id,
-        serviceFee: calculateServiceFee(),
-      });
-      // Create routes
-      await publicRequest.post("/orderRoute", {
-        address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
-        warehouseId: 2,
-        shippingOrderId: shippingOrder.data.data.id,
-        routeId: 1,
-      });
-      for (const route of optimalRoute) {
-        const routeId = optimalRoute.indexOf(route) + 2;
+      if (!isValid) {
+        return useToastError("Thông tin đơn hàng chưa hợp lệ!");
+      } else {
+        // Create sender
+        const sender = await publicRequest.post("/sender", {
+          name: senderInfo.name,
+          address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
+          phone: senderInfo.phone,
+        });
+        // Create receiver
+        const receiver = await publicRequest.post("/receiver", {
+          name: receiverInfo.name,
+          address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
+          phone: receiverInfo.phone,
+        });
+        console.log(receiver.data);
+        // Create order
+        const shippingOrder = await publicRequest.post("/order", {
+          orderCode: v4(),
+          senderId: sender.data.data.id,
+          receiverId: receiver.data.data.id,
+          serviceFee: calculateServiceFee(),
+        });
+        // Create routes
         await publicRequest.post("/orderRoute", {
-          address: route.name,
-          warehouseId: route.id,
+          address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
+          warehouseId: 2,
           shippingOrderId: shippingOrder.data.data.id,
-          routeId,
+          routeId: 1,
         });
-      }
-      await publicRequest.post("/orderRoute", {
-        address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
-        warehouseId: 3,
-        shippingOrderId: shippingOrder.data.data.id,
-        routeId: optimalRoute.length + 2,
-      });
-      // Create products
-      for (const product of products) {
-        await publicRequest.post("/product", {
-          name: product.name,
-          quantity: product.quantity,
-          price: product.price,
-          image: product.image,
-          weight: product.weight,
-          description: product.description,
+        for (const route of optimalRoute) {
+          const routeId = optimalRoute.indexOf(route) + 2;
+          await publicRequest.post("/orderRoute", {
+            address: route.name,
+            warehouseId: route.id,
+            shippingOrderId: shippingOrder.data.data.id,
+            routeId,
+          });
+        }
+        await publicRequest.post("/orderRoute", {
+          address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
+          warehouseId: 3,
           shippingOrderId: shippingOrder.data.data.id,
+          routeId: optimalRoute.length + 2,
         });
-      }
+        // Create products
+        for (const product of products) {
+          await publicRequest.post("/product", {
+            name: product.name,
+            quantity: product.quantity,
+            price: product.price,
+            image: product.image,
+            weight: product.weight,
+            description: product.description,
+            shippingOrderId: shippingOrder.data.data.id,
+          });
+        }
 
-      useToastSuccess("Order created");
-      // navigate("/coordinate");
+        useToastSuccess("Order created");
+        navigate("/coordinator");
+      }
     } catch (error) {
       console.log(error);
     }
   };
+  useEffect(() => {
+    if (optimalRoute.length === 0 || products.length === 0) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+  }, [optimalRoute, products]);
+
   return (
     <div className="bodyContainer">
       <Sidebar />

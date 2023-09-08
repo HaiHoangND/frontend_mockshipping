@@ -52,13 +52,13 @@ export const OrderListTable = () => {
           setOrders(res.data.data.content);
         } else return useToastError("Something went wrong!");
       } else if (role === "COORDINATOR") {
-        // res = await publicRequest.get(
-        //   `/warehouse/getAllShippingOrders?warehouseId=${warehouseId}`
-        // );
-        res = await publicRequest.get(`/order?pageNumber=${page}&pageSize=5`);
+        res = await publicRequest.get(
+          `/warehouse/getAllShippingOrders?warehouseId=${warehouseId}`
+        );
+        // res = await publicRequest.get(`/order?pageNumber=${page}&pageSize=5`);
         if (res.data.type === "success") {
           useToastSuccess(res.data.message);
-          setOrders(res.data.data.content);
+          setOrders(res.data.data);
         } else return useToastError("Something went wrong!");
       }
     } catch (error) {
