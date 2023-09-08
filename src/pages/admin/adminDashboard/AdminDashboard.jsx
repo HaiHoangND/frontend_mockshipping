@@ -41,14 +41,8 @@ const AdminDashboard = () => {
     }
   };
 
-  const getCurrentDate = () => {
-    const day = currentDate.getDate().toString().padStart(2, "0"); // Get the day and pad it with leading zeros if needed
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Get the month (Note: Month is zero-based, so we add 1) and pad it
-    const year = currentDate.getFullYear();
-  };
 
   useEffect(() => {
-    getCurrentDate();
     getStats();
   }, []);
 

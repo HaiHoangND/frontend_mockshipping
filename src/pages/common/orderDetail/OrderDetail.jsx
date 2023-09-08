@@ -63,7 +63,7 @@ const OrderDetail = () => {
         shipperId:
           order.orderStatusList.length === 0
             ? authUser().id
-            : getArrayLastItem(order.orderStatusList).shipper.id,
+            : order.orderStatusList[0].shipper.id,
         orderRouteId: order.orderRoutes[0].id,
         status: "Đơn hủy",
         arriving: false,
@@ -314,34 +314,34 @@ const OrderDetail = () => {
                     <>
                       <div className="shipperDetailItem">
                         <span>Mã số nhân viên:</span>
-                        <span>{order.orderStatusList[0].shipper.id}</span>
+                        <span>{getArrayLastItem(order.orderStatusList).shipper.id}</span>
                       </div>
                       <div className="shipperDetailItem">
                         <span>Mã số cơ quan:</span>
                         <span>
                           {order.orderStatusList.length === 0
                             ? authUser().warehouseId
-                            : order.orderStatusList[0].shipper.warehouseId}
+                            : getArrayLastItem(order.orderStatusList).shipper.warehouseId}
                         </span>
                       </div>
                       <div className="shipperDetailItem">
                         <span>Tên:</span>
-                        <span>{order.orderStatusList[0].shipper.fullName}</span>
+                        <span>{getArrayLastItem(order.orderStatusList).shipper.fullName}</span>
                       </div>
                       <div className="shipperDetailItem">
                         <span>Email:</span>
-                        <span>{order.orderStatusList[0].shipper.email}</span>
+                        <span>{getArrayLastItem(order.orderStatusList).shipper.email}</span>
                       </div>
                       <div className="shipperDetailItem">
                         <span>Số điện thoại:</span>
-                        <span>{order.orderStatusList[0].shipper.phone}</span>
+                        <span>{getArrayLastItem(order.orderStatusList).shipper.phone}</span>
                       </div>
                       <div className="shipperDetailItem">
                         <span>Chức vụ:</span>
                         <span>
                           {order.orderStatusList.length === 0
                             ? authUser().role
-                            : order.orderStatusList[0].shipper.role}
+                            : getArrayLastItem(order.orderStatusList).shipper.role}
                         </span>
                       </div>
                     </>
