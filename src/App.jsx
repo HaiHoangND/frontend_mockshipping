@@ -70,7 +70,6 @@ function App() {
         />
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
 
-        <Route path="/orderDetail/:orderCode" element={<ShipperRoute Component={OrderDetail} />} />
         <Route path="/shipper/shipperOrderDetail/:orderCode" element={<ShipperRoute Component={ShipperOrderDetail} />} />
 
         <Route
