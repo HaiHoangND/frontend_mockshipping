@@ -13,6 +13,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
   const [shippers, setShippers] = useState([]);
   const [selectedShipper, setSelectedShipper] = useState("");
   const authUser = useAuthUser();
+  const role = authUser().role;
 
   function closeModal() {
     setIsOpen(false);
@@ -23,9 +24,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
   }
 
   const getShippers = async () => {
-    const res = await publicRequest.get(
-      `/warehouse/getShippersWithStatus?warehouseId=${authUser().warehouseId}`
-    );
+    const res = await publicRequest.get(`/user/getShippersWithStatus`);
     const filteredResult = res.data.data.map((item) => item.user);
     setShippers(filteredResult);
   };
@@ -67,25 +66,8 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     if (order.orderStatusList.length === 0) {
       nextOrderRouteId = order.orderRoutes[0].id;
     } else {
-      if (
-        getIndexOfItem(
-          order.orderRoutes,
-          order.orderStatusList[0].orderRoute.id
-        ) ===
-        order.orderRoutes.length - 2
-      ) {
-        nextOrderRouteId = getArrayLastItem(order.orderRoutes).id;
-      } else {
-        nextOrderRouteId =
-          order.orderRoutes[
-            getIndexOfItem(
-              order.orderRoutes,
-              order.orderStatusList[0].orderRoute.id
-            ) + 1
-          ].id;
-      }
+      nextOrderRouteId = order.orderRoutes[1].id;
     }
-    console.log(nextOrderRouteId);
 
     try {
       const res = await publicRequest.post("/orderStatus", {
@@ -111,14 +93,18 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
 
   return (
     <>
-      <button
-        onClick={openModal}
-        style={{ cursor: "pointer" }}
-        className="updateEmployeeModalBtn"
-        disabled={isDisabled()}
-      >
-        Cập nhật nhân viên
-      </button>
+      {role !== "SHOP" ? (
+        <button
+          onClick={openModal}
+          style={{ cursor: "pointer" }}
+          className="updateEmployeeModalBtn"
+          disabled={isDisabled()}
+        >
+          Cập nhật nhân viên
+        </button>
+      ) : (
+        <div></div>
+      )}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -156,12 +142,10 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
                   >
                     Cập nhật nhân viên đảm nhận
                   </Dialog.Title>
-                  <div className="mt-2">
-                    <InputLabel id="select-label">Nhân viên</InputLabel>
+                  <div className="mt-2 selectInput">
                     <Select
                       labelId="select-label"
                       value={selectedShipper}
-                      label="Nhân viên"
                       onChange={handleShipperChange}
                       defaultValue={
                         shippers.length > 0 ? shippers[0].fullName : ""

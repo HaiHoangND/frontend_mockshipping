@@ -1,4 +1,4 @@
-.shippersTableContainer{
+.shippersTableContainer {
     background-color: white;
     padding: 25px;
     margin: 30px 20px;
@@ -11,6 +11,24 @@
         margin: 0;
         svg {
             margin-right: 10px;
+        }
+    }
+    .shipperTableAddEmployeeBtn {
+        display: flex;
+        font-size: 17px;
+        margin: 20px 0px;
+        justify-content: flex-end;
+        width: 100%;
+        button {
+            padding: 10px 15px;
+            background-color: #14ae5c;
+            border-radius: 50px;
+            color: white;
+            transition: all ease 2s;
+            &:hover{
+                background-color: red;
+                width: 200px;
+            }
         }
     }
 }

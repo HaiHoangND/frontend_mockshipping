@@ -286,10 +286,6 @@ const OrderDetail = () => {
               </h3>
               <div className="orderDetailPersonalInfosWrapper">
                 <OrderDetailPersonalInfo
-                  person={order.sender}
-                  type={"Người gửi"}
-                />
-                <OrderDetailPersonalInfo
                   person={order.receiver}
                   type={"Người nhận"}
                 />
@@ -409,6 +405,20 @@ const OrderDetail = () => {
                         </div>
                       </div>
                     ))}
+                    <div className="orderDetailStatusItem">
+                      <div className="statusTime">
+                        {formatDateTimeDetail(order.createdAt)}
+                      </div>
+                      <div className="statusCircle" style={{backgroundColor:"gray", borderColor:"gray"}}>
+                        <ReceiptLongOutlined/>
+                      </div>
+                      <div className="statusDetailWrapper">
+                        <div className="statusDetailTitle">Tạo đơn</div>
+                        <div className="statusDetailSub">
+                          Tạo đơn thành công
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

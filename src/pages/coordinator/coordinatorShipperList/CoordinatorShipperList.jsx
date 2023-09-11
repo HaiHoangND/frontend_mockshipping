@@ -1,4 +1,4 @@
-import { ReceiptLong } from "@mui/icons-material";
+import { AddCircle, ReceiptLong } from "@mui/icons-material";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import "./coordinatorShipperList.scss";
@@ -9,13 +9,12 @@ import { useAuthUser } from "react-auth-kit";
 
 const CoordinatorShipperList = () => {
   const authUser = useAuthUser();
-  const warehouseId = authUser().warehouseId;
   const [shippers, setShippers] = useState([]);
 
   const getShippers = async () => {
     try {
       const res = await publicRequest.get(
-        `/warehouse/getShippersWithStatus?warehouseId=${warehouseId}`
+        `/user/getShippersWithStatus`
       );
       setShippers(res.data.data);
     } catch (error) {
@@ -36,6 +35,9 @@ const CoordinatorShipperList = () => {
             <h3>
               <ReceiptLong fontSize="inherit" /> Danh sách nhân viên
             </h3>
+            <div className="shipperTableAddEmployeeBtn">
+              <button><AddCircle/> Thêm mới nhân viên</button>
+            </div>
             <ShippersTable shipperData={shippers} />
           </div>
         )}
