@@ -3,26 +3,25 @@ import {
     , Place, Person, Home, Call, WarningAmber
 } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 
 import "./shipperOrderDetail.scss";
 import { Fragment, useState, useEffect } from 'react';
 import { publicRequest, userRequest } from "../../../requestMethods";
-import { getArrayLastItem } from '../../../utils/getLastArrayItem';
+import { getArrayLastItem, getIndexOfItem } from '../../../utils/getLastArrayItem';
 import { convertCurrency } from '../../../utils/formatStrings';
 
 
 const ShipperOrderDetail = () => {
     const shippingOrderCode = useLocation().pathname.split("/")[3];
+    const navigate = useNavigate();
     const [orderInfo, setOrderInfo] = useState([]);
-    // const { shippingOrderCode } = useParams();
     const [isOpen, setIsOpen] = useState(false);
     const [isAccepted, setAccepted] = useState(false);
     const [statusButton, setStatusButton] = useState('');
     console.log(shippingOrderCode);
     console.log(orderInfo);
-
     const getSumOfItemPrice = (array) => {
         let sumOfOrderPrice = 0;
         if (array && array.length !== 0) {
@@ -48,6 +47,17 @@ const ShipperOrderDetail = () => {
         getOrderDetail();
     }, [])
 
+    const handleUpdateFinalStatus = () => {
+        if (isAccepted) {
+            handleChangeStatus();
+            navigate("/shipper");
+        }
+    }
+
+    useEffect(() => {
+        handleUpdateFinalStatus();
+    }, [isAccepted])
+
     const closeModal = () => {
         setIsOpen(false);
     }
@@ -56,62 +66,60 @@ const ShipperOrderDetail = () => {
         setIsOpen(true);
     }
 
-    const handleVerified = () => {
-        openModal();
-    }
+
+
     const handleChangeStatus = async () => {
-        if (isAccepted) {
-            let lastestStatus = getArrayLastItem(orderInfo.orderStatusList);
-            let routeLength = orderInfo.orderRoutes.length;
-            let status = '';
-            let nextLocation = '';
-            let nextOrderRouteId;
-            let checkArriving;
-            // let currentNextLocation = lastestStatus.nextLocation;
-            let currentOrderRouteId = lastestStatus.orderRoute.routeId;
-            console.log(currentOrderRouteId);
-            if (currentOrderRouteId === routeLength) {
-                nextLocation = '';
-                status = "Giao hàng thành công"
-                nextOrderRouteId = currentOrderRouteId;
-            } else if (checkArriving && currentOrderRouteId === 1) {
-                nextLocation = orderInfo.orderRoutes[currentOrderRouteId].address;
-                status = "Đang lấy hàng"
-                nextOrderRouteId = currentOrderRouteId + 1;
-            } else if (!checkArriving && currentOrderRouteId === 1) {
-                nextLocation = orderInfo.orderRoutes[currentOrderRouteId].address;
+        let lastestStatus = getArrayLastItem(orderInfo.orderStatusList);
+        let routeLength = orderInfo.orderRoutes.length;
+        let status = '';
+        let nextLocation = '';
+        let nextOrderRouteId;
+        let checkArriving = lastestStatus.arriving;
+        console.log(checkArriving);
+        console.log(lastestStatus);
+        let currentOrderRouteId = lastestStatus.orderRoute.routeId;
+        let currentOrderRouteIndex = getIndexOfItem(orderInfo.orderRoutes, lastestStatus.orderRoute.id);
+        if (currentOrderRouteIndex === routeLength - 1 && checkArriving) {
+            nextLocation = '';
+            status = "Giao hàng thành công"
+            nextOrderRouteId = currentOrderRouteIndex;
+        } else if (checkArriving) {
+            if (currentOrderRouteId === 1) {
+                nextLocation = lastestStatus.nextLocation;
                 status = "Lấy hàng thành công"
-                nextOrderRouteId = currentOrderRouteId + 1;
-            }
-            else {
+                nextOrderRouteId = currentOrderRouteIndex;
+            } else {
                 nextLocation = orderInfo.orderRoutes[currentOrderRouteId].address;
                 status = "Đang giao hàng"
-                nextOrderRouteId = currentOrderRouteId + 1;
+                nextOrderRouteId = currentOrderRouteIndex + 1;
             }
-            try {
-                const res = await publicRequest.post("/orderStatus", {
-                    shippingOrderId: orderInfo.id,
-                    shipperId: lastestStatus.shipper.id,
-                    nextLocation: nextLocation,
-                    orderRouteId: nextOrderRouteId,
-                    status: status,
-                    arriving: !lastestStatus.arriving
-                });
-                console.log(res);
-            } catch (error) {
-                console.log(error)
-            }
-            setAccepted(false);
-            closeModal();
+        } else {
+            nextLocation = orderInfo.orderRoutes[currentOrderRouteId].address;
+            status = "Đang giao hàng"
+            nextOrderRouteId = currentOrderRouteIndex + 1;
         }
+        try {
+            const res = await publicRequest.post("/orderStatus", {
+                shippingOrderId: orderInfo.id,
+                shipperId: lastestStatus.shipper.id,
+                nextLocation: nextLocation,
+                orderRouteId: orderInfo.orderRoutes[nextOrderRouteId].id,
+                status: status,
+                arriving: !lastestStatus.arriving
+            });
+            // console.log(currentOrderRouteIndex);
+            // console.log(nextOrderRouteId);
+            // console.log(order[index].orderRoutes);
+            // console.log(order[index].orderRoutes[nextOrderRouteId].id);
+            // console.log(nextOrderRouteId);
+            // console.log(currentOrderRouteId);
+        } catch (error) {
+            console.log(error)
+        }
+        // setAccepted(false);
+        closeModal();
+
     }
-
-
-    useEffect(() => {
-        handleChangeStatus();
-        getOrderDetail();
-    }, [isAccepted])
-
 
     return (
         <>
@@ -185,7 +193,7 @@ const ShipperOrderDetail = () => {
                         <div className='orderTitle'>Giao tới</div>
                         <div className='orderItem'>
                             <Place /> {orderInfo && orderInfo.orderStatusList &&
-                                getArrayLastItem(orderInfo.orderStatusList).orderRoute.warehouse.address
+                                getArrayLastItem(orderInfo.orderStatusList).orderRoute.address
                             }
                         </div>
                     </div>
@@ -246,7 +254,7 @@ const ShipperOrderDetail = () => {
                     <div className='orderChangeStatus'>
                         <Button variant="contained"
                             disabled={statusButton === 'Hoàn thành' ? true : false}
-                            onClick={() => handleVerified()}>Chuyển trạng thái</Button>
+                            onClick={() => openModal()}>Chuyển trạng thái</Button>
                     </div>
                 </div>
             }
