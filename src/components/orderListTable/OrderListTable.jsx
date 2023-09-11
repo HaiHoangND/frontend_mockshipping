@@ -38,26 +38,22 @@ export const OrderListTable = () => {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
   const authUser = useAuthUser();
-  const warehouseId = authUser().warehouseId;
   const role = authUser().role;
 
   console.log(orders);
   const getOrders = async () => {
     let res;
     try {
-      if (role === "ADMIN") {
+      if (role === "ADMIN" || role === "COORDINATOR") {
         res = await publicRequest.get(`/order?pageNumber=${page}&pageSize=5`);
         if (res.data.type === "success") {
-          useToastSuccess(res.data.message);
           setOrders(res.data.data.content);
         } else return useToastError("Something went wrong!");
-      } else if (role === "COORDINATOR") {
+      } else if (role === "SHOP") {
         res = await publicRequest.get(
-          `/warehouse/getAllShippingOrders?warehouseId=${warehouseId}`
+          `/order/getByShopOwnerId?ShopOwnerId=${authUser().id}`
         );
-        // res = await publicRequest.get(`/order?pageNumber=${page}&pageSize=5`);
         if (res.data.type === "success") {
-          useToastSuccess(res.data.message);
           setOrders(res.data.data);
         } else return useToastError("Something went wrong!");
       }
@@ -78,7 +74,7 @@ export const OrderListTable = () => {
   };
 
   return (
-      <div>
+    <div>
       <table>
         <thead>
           <tr>
@@ -99,7 +95,7 @@ export const OrderListTable = () => {
                   {order.orderCode}
                 </Link>
               </td>
-              <td>{order.sender.name}</td>
+              <td>{authUser().username}</td>
               <td>{order.receiver.name}</td>
               <td>
                 {order.orderStatusList.length === 0

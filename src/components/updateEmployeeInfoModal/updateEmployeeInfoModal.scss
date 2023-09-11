@@ -1,0 +1,10 @@
+.updateEmployeeInputsWrapper{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 15px;
+    .employeeInfoInputContainer{
+        div{
+            width: 100%;
+        }
+    }
+}

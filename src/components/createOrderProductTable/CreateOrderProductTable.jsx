@@ -3,6 +3,21 @@ import "./createOrderProductTable.scss";
 import * as XLSX from "xlsx";
 import { convertCurrency } from "../../utils/formatStrings";
 import { AddProductModal } from "../addProductModal/AddProductModal";
+import { WarningModal } from "../warningModal/WarningModal";
+import { Delete } from "@mui/icons-material";
+import { removeItemByIndex } from "../../utils/getLastArrayItem";
+
+const DeleteProductBtn = () => {
+  return (
+    <button className="deleteSingleProductBtn">
+      <Delete />
+    </button>
+  );
+};
+
+const ClearProductsBtn = () => {
+  return <button>Xóa tất cả sản phẩm</button>;
+};
 
 export const CreateOrderProductTable = ({
   onProductPriceChange,
@@ -77,11 +92,24 @@ export const CreateOrderProductTable = ({
     onProductPriceChange(productPrice);
   }, [products]);
 
+  const handleDeleteSingleProduct = (index) => {
+    const changedProductsArray = removeItemByIndex(products, index);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // This clears the selected file
+    }
+    setProducts(changedProductsArray);
+    onProductChange(changedProductsArray);
+  };
+
   return (
     <div>
       <div className="uploadExcelBtn">
         <button onClick={handleUploadExcel}>Tải lên file .xlsx</button>
-        <button onClick={handleClearProducts}>Xóa sản phẩm</button>
+        <WarningModal
+          InitiateComponent={ClearProductsBtn}
+          warningContent={"Ban có chắc muốn xóa tát cả sản phẩm không?"}
+          confirmFunction={handleClearProducts}
+        />
         <input
           type="file"
           accept=".xlsx, .xls"
@@ -98,6 +126,7 @@ export const CreateOrderProductTable = ({
             <th>Cân nặng</th>
             <th>Đơn giá</th>
             <th>Mô tả sản phẩm</th>
+            <th style={{ textAlign: "center" }}>Xóa sản phẩm</th>
           </tr>
         </thead>
 
@@ -119,10 +148,18 @@ export const CreateOrderProductTable = ({
                 <td>{product.weight} KG</td>
                 <td>{convertCurrency(product.price)}</td>
                 <td>{product.description}</td>
+                <td style={{ textAlign: "center" }}>
+                  <WarningModal
+                    InitiateComponent={DeleteProductBtn}
+                    warningContent={"Bạn có chắc muốn xóa sản phẩm này chứ"}
+                    confirmFunction={handleDeleteSingleProduct}
+                    parameters={index}
+                  />
+                </td>
               </tr>
             ))}
           <tr>
-            <td style={{ textAlign: "center" }} colSpan={6}>
+            <td style={{ textAlign: "center" }} colSpan={7}>
               <AddProductModal handleAddProduct={handleAddProduct} />
             </td>
           </tr>

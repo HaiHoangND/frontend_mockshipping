@@ -16,23 +16,19 @@ import { convertCurrency } from "../../../utils/formatStrings";
 import { publicRequest, userRequest } from "../../../requestMethods";
 import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
+  const authUser = useAuthUser();
   const [isValid, setIsValid] = useState(false);
-  const [senderInfo, setSenderInfo] = useState();
   const [receiverInfo, setReceiverInfo] = useState();
-  const [optimalRoute, setOptimalRoute] = useState([]);
   const [productWeight, setProductWeight] = useState(0);
   const [productPrice, setProductPrice] = useState(0);
   const [products, setProducts] = useState([]);
-  const handleSenderInfoChange = (newAddress) => {
-    setSenderInfo(newAddress);
-    setOptimalRoute([]);
-  };
+  const [currentShop, setCurrentShop] = useState({});
   const handleReceiverAddressChange = (newAddress) => {
     setReceiverInfo(newAddress);
-    setOptimalRoute([]);
   };
 
   const handleProductWeightChange = (newWeight) => {
@@ -42,7 +38,7 @@ const CreateOrder = () => {
     setProductPrice(newPrice);
   };
   const calculateServiceFee = () => {
-    const routeFee = 25000 + (optimalRoute.length - 1) * 5000;
+    const routeFee = 25000;
     if (productWeight > 5) return routeFee + (routeFee * 30) / 100;
     else return routeFee;
   };
@@ -52,92 +48,57 @@ const CreateOrder = () => {
     return emailRegex.test(email);
   };
 
-  const handleGetOptimalRoute = () => {
-    if (
-      !senderInfo?.name ||
-      !receiverInfo?.name ||
-      !receiverInfo?.phone ||
-      !senderInfo?.phone ||
-      !senderInfo?.email ||
-      !receiverInfo?.email ||
-      !senderInfo?.district ||
-      !receiverInfo?.district ||
-      !receiverInfo?.detailedAddress ||
-      !senderInfo?.detailedAddress
-    ) {
-      return useToastError("Xin hãy điền đầy đủ địa chỉ!");
-    } else if (
-      senderInfo?.phone !== parseInt(senderInfo?.phone).toString() ||
-      receiverInfo?.phone !== parseInt(receiverInfo?.phone).toString()
-    ) {
-      return useToastError("Số điện thoại sai định dạng");
-    } else if (
-      !validateEmail(senderInfo?.email) ||
-      !validateEmail(senderInfo?.email)
-    ) {
-      return useToastError("Email sai định dạng");
-    }
-    const senderAddressId = districts.find(
-      (item) => item.district === senderInfo.district
-    )?.id;
-    const receiverAddressId = districts.find(
-      (item) => item.district === receiverInfo.district
-    )?.id;
-    setOptimalRoute(
-      findBestRoute(districts, senderAddressId, receiverAddressId)
-    );
-  };
-
   const handleProductChange = (newProducts) => {
     setProducts(newProducts);
   };
+
+  console.log(receiverInfo);
+
+  const getCurrentShop = async () => {
+    try {
+      const res = await publicRequest.get(`/user/${authUser().id}`);
+      setCurrentShop(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getCurrentShop();
+  }, []);
+
+  console.log(currentShop);
 
   const handleCreateOrder = async () => {
     try {
       if (!isValid) {
         return useToastError("Thông tin đơn hàng chưa hợp lệ!");
       } else {
-        // Create sender
-        const sender = await publicRequest.post("/sender", {
-          name: senderInfo.name,
-          address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
-          phone: senderInfo.phone,
-        });
         // Create receiver
         const receiver = await publicRequest.post("/receiver", {
           name: receiverInfo.name,
-          address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
+          address: `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
           phone: receiverInfo.phone,
+          shopOwnerId: authUser().id,
         });
         console.log(receiver.data);
         // Create order
         const shippingOrder = await publicRequest.post("/order", {
           orderCode: v4(),
-          senderId: sender.data.data.id,
+          shopOwnerId: authUser().id,
           receiverId: receiver.data.data.id,
           serviceFee: calculateServiceFee(),
         });
         // Create routes
         await publicRequest.post("/orderRoute", {
-          address: `${senderInfo.detailedAddress}, ${senderInfo.district}`,
-          warehouseId: 2,
+          address: currentShop.address,
           shippingOrderId: shippingOrder.data.data.id,
           routeId: 1,
         });
-        for (const route of optimalRoute) {
-          const routeId = optimalRoute.indexOf(route) + 2;
-          await publicRequest.post("/orderRoute", {
-            address: route.name,
-            warehouseId: route.id,
-            shippingOrderId: shippingOrder.data.data.id,
-            routeId,
-          });
-        }
         await publicRequest.post("/orderRoute", {
-          address: `${receiverInfo.detailedAddress}, ${receiverInfo.district}`,
-          warehouseId: 3,
+          address: `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
           shippingOrderId: shippingOrder.data.data.id,
-          routeId: optimalRoute.length + 2,
+          routeId: 2,
         });
         // Create products
         for (const product of products) {
@@ -153,19 +114,19 @@ const CreateOrder = () => {
         }
 
         useToastSuccess("Order created");
-        navigate("/coordinator");
+        navigate("/shop");
       }
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    if (optimalRoute.length === 0 || products.length === 0) {
+    if (products.length === 0) {
       setIsValid(false);
     } else {
       setIsValid(true);
     }
-  }, [optimalRoute, products]);
+  }, [products]);
 
   return (
     <div className="bodyContainer">
@@ -178,37 +139,10 @@ const CreateOrder = () => {
           </h3>
           <div className="personalInformationFormsWrapper">
             <CreateOrderPersonalInfoForm
-              person={"Người gửi"}
-              onInputsChange={handleSenderInfoChange}
-              key={"sender"}
-            />
-            <CreateOrderPersonalInfoForm
               person={"Người nhận"}
               onInputsChange={handleReceiverAddressChange}
               key={"receiver"}
             />
-          </div>
-          <div className="createOrderRoutes">
-            <button onClick={handleGetOptimalRoute}>
-              Tạo lộ trình đơn hàng
-            </button>
-            {optimalRoute.length > 0 && (
-              <span>
-                <span className="senderAddress">
-                  {senderInfo?.detailedAddress}, {senderInfo?.district}
-                </span>
-                <East />
-                {optimalRoute.map((route, index) => (
-                  <div className="middleWarehouse" key={index}>
-                    <span>{route.name}</span>
-                    <East />
-                  </div>
-                ))}
-                <span className="receiverAddress">
-                  {receiverInfo?.detailedAddress}, {receiverInfo?.district}
-                </span>
-              </span>
-            )}
           </div>
         </div>
         <div className="createOrderProductTableContainer">
@@ -227,9 +161,15 @@ const CreateOrder = () => {
             Tóm tắt đơn hàng
           </h3>
           <div className="orderSummaryFeeContainer">
-            <span>Phí dịch vụ</span>
-            <span>{convertCurrency(calculateServiceFee())}</span>
+            <span>Phí khoảng cách</span>
+            <span>{convertCurrency(25000)}</span>
           </div>
+          {productWeight > 5 && (
+            <div className="orderSummaryFeeContainer">
+              <span>Phí cân nặng</span>
+              <span>{convertCurrency(25000 + (25000 * 30) / 100)}</span>
+            </div>
+          )}
           <div className="orderSummaryFeeContainer">
             <span>Giá trị mặt hàng</span>
             <span>{convertCurrency(productPrice)}</span>

@@ -1,4 +1,11 @@
-import { Add, Group, Home, Logout, ReceiptLong, Warehouse } from "@mui/icons-material";
+import {
+  Add,
+  Group,
+  Home,
+  Logout,
+  ReceiptLong,
+  Warehouse,
+} from "@mui/icons-material";
 import "./sidebar.scss";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthUser, useSignOut } from "react-auth-kit";
@@ -34,17 +41,7 @@ export const Sidebar = () => {
                 <Home /> Trang chủ
               </div>
             </Link>
-            <Link to={"/coordinator/createOrder"}>
-              <div
-                className={
-                  pathname[2] === "createOrder"
-                    ? "sidebarItem selected"
-                    : "sidebarItem"
-                }
-              >
-                <Add /> Tạo đơn hàng
-              </div>
-            </Link>
+
             <Link to="/coordinator/shipperList">
               <div
                 className={
@@ -80,6 +77,32 @@ export const Sidebar = () => {
                 }
               >
                 <Warehouse /> Danh sách nhà kho
+              </div>
+            </Link>
+          </>
+        )}
+        {role === "SHOP" && (
+          <>
+            <Link to="/shop">
+              <div
+                className={
+                  pathname[1] === "shop" && !pathname[2]
+                    ? "sidebarItem selected"
+                    : "sidebarItem"
+                }
+              >
+                <Home /> Trang chủ
+              </div>
+            </Link>
+            <Link to={"/shop/createOrder"}>
+              <div
+                className={
+                  pathname[2] === "createOrder"
+                    ? "sidebarItem selected"
+                    : "sidebarItem"
+                }
+              >
+                <Add /> Tạo đơn hàng
               </div>
             </Link>
           </>

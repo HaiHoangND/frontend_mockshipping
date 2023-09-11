@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import "./shippersTable.scss";
+import { UpdateEmployeeInfoModal } from "../updateEmployeeInfoModal/UpdateEmployeeInfoModal";
 
 const ShipperStatus = styled.span`
   padding: 10px 15px;
@@ -9,6 +10,7 @@ const ShipperStatus = styled.span`
 `;
 
 export const ShippersTable = ({ shipperData }) => {
+  console.log(shipperData);
   return (
     <table>
       <thead>
@@ -18,6 +20,7 @@ export const ShippersTable = ({ shipperData }) => {
           <th>Số điện thoại</th>
           <th style={{ textAlign: "center" }}>Số lượng đơn hàng</th>
           <th style={{ textAlign: "center" }}>Trạng thái nhân viên</th>
+          <th style={{ textAlign: "center" }}>Cập nhật thông tin</th>
         </tr>
       </thead>
       <tbody>
@@ -34,6 +37,7 @@ export const ShippersTable = ({ shipperData }) => {
                   : "Đang giao hàng"}
               </ShipperStatus>
             </td>
+            <td><UpdateEmployeeInfoModal employeeInfo={shipper}/></td>
           </tr>
         ))}
       </tbody>

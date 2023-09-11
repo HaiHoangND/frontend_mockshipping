@@ -66,6 +66,7 @@ export default function Login() {
       if (res.data.role === "COORDINATOR") return navigate("/coordinator");
       else if (res.data.role === "SHIPPER") return navigate("/shipper")
       else if (res.data.role === "ADMIN") return navigate("/admin")
+      else if (res.data.role === "SHOP") return navigate("/shop")
     }
   };
 

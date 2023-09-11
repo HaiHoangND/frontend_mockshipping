@@ -1,0 +1,52 @@
+.registerBodyContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url(https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/bg-register.jpg);
+    .registerBodyWrapper {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        min-width: 500px;
+        font-family: "Roboto";
+        .registerSapoLogoContainer {
+            width: 200px;
+            img {
+                width: 100%;
+            }
+        }
+        h3 {
+            margin-top: 10px;
+            font-size: 30px;
+            font-weight: 400;
+        }
+        .registerInputsWrapper {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 50% 50%;
+            gap: 15px;
+            .registerInputWrapper {
+                div {
+                    width: 100%;
+                }
+            }
+        }
+        .registerBtn {
+            font-size: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            button {
+                background: linear-gradient(to right, #2ad38b, #0cceb0);
+                color: white;
+                padding: 10px 50px;
+                width: 80%;
+                border-radius: 50px;
+                transition: all ease 0.2s;
+            }
+        }
+    }
+}

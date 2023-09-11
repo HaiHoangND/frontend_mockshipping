@@ -1,44 +1,32 @@
 import {
   AllInboxRounded,
   BackupTable,
+  Done,
+  DoneAll,
   LocalShippingRounded,
-  PeopleAlt,
   ReceiptLong,
 } from "@mui/icons-material";
-import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
+import React from "react";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
-import "./coordinatorDashboard.scss";
-import { useEffect, useState } from "react";
-import { publicRequest } from "../../../requestMethods";
-import { useAuthUser } from "react-auth-kit";
+import "./shopOwnerDashboard.scss";
+import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
 
-const CoordinatorDashboard = () => {
-  const authUser = useAuthUser();
-  const [stats, setStats] = useState({});
-
-  const getStats = async () => {
-    const res = await publicRequest.get(`/order/coordinatorStatistic`);
-    setStats(res.data.data[0]);
-  };
-  useEffect(() => {
-    getStats();
-  }, []);
-
+const ShopOwnerDashboard = () => {
   return (
     <div className="bodyContainer">
       <Sidebar />
       <div className="contentContainer">
         <Topbar />
-        <div className="coordinatorOverviewContainer">
+        <div className="shopOwnerDashboardOverviewContainer">
           <h3>
             <BackupTable fontSize="inherit" /> Tổng quan
           </h3>
-          <div className="coordinatorOverviewTilesContainer">
-            <div className="coordinatorOverviewTile">
+          <div className="shopOwnerOverviewTilesContainer">
+            <div className="shopOwnerOverviewTile">
               <div className="left">
                 <span>Tổng đơn hàng</span>
-                <div className="bigNumber">{stats.ShippingOrders}</div>
+                <div className="bigNumber">12</div>
               </div>
               <div className="right">
                 <AllInboxRounded
@@ -46,10 +34,10 @@ const CoordinatorDashboard = () => {
                 />
               </div>
             </div>
-            <div className="coordinatorOverviewTile">
+            <div className="shopOwnerOverviewTile">
               <div className="left">
                 <span>Đang vận chuyển</span>
-                <div className="bigNumber">{stats.Delivering}</div>
+                <div className="bigNumber">12</div>
               </div>
               <div className="right">
                 <LocalShippingRounded
@@ -57,13 +45,13 @@ const CoordinatorDashboard = () => {
                 />
               </div>
             </div>
-            <div className="coordinatorOverviewTile">
+            <div className="shopOwnerOverviewTile">
               <div className="left">
-                <span>Nhân viên có sẵn</span>
-                <div className="bigNumber">{stats.Shippers}</div>
+                <span>Đơn hàng thành công</span>
+                <div className="bigNumber">12</div>
               </div>
               <div className="right">
-                <PeopleAlt
+                <DoneAll
                   style={{ backgroundColor: "#14ae5c", borderColor: "#14ae5c" }}
                 />
               </div>
@@ -71,7 +59,7 @@ const CoordinatorDashboard = () => {
           </div>
         </div>
 
-        <div className="coordinatorOrderListTableContainer">
+        <div className="shopOwnerOrderListTableContainer">
           <h3>
             <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
           </h3>
@@ -82,4 +70,4 @@ const CoordinatorDashboard = () => {
   );
 };
 
-export default CoordinatorDashboard;
+export default ShopOwnerDashboard;

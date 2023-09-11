@@ -1,11 +1,12 @@
 import { Dialog, Transition } from "@headlessui/react";
+import { AddCircleOutline } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Fragment, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { storage } from "../../firebase";
-import "./addProductModal.scss";
 import { useToastShow } from "../../utils/toastSettings";
+import "./addProductModal.scss";
 
 export const AddProductModal = ({ handleAddProduct }) => {
   let [isOpen, setIsOpen] = useState(false);
@@ -42,15 +43,25 @@ export const AddProductModal = ({ handleAddProduct }) => {
     setImgURL(uploadedImgURL);
   };
   const addProduct = async () => {
-    useToastShow("Đang thêm sản phẩm")
+    useToastShow("Đang thêm sản phẩm");
     await handleUploadImg();
     handleAddProduct(inputs, imgURL);
   };
 
   return (
     <>
-      <div onClick={openModal} style={{ cursor: "pointer" }}>
-        Thêm sản phẩm
+      <div
+        onClick={openModal}
+        style={{
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "20px",
+        }}
+      >
+        <AddCircleOutline />
+        <span style={{ marginLeft: "8px" }}>Thêm sản phẩm</span>
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>

@@ -1,28 +1,37 @@
-.uploadExcelBtn{
-margin: 10px 0px;
-margin-top: 0px;
-display: flex;
-justify-content: flex-end;
-    button{
+.uploadExcelBtn {
+    margin: 10px 0px;
+    margin-top: 0px;
+    display: flex;
+    justify-content: flex-end;
+    button {
         padding: 10px 20px;
         background-color: #0d99ff;
         border-radius: 10px;
         margin-right: 10px;
         color: white;
         transition: all ease 0.2s;
-        &:hover{
+        &:hover {
             background-color: #1085d8;
         }
     }
-    button:nth-child(2){
-        padding: 10px 20px;
-        background-color: #f24822;
-        border-radius: 10px;
-        &:hover{
-            background-color: #d23f1e;
+    div {
+        button {
+            padding: 10px 20px;
+            background-color: #f24822;
+            border-radius: 10px;
+            &:hover {
+                background-color: #d23f1e;
+            }
         }
     }
-    input{
+    input {
         display: none;
     }
+}
+
+.deleteSingleProductBtn {
+    padding: 15px;
+    background-color: #f24822;
+    color: white;
+    border-radius: 10px;
 }
