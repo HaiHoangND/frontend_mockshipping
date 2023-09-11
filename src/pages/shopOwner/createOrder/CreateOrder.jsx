@@ -12,7 +12,10 @@ import { Topbar } from "../../../components/topbar/Topbar";
 import { districts, findBestRoute } from "../../../utils/shortestPath";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import "./createOrder.scss";
-import { convertCurrency } from "../../../utils/formatStrings";
+import {
+  convertCurrency,
+  generateOrderCode,
+} from "../../../utils/formatStrings";
 import { publicRequest, userRequest } from "../../../requestMethods";
 import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
@@ -84,7 +87,7 @@ const CreateOrder = () => {
         console.log(receiver.data);
         // Create order
         const shippingOrder = await publicRequest.post("/order", {
-          orderCode: v4(),
+          orderCode: generateOrderCode(),
           shopOwnerId: authUser().id,
           receiverId: receiver.data.data.id,
           serviceFee: calculateServiceFee(),

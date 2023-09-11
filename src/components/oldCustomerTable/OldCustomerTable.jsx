@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { publicRequest } from "../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
+import { RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 
 export const OldCustomerTable = () => {
   const authUser = useAuthUser();
   const [oldCustomers, setOldCustomers] = useState([]);
+  const [customerIndex, setCustomerIndex] = useState(-1);
 
   const getOldCustomers = async () => {
     try {
@@ -19,6 +21,10 @@ export const OldCustomerTable = () => {
     getOldCustomers();
   }, []);
 
+  const handleIndexChange = (index) => {
+    setCustomerIndex(index);
+  };
+
   console.log(oldCustomers);
   return (
     <div className="mt-6">
@@ -28,6 +34,7 @@ export const OldCustomerTable = () => {
             <th>Tên khách hàng</th>
             <th>Địa chỉ</th>
             <th>Số điện thoại</th>
+            <th style={{ textAlign: "center" }}>Chọn</th>
           </tr>
         </thead>
         <tbody>
@@ -38,11 +45,28 @@ export const OldCustomerTable = () => {
               </td>
             </tr>
           ) : (
-            oldCustomers.map((customer) => (
-              <tr key={customer.id}>
+            oldCustomers.map((customer, index) => (
+              <tr
+                key={customer.id}
+                style={{
+                  background:
+                    customerIndex === index ? "#7ceaaf" : "",
+                }}
+              >
                 <td>{customer.name}</td>
                 <td>{customer.address}</td>
                 <td>{customer.phone}</td>
+                <td style={{ textAlign: "center" }}>
+                  <div>
+                    <button onClick={() => handleIndexChange(index)}>
+                      {customerIndex === index ? (
+                        <RadioButtonChecked />
+                      ) : (
+                        <RadioButtonUnchecked />
+                      )}
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))
           )}

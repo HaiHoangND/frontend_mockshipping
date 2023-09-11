@@ -26,7 +26,7 @@ export const ShippersTable = ({ shipperData }) => {
       <tbody>
         {shipperData.map((shipper) => (
           <tr key={shipper.user.id}>
-            <td style={{paddingLeft:"100px"}}>{shipper.user.id}</td>
+            <td style={{ paddingLeft: "100px" }}>{shipper.user.id}</td>
             <td>{shipper.user.fullName}</td>
             <td>{shipper.user.phone}</td>
             <td style={{ textAlign: "center" }}>{shipper.ordersInProgress}</td>
@@ -37,7 +37,9 @@ export const ShippersTable = ({ shipperData }) => {
                   : "Đang giao hàng"}
               </ShipperStatus>
             </td>
-            <td><UpdateEmployeeInfoModal employeeInfo={shipper}/></td>
+            <td>
+              <UpdateEmployeeInfoModal employeeInfo={shipper} type={"update"} />
+            </td>
           </tr>
         ))}
       </tbody>

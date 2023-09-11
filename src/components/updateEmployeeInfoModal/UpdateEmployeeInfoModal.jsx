@@ -1,13 +1,26 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Edit, WarningAmber } from "@mui/icons-material";
+import { Add, AddCircle, Edit, WarningAmber } from "@mui/icons-material";
 import { MenuItem, TextField } from "@mui/material";
 import { Fragment, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
-import "./updateEmployeeInfoModal.scss"
+import "./updateEmployeeInfoModal.scss";
+import { publicRequest } from "../../requestMethods";
+import { useToastSuccess } from "../../utils/toastSettings";
+import { useNavigate } from "react-router-dom";
 
-export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
+export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
+  const navigate = useNavigate();
   let [isOpen, setIsOpen] = useState(false);
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState({
+    fullName: employeeInfo ? employeeInfo.user.fullName : "",
+    email: employeeInfo ? employeeInfo.user.email : "",
+    password: employeeInfo ? employeeInfo.user.password : "",
+    role: employeeInfo ? employeeInfo.user.role : "SHIPPER",
+    address: employeeInfo ? employeeInfo.user.address : "",
+    gender: employeeInfo ? employeeInfo.user.gender : "Nam",
+    phone: employeeInfo ? employeeInfo.user.phone : "",
+    workingStatus: employeeInfo ? employeeInfo.user.workingStatus : true,
+  });
   const authUser = useAuthUser();
 
   const handleInputsChange = (e) => {
@@ -22,28 +35,70 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
     setIsOpen(true);
   }
 
-  const handleConfirm = () => {
-    closeModal();
+  console.log(employeeInfo);
+
+  const handleConfirm = async () => {
+    if (type === "add") {
+      const res = await publicRequest.post("/register", {
+        fullName: inputs.fullName,
+        email: inputs.email,
+        password: inputs.password,
+        role: inputs.role,
+        address: inputs.address,
+        gender: inputs.gender,
+        phone: inputs.phone,
+        workingStatus: inputs.workingStatus,
+      });
+      if (res.data.type === "success") {
+        useToastSuccess("Tạo nhân viên thành công");
+        navigate(0);
+        closeModal();
+      }
+    } else if (type === "update") {
+      const res = await publicRequest.put(`/user/${employeeInfo.user.id}`, {
+        fullName: inputs.fullName,
+        email: inputs.email,
+        password: inputs.password,
+        role: inputs.role,
+        address: inputs.address,
+        gender: inputs.gender,
+        phone: inputs.phone,
+        workingStatus: inputs.workingStatus,
+      });
+      if (res.data.type === "success") {
+        useToastSuccess("Cập nhật nhân viên thành công");
+        navigate(0);
+        closeModal();
+      }
+    }
   };
 
   return (
     <>
-      <div
-        onClick={openModal}
-        className="flex justify-center"
-        style={{ cursor: "pointer" }}
-      >
-        <button
-          style={{
-            backgroundColor: "#0d99ff",
-            color: "white",
-            padding: "10px",
-            borderRadius: "10px",
-          }}
+      {type === "update" ? (
+        <div
+          onClick={openModal}
+          className="flex justify-center"
+          style={{ cursor: "pointer" }}
         >
-          <Edit />
-        </button>
-      </div>
+          <button
+            style={{
+              backgroundColor: "#0d99ff",
+              color: "white",
+              padding: "10px",
+              borderRadius: "10px",
+            }}
+          >
+            <Edit />
+          </button>
+        </div>
+      ) : (
+        <div className="shipperTableAddEmployeeBtn" onClick={openModal}>
+          <button>
+            <AddCircle /> Thêm mới nhân viên
+          </button>
+        </div>
+      )}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -79,8 +134,17 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
                     }}
                     className="text-lg font-medium leading-6 "
                   >
-                    <Edit />{" "}
-                    <p style={{ marginLeft: "10px" }}>Cập nhật thông tin</p>
+                    {type === "update" ? (
+                      <>
+                        <Edit />{" "}
+                        <p style={{ marginLeft: "10px" }}>Cập nhật thông tin</p>
+                      </>
+                    ) : (
+                      <>
+                        <AddCircle />
+                        <p style={{ marginLeft: "10px" }}>Thêm mới nhân viên</p>
+                      </>
+                    )}
                   </Dialog.Title>
                   <div className="mt-2 updateEmployeeInputsWrapper">
                     <div className="employeeInfoInputContainer">
@@ -88,7 +152,11 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
                         label="Tên"
                         name="fullName"
                         onChange={handleInputsChange}
-                        placeholder={employeeInfo.user.fullName}
+                        placeholder={
+                          !employeeInfo
+                            ? "Trần Phi Long"
+                            : employeeInfo.user.fullName
+                        }
                       />
                     </div>
                     <div className="employeeInfoInputContainer">
@@ -96,7 +164,9 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
                         select
                         label="Giới tính"
                         name="gender"
-                        defaultValue={employeeInfo.user.gender}
+                        defaultValue={
+                          !employeeInfo ? "Nam" : employeeInfo.user.gender
+                        }
                         onChange={handleInputsChange}
                         sx={{ width: "200px" }}
                       >
@@ -109,7 +179,11 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
                         label="Số điện thoại"
                         name="phone"
                         onChange={handleInputsChange}
-                        placeholder={employeeInfo.user.phone}
+                        placeholder={
+                          !employeeInfo
+                            ? "01234567889"
+                            : employeeInfo.user.phone
+                        }
                       />
                     </div>
                     <div className="employeeInfoInputContainer">
@@ -117,7 +191,11 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
                         label="Email"
                         name="email"
                         onChange={handleInputsChange}
-                        placeholder={employeeInfo.user.email}
+                        placeholder={
+                          !employeeInfo
+                            ? "example@email.com"
+                            : employeeInfo.user.email
+                        }
                       />
                     </div>
                     <div className="employeeInfoInputContainer">
@@ -125,7 +203,11 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
                         label="Địa chỉ"
                         name="address"
                         onChange={handleInputsChange}
-                        placeholder={employeeInfo.user.address}
+                        placeholder={
+                          !employeeInfo
+                            ? "256 Đội Cấn"
+                            : employeeInfo.user.address
+                        }
                       />
                     </div>
                     <div className="employeeInfoInputContainer">
@@ -133,7 +215,9 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
                         select
                         label="Trạng thái làm việc"
                         name="workingStatus"
-                        defaultValue={employeeInfo.user.workingStatus}
+                        defaultValue={
+                          !employeeInfo ? true : employeeInfo.user.workingStatus
+                        }
                         onChange={handleInputsChange}
                         sx={{ width: "200px" }}
                       >
@@ -146,21 +230,35 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo }) => {
                         select
                         label="Chức vụ"
                         name="role"
-                        defaultValue={employeeInfo.user.role}
+                        defaultValue={
+                          !employeeInfo ? "SHIPPER" : employeeInfo.user.role
+                        }
                         onChange={handleInputsChange}
                         sx={{ width: "200px" }}
                       >
-                        <MenuItem value={"COORDINATOR"}>
-                          Điều phối viên
-                        </MenuItem>
+                        {authUser().role === "ADMIN" && (
+                          <MenuItem value={"COORDINATOR"}>
+                            Điều phối viên
+                          </MenuItem>
+                        )}
                         <MenuItem value={"SHIPPER"}>
                           Nhân viên giao hàng
                         </MenuItem>
+
                         {authUser().role === "ADMIN" && (
                           <MenuItem value={"ADMIN"}>Quản lí giao hàng</MenuItem>
                         )}
                       </TextField>
                     </div>
+                    {type === "add" && (
+                      <div className="employeeInfoInputContainer">
+                        <TextField
+                          label="Mật khẩu"
+                          name="password"
+                          onChange={handleInputsChange}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="confirmModalBtns mt-4">

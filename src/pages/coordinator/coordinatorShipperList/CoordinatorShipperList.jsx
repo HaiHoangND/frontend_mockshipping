@@ -6,6 +6,7 @@ import { ShippersTable } from "../../../components/shippersTable/ShippersTable";
 import { useEffect, useState } from "react";
 import { publicRequest } from "../../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
+import { UpdateEmployeeInfoModal } from "../../../components/updateEmployeeInfoModal/UpdateEmployeeInfoModal";
 
 const CoordinatorShipperList = () => {
   const authUser = useAuthUser();
@@ -35,9 +36,7 @@ const CoordinatorShipperList = () => {
             <h3>
               <ReceiptLong fontSize="inherit" /> Danh sách nhân viên
             </h3>
-            <div className="shipperTableAddEmployeeBtn">
-              <button><AddCircle/> Thêm mới nhân viên</button>
-            </div>
+           <UpdateEmployeeInfoModal  type={"add"}/>
             <ShippersTable shipperData={shippers} />
           </div>
         )}
