@@ -95,7 +95,6 @@ const ShipperAllOrders = () => {
                 nextLocation = '';
                 status = "Giao hàng thành công"
                 nextOrderRouteId = currentOrderRouteIndex;
-                console.log("thành công");
             } else if (checkArriving) {
                 if (currentOrderRouteId === 1) {
                     nextLocation = lastestStatus.nextLocation;
@@ -104,7 +103,7 @@ const ShipperAllOrders = () => {
                 } else {
                     nextLocation = order[index].orderRoutes[currentOrderRouteId].address;
                     status = "Đang giao hàng"
-                    nextOrderRouteId = currentOrderRouteIndex;
+                    nextOrderRouteId = currentOrderRouteIndex + 1;
                 }
             } else {
                 nextLocation = order[index].orderRoutes[currentOrderRouteId].address;
