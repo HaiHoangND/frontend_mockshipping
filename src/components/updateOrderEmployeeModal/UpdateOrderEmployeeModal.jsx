@@ -58,15 +58,13 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
 
     return false;
   };
-
-  console.log(selectedShipper);
-
+  console.log(order);
   const handleUpdateEmployee = async () => {
     let nextOrderRouteId;
     if (order.orderStatusList.length === 0) {
       nextOrderRouteId = order.orderRoutes[0].id;
     } else {
-      nextOrderRouteId = order.orderRoutes[1].id;
+      nextOrderRouteId = order.orderStatusList[0].orderRoute.id;
     }
 
     try {
@@ -77,11 +75,11 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
         status:
           order.orderStatusList.length === 0
             ? "Đang lấy hàng"
-            : "Đang giao hàng",
+            : order.orderStatusList[0].status,
         arriving:
           order.orderStatusList.length === 0
             ? true
-            : !order.orderStatusList[0].arriving,
+            : order.orderStatusList[0].arriving,
       });
       if (res.data.type === "success") {
         navigate(0);

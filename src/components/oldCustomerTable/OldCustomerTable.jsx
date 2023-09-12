@@ -3,7 +3,7 @@ import { publicRequest } from "../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
 import { RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 
-export const OldCustomerTable = () => {
+export const OldCustomerTable = ({ onCustomerChange }) => {
   const authUser = useAuthUser();
   const [oldCustomers, setOldCustomers] = useState([]);
   const [customerIndex, setCustomerIndex] = useState(-1);
@@ -21,11 +21,16 @@ export const OldCustomerTable = () => {
     getOldCustomers();
   }, []);
 
-  const handleIndexChange = (index) => {
+  const handleChooseCustomer = (index, customer) => {
     setCustomerIndex(index);
+    onCustomerChange({
+      id: customer.id,
+      name: customer.name,
+      address: customer.address,
+      phone: customer.phone,
+    });
   };
 
-  console.log(oldCustomers);
   return (
     <div className="mt-6">
       <table>
@@ -49,16 +54,16 @@ export const OldCustomerTable = () => {
               <tr
                 key={customer.id}
                 style={{
-                  background:
-                    customerIndex === index ? "#7ceaaf" : "",
+                  background: customerIndex === index ? "#7ceaaf" : "",
                 }}
+                onClick={() => handleChooseCustomer(index, customer)}
               >
                 <td>{customer.name}</td>
                 <td>{customer.address}</td>
                 <td>{customer.phone}</td>
                 <td style={{ textAlign: "center" }}>
                   <div>
-                    <button onClick={() => handleIndexChange(index)}>
+                    <button>
                       {customerIndex === index ? (
                         <RadioButtonChecked />
                       ) : (

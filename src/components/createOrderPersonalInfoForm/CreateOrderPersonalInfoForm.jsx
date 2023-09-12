@@ -2,17 +2,26 @@ import { Person, Phone } from "@mui/icons-material";
 import "./createOrderPersonalInfoForm.scss";
 import { MenuItem, TextField } from "@mui/material";
 import { districts } from "../../utils/shortestPath";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OldCustomerTable } from "../oldCustomerTable/OldCustomerTable";
 
 export const CreateOrderPersonalInfoForm = ({ person, onInputsChange }) => {
-  const [inputs, setInputs] = useState({
-    districts: "Ba Đình",
-  });
   const [customerType, setCustomerType] = useState("newCustomer");
+  const [inputs, setInputs] = useState({
+    districts: customerType === "oldCustomer" ? "" : "Ba Đình",
+  });
 
   const handleCustomerTypeChange = (e) => {
-    setCustomerType(e.target.value);
+    const newCustomerType = e.target.value; // Store the new value
+    setCustomerType(newCustomerType);
+    setInputs({
+      districts: newCustomerType === "oldCustomer" ? "" : "Ba Đình", // Use the new value here
+    });
+  };
+
+  const handleOldCustomerChange = (customer) => {
+    setInputs(customer);
+    onInputsChange(customer);
   };
 
   const customerTypeOptions = [
@@ -34,6 +43,8 @@ export const CreateOrderPersonalInfoForm = ({ person, onInputsChange }) => {
     setInputs(newInputs);
     onInputsChange(newInputs);
   };
+
+  useEffect(() => {}, [customerType]);
 
   return (
     <div className="createOrderPersonalInfoFormContainer">
@@ -122,7 +133,7 @@ export const CreateOrderPersonalInfoForm = ({ person, onInputsChange }) => {
           </div>
         </div>
       ) : (
-        <OldCustomerTable />
+        <OldCustomerTable onCustomerChange={handleOldCustomerChange} />
       )}
     </div>
   );

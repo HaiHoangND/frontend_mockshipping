@@ -35,7 +35,8 @@ export const formatDateTimeDetail = (dateTime) => {
 export const generateOrderCode = () => {
   const timestamp = new Date().getTime(); // Get current timestamp in milliseconds
   const randomString = Math.random().toString(36).substring(2, 4); // Generate a random string of 6 characters
+  const uppercaseRandomString = randomString.toUpperCase(); // Convert the random string to uppercase
 
-  const orderCode = `ORD${timestamp}${randomString}`;
+  const orderCode = `ORD${timestamp}${uppercaseRandomString}`;
   return orderCode;
 };

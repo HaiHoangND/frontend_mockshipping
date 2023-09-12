@@ -1,18 +1,44 @@
 import {
   AllInboxRounded,
+  AttachMoney,
   BackupTable,
-  Done,
   DoneAll,
   LocalShippingRounded,
   ReceiptLong,
 } from "@mui/icons-material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAuthUser } from "react-auth-kit";
+import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
+import { publicRequest } from "../../../requestMethods";
+import { convertCurrency } from "../../../utils/formatStrings";
 import "./shopOwnerDashboard.scss";
-import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
+import { Searchbar } from "../../../components/searchbar/Searchbar";
 
 const ShopOwnerDashboard = () => {
+  const [statistics, setStatistics] = useState({});
+  const [profit, setProfit] = useState(0);
+  const authUser = useAuthUser();
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchQueryChange = (newQuery) => {
+    setSearchQuery(newQuery);
+  };
+
+  const getStats = async () => {
+    const profit = await publicRequest.get(
+      `/order/getTotalRevenue?ShopOwnerId=${authUser().id}`
+    );
+    setProfit(profit.data.data);
+    const stats = await publicRequest.get(
+      `order/shopOwnerStatistic?shopOwnerId=${authUser().id}`
+    );
+    setStatistics(stats.data.data[0]);
+  };
+  useEffect(() => {
+    getStats();
+  }, []);
+
   return (
     <div className="bodyContainer">
       <Sidebar />
@@ -26,7 +52,7 @@ const ShopOwnerDashboard = () => {
             <div className="shopOwnerOverviewTile">
               <div className="left">
                 <span>Tổng đơn hàng</span>
-                <div className="bigNumber">12</div>
+                <div className="bigNumber">{statistics.ShippingOrders}</div>
               </div>
               <div className="right">
                 <AllInboxRounded
@@ -37,7 +63,7 @@ const ShopOwnerDashboard = () => {
             <div className="shopOwnerOverviewTile">
               <div className="left">
                 <span>Đang vận chuyển</span>
-                <div className="bigNumber">12</div>
+                <div className="bigNumber">{statistics.Delivering}</div>
               </div>
               <div className="right">
                 <LocalShippingRounded
@@ -48,10 +74,21 @@ const ShopOwnerDashboard = () => {
             <div className="shopOwnerOverviewTile">
               <div className="left">
                 <span>Đơn hàng thành công</span>
-                <div className="bigNumber">12</div>
+                <div className="bigNumber">{statistics.Successful}</div>
               </div>
               <div className="right">
                 <DoneAll
+                  style={{ backgroundColor: "#14ae5c", borderColor: "#14ae5c" }}
+                />
+              </div>
+            </div>
+            <div className="shopOwnerOverviewTile">
+              <div className="left">
+                <span>Doanh thu</span>
+                <div className="bigNumber">{convertCurrency(profit)}</div>
+              </div>
+              <div className="right">
+                <AttachMoney
                   style={{ backgroundColor: "#14ae5c", borderColor: "#14ae5c" }}
                 />
               </div>
@@ -60,10 +97,13 @@ const ShopOwnerDashboard = () => {
         </div>
 
         <div className="shopOwnerOrderListTableContainer">
-          <h3>
-            <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
-          </h3>
-          <OrderListTable />
+          <div className="titleWrapper">
+            <h3>
+              <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
+            </h3>
+            <Searchbar onInputChange={handleSearchQueryChange} placeholderText={"Mã vận đơn"}/>
+          </div>
+          <OrderListTable searchQuery={searchQuery} />
         </div>
       </div>
     </div>

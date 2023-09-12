@@ -7,17 +7,23 @@ import { useEffect, useState } from "react";
 import { publicRequest } from "../../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
 import { UpdateEmployeeInfoModal } from "../../../components/updateEmployeeInfoModal/UpdateEmployeeInfoModal";
+import { Searchbar } from "../../../components/searchbar/Searchbar";
 
 const CoordinatorShipperList = () => {
   const authUser = useAuthUser();
+  const [page, setPage] = useState(1);
   const [shippers, setShippers] = useState([]);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchQueryChange = (newQuery) => {
+    setSearchQuery(newQuery);
+  };
+  console.log(searchQuery);
   const getShippers = async () => {
     try {
       const res = await publicRequest.get(
-        `/user/getShippersWithStatus`
+        `/user/getAllShippers?pageNumber=${page}&pageSize=10&keyWord=${searchQuery}`
       );
-      setShippers(res.data.data);
+      setShippers(res.data.data.content);
     } catch (error) {
       console.log(error);
     }
@@ -25,21 +31,28 @@ const CoordinatorShipperList = () => {
 
   useEffect(() => {
     getShippers();
-  }, []);
+  }, [searchQuery]);
   return (
     <div className="bodyContainer">
       <Sidebar />
       <div className="contentContainer">
         <Topbar />
-        {shippers.length !== 0 && (
-          <div className="shippersTableContainer">
+
+        <div className="shippersTableContainer">
+          <div className="titleWrapper">
             <h3>
               <ReceiptLong fontSize="inherit" /> Danh sách nhân viên
             </h3>
-           <UpdateEmployeeInfoModal  type={"add"}/>
-            <ShippersTable shipperData={shippers} />
+            <div className="modalWrapper">
+              <Searchbar
+                onInputChange={handleSearchQueryChange}
+                placeholderText={"Tìm kiếm nhân viên"}
+              />
+              <UpdateEmployeeInfoModal type={"add"} />
+            </div>
           </div>
-        )}
+          <ShippersTable shipperData={shippers} />
+        </div>
       </div>
     </div>
   );

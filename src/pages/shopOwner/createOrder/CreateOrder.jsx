@@ -1,25 +1,22 @@
 import {
   AddShoppingCartOutlined,
-  East,
   ReceiptLong,
   SummarizeOutlined,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
+import { useAuthUser } from "react-auth-kit";
+import { useNavigate } from "react-router-dom";
 import { CreateOrderPersonalInfoForm } from "../../../components/createOrderPersonalInfoForm/CreateOrderPersonalInfoForm";
 import { CreateOrderProductTable } from "../../../components/createOrderProductTable/CreateOrderProductTable";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
-import { districts, findBestRoute } from "../../../utils/shortestPath";
-import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
-import "./createOrder.scss";
+import { publicRequest } from "../../../requestMethods";
 import {
   convertCurrency,
   generateOrderCode,
 } from "../../../utils/formatStrings";
-import { publicRequest, userRequest } from "../../../requestMethods";
-import { v4 } from "uuid";
-import { useNavigate } from "react-router-dom";
-import { useAuthUser } from "react-auth-kit";
+import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
+import "./createOrder.scss";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
@@ -30,6 +27,7 @@ const CreateOrder = () => {
   const [productPrice, setProductPrice] = useState(0);
   const [products, setProducts] = useState([]);
   const [currentShop, setCurrentShop] = useState({});
+
   const handleReceiverAddressChange = (newAddress) => {
     setReceiverInfo(newAddress);
   };
@@ -70,26 +68,28 @@ const CreateOrder = () => {
     getCurrentShop();
   }, []);
 
-  console.log(currentShop);
-
   const handleCreateOrder = async () => {
     try {
       if (!isValid) {
         return useToastError("Thông tin đơn hàng chưa hợp lệ!");
       } else {
-        // Create receiver
-        const receiver = await publicRequest.post("/receiver", {
-          name: receiverInfo.name,
-          address: `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
-          phone: receiverInfo.phone,
-          shopOwnerId: authUser().id,
-        });
-        console.log(receiver.data);
+        let receiver;
+        if (!receiverInfo.id) {
+          const receiverData = await publicRequest.post("/receiver", {
+            name: receiverInfo.name,
+            address: `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
+            phone: receiverInfo.phone,
+            shopOwnerId: authUser().id,
+          });
+          receiver = receiverData.data.data.id;
+        } else {
+          receiver = receiverInfo.id;
+        }
         // Create order
         const shippingOrder = await publicRequest.post("/order", {
           orderCode: generateOrderCode(),
           shopOwnerId: authUser().id,
-          receiverId: receiver.data.data.id,
+          receiverId: receiver,
           serviceFee: calculateServiceFee(),
         });
         // Create routes
@@ -99,7 +99,9 @@ const CreateOrder = () => {
           routeId: 1,
         });
         await publicRequest.post("/orderRoute", {
-          address: `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
+          address: receiverInfo.id
+            ? receiverInfo.address
+            : `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
           shippingOrderId: shippingOrder.data.data.id,
           routeId: 2,
         });

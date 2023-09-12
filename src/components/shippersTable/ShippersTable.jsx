@@ -2,15 +2,34 @@ import { styled } from "styled-components";
 import "./shippersTable.scss";
 import { UpdateEmployeeInfoModal } from "../updateEmployeeInfoModal/UpdateEmployeeInfoModal";
 
-const ShipperStatus = styled.span`
+const ShipperStatus = styled.div`
   padding: 10px 15px;
-  background-color: ${(props) => (props.value === 0 ? "#14ae5c" : "#ffcd29")};
+  width: 145px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${(props) =>
+    props.name === "Đang rảnh"
+      ? "#14ae5c"
+      : props.name === "Đang giao hàng"
+      ? "#ffcd29"
+      : props.name === "Nghỉ việc"
+      ? "#f24822"
+      : "gray"};
   border-radius: 10px;
   color: white;
 `;
 
 export const ShippersTable = ({ shipperData }) => {
-  console.log(shipperData);
+  const getStatus = (shipperData) => {
+    if (!shipperData.user.workingStatus) {
+      return "Nghỉ việc";
+    } else if (shipperData.ordersInProgress === 0) {
+      return "Đang rảnh";
+    } else {
+      return "Đang giao hàng";
+    }
+  };
   return (
     <table>
       <thead>
@@ -24,24 +43,26 @@ export const ShippersTable = ({ shipperData }) => {
         </tr>
       </thead>
       <tbody>
-        {shipperData.map((shipper) => (
+        {
+        shipperData.length !== 0 ?
+        shipperData.map((shipper) => (
           <tr key={shipper.user.id}>
             <td style={{ paddingLeft: "100px" }}>{shipper.user.id}</td>
             <td>{shipper.user.fullName}</td>
             <td>{shipper.user.phone}</td>
             <td style={{ textAlign: "center" }}>{shipper.ordersInProgress}</td>
-            <td style={{ textAlign: "center" }}>
-              <ShipperStatus value={shipper.ordersInProgress}>
-                {shipper.ordersInProgress === 0
-                  ? "Đang rảnh"
-                  : "Đang giao hàng"}
+            <td className="flex justify-center">
+              <ShipperStatus name={getStatus(shipper)}>
+                {getStatus(shipper)}
               </ShipperStatus>
             </td>
             <td>
               <UpdateEmployeeInfoModal employeeInfo={shipper} type={"update"} />
             </td>
           </tr>
-        ))}
+        )) : (
+          <tr><td colSpan={6} className="text-center">Không tìm thấy nhân viên nào</td></tr>
+        )}
       </tbody>
     </table>
   );

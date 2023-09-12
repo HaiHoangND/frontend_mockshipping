@@ -34,27 +34,30 @@ const DeliveryStatus = styled.div`
       : "gray"};
 `;
 
-export const OrderListTable = () => {
+export const OrderListTable = ({ searchQuery }) => {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
   const authUser = useAuthUser();
   const role = authUser().role;
 
-  console.log(orders);
   const getOrders = async () => {
     let res;
     try {
       if (role === "ADMIN" || role === "COORDINATOR") {
-        res = await publicRequest.get(`/order?pageNumber=${page}&pageSize=5`);
+        res = await publicRequest.get(
+          `/order?pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
+        );
         if (res.data.type === "success") {
           setOrders(res.data.data.content);
         } else return useToastError("Something went wrong!");
       } else if (role === "SHOP") {
         res = await publicRequest.get(
-          `/order/getByShopOwnerId?ShopOwnerId=${authUser().id}`
+          `/order/getByShopOwnerId?ShopOwnerId=${
+            authUser().id
+          }&pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
-          setOrders(res.data.data);
+          setOrders(res.data.data.content);
         } else return useToastError("Something went wrong!");
       }
     } catch (error) {
@@ -64,7 +67,7 @@ export const OrderListTable = () => {
 
   useEffect(() => {
     getOrders();
-  }, [page]);
+  }, [page, searchQuery]);
 
   const handleNextPagination = () => {
     setPage((prev) => prev + 1);
@@ -95,15 +98,33 @@ export const OrderListTable = () => {
                   {order.orderCode}
                 </Link>
               </td>
-              <td>{authUser().username}</td>
-              <td>{order.receiver.name}</td>
               <td>
-                {order.orderStatusList.length === 0
-                  ? "Chưa phân công"
-                  : getArrayLastItem(order.orderStatusList).shipper.fullName}
+                <Link to={`/orderDetail/${order.orderCode}`} target="_blank">
+                  {order.shopOwner.fullName}
+                </Link>
               </td>
-              <td>{convertCurrency(productsPrice(order.products))}</td>
-              <td>{convertDateTime(order.createdAt)}</td>
+              <td>
+                <Link to={`/orderDetail/${order.orderCode}`} target="_blank">
+                  {order.receiver.name}
+                </Link>
+              </td>
+              <td>
+                <Link to={`/orderDetail/${order.orderCode}`} target="_blank">
+                  {order.orderStatusList.length === 0
+                    ? "Chưa phân công"
+                    : getArrayLastItem(order.orderStatusList).shipper.fullName}
+                </Link>
+              </td>
+              <td>
+                <Link to={`/orderDetail/${order.orderCode}`} target="_blank">
+                  {convertCurrency(productsPrice(order.products))}
+                </Link>
+              </td>
+              <td>
+                <Link to={`/orderDetail/${order.orderCode}`} target="_blank">
+                  {convertDateTime(order.createdAt)}
+                </Link>
+              </td>
               <td>
                 <DeliveryStatus
                   name={
@@ -131,7 +152,7 @@ export const OrderListTable = () => {
         </button>
         <div className="w-9 text-center">{page}</div>
         <button
-          disabled={orders?.length < 5}
+          disabled={orders?.length < 10}
           className="paginationButton"
           onClick={handleNextPagination}
         >

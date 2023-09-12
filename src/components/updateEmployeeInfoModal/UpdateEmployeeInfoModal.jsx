@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import "./updateEmployeeInfoModal.scss";
 import { publicRequest } from "../../requestMethods";
-import { useToastSuccess } from "../../utils/toastSettings";
+import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { useNavigate } from "react-router-dom";
 
 export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
@@ -35,24 +35,36 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
     setIsOpen(true);
   }
 
-  console.log(employeeInfo);
 
   const handleConfirm = async () => {
     if (type === "add") {
-      const res = await publicRequest.post("/register", {
-        fullName: inputs.fullName,
-        email: inputs.email,
-        password: inputs.password,
-        role: inputs.role,
-        address: inputs.address,
-        gender: inputs.gender,
-        phone: inputs.phone,
-        workingStatus: inputs.workingStatus,
-      });
-      if (res.data.type === "success") {
-        useToastSuccess("Tạo nhân viên thành công");
-        navigate(0);
-        closeModal();
+      if (
+        !inputs.fullName ||
+        !inputs.email ||
+        !inputs.password ||
+        !inputs.role ||
+        !inputs.address ||
+        !inputs.gender ||
+        !inputs.phone ||
+        !inputs.workingStatus
+      ) {
+        return useToastError("Chưa điền đầy đủ thông tin");
+      } else {
+        const res = await publicRequest.post("/register", {
+          fullName: inputs.fullName,
+          email: inputs.email,
+          password: inputs.password,
+          role: inputs.role,
+          address: inputs.address,
+          gender: inputs.gender,
+          phone: inputs.phone,
+          workingStatus: inputs.workingStatus,
+        });
+        if (res.data.type === "success") {
+          useToastSuccess("Tạo nhân viên thành công");
+          navigate(0);
+          closeModal();
+        }
       }
     } else if (type === "update") {
       const res = await publicRequest.put(`/user/${employeeInfo.user.id}`, {
@@ -256,6 +268,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
                           label="Mật khẩu"
                           name="password"
                           onChange={handleInputsChange}
+                          type="password"
                         />
                       </div>
                     )}

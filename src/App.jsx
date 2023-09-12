@@ -26,11 +26,19 @@ function App() {
   };
 
   const CoordinatorRoute = ({ Component }) => {
-    return role === "COORDINATOR" ? <Component /> : <Navigate to="/login" />;
+    return role === "COORDINATOR" || role === "ADMIN" ? (
+      <Component />
+    ) : (
+      <Navigate to="/login" />
+    );
   };
 
   const ShipperRoute = ({ Component }) => {
-    return role === "SHIPPER" ? <Component /> : <Navigate to="/login" />;
+    return role === "SHIPPER" || role === "ADMIN" ? (
+      <Component />
+    ) : (
+      <Navigate to="/login" />
+    );
   };
 
   const AdminRoute = ({ Component }) => {
@@ -38,7 +46,11 @@ function App() {
   };
 
   const ShopRoute = ({ Component }) => {
-    return role === "SHOP" ? <Component /> : <Navigate to="/login" />;
+    return role === "SHOP" || role === "ADMIN" ? (
+      <Component />
+    ) : (
+      <Navigate to="/login" />
+    );
   };
 
   return (

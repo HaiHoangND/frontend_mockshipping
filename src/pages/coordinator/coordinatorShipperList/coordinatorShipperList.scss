@@ -13,20 +13,27 @@
             margin-right: 10px;
         }
     }
-    .shipperTableAddEmployeeBtn {
+    .titleWrapper {
         display: flex;
-        font-size: 17px;
+        justify-content: space-between;
+        align-items: center;
         margin: 20px 0px;
-        justify-content: flex-end;
-        width: 100%;
-        button {
-            padding: 10px 15px;
-            background-color: #14ae5c;
-            border-radius: 50px;
-            color: white;
-            transition: all ease 0.2s;
-            &:hover{
-                background-color: #128548;
+        .modalWrapper{
+            min-width: 500px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .shipperTableAddEmployeeBtn {
+            font-size: 17px;
+            button {
+                padding: 10px 15px;
+                background-color: #14ae5c;
+                border-radius: 50px;
+                color: white;
+                transition: all ease 0.2s;
+                &:hover {
+                    background-color: #128548;
+                }
             }
         }
     }

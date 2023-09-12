@@ -81,7 +81,7 @@ const OrderDetail = () => {
     try {
       const res = await publicRequest.post("/orderStatus", {
         shippingOrderId: order.id,
-        shipperId: authUser().id,
+        shipperId: order.orderStatusList[0].shipper.id,
         orderRouteId: getArrayLastItem(order.orderRoutes).id,
         status:
           order.orderStatusList[0].status === "Giao hàng thành công"
@@ -118,35 +118,30 @@ const OrderDetail = () => {
   };
 
   const CancelBtn = () => {
-    return (
-      <button className="cancelOrderBtn" disabled={isDisabled()}>
-        Hủy đơn hàng
-      </button>
-    );
+    return <button className="cancelOrderBtn">Hủy đơn hàng</button>;
   };
   const ChangeStatusBtn = () => {
     return (
-      <button className="changeStatusOrderBtn" disabled={isDisabled()}>
+      <button className="changeStatusOrderBtn">
         Chuyển trạng thái đơn hàng
       </button>
     );
   };
-
-  const isDisabled = () => {
+  const isDisabled = (type) => {
     if (order.orderStatusList.length === 0) {
       return false;
     } else if (order.orderStatusList[0].status === "Đơn hủy") {
       return true;
     } else if (
-      order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" &&
-      (role === "COORDINATOR" || role === "ADMIN")
+      (order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
+        order.orderStatusList[0].status === "Giao hàng thành công") &&
+      (role === "COORDINATOR" || role === "ADMIN" || role === "SHOP")
     ) {
       return true;
     } else {
       return false;
     }
   };
-
   return (
     <div className="bodyContainer">
       <Sidebar />
@@ -315,15 +310,6 @@ const OrderDetail = () => {
                         </span>
                       </div>
                       <div className="shipperDetailItem">
-                        <span>Mã số cơ quan:</span>
-                        <span>
-                          {order.orderStatusList.length === 0
-                            ? authUser().warehouseId
-                            : getArrayLastItem(order.orderStatusList).shipper
-                                .warehouseId}
-                        </span>
-                      </div>
-                      <div className="shipperDetailItem">
                         <span>Tên:</span>
                         <span>
                           {
@@ -372,7 +358,7 @@ const OrderDetail = () => {
                       Chưa có nhân viên nào đảm nhận
                     </div>
                   )}
-                  <UpdateOrderEmployeeModal order={order} />
+                  {!isDisabled() && <UpdateOrderEmployeeModal order={order} />}
                 </div>
 
                 <div className="orderDetailJourney">
@@ -409,8 +395,11 @@ const OrderDetail = () => {
                       <div className="statusTime">
                         {formatDateTimeDetail(order.createdAt)}
                       </div>
-                      <div className="statusCircle" style={{backgroundColor:"gray", borderColor:"gray"}}>
-                        <ReceiptLongOutlined/>
+                      <div
+                        className="statusCircle"
+                        style={{ backgroundColor: "gray", borderColor: "gray" }}
+                      >
+                        <ReceiptLongOutlined />
                       </div>
                       <div className="statusDetailWrapper">
                         <div className="statusDetailTitle">Tạo đơn</div>
@@ -446,12 +435,14 @@ const OrderDetail = () => {
                   )}
                 </span>
               </div>
-              <WarningModal
-                InitiateComponent={CancelBtn}
-                warningContent={"Bạn có chắc muốn hủy đơn hàng này không?"}
-                confirmFunction={handleCancelOrder}
-                parameters={order}
-              />
+              {!isDisabled("cancel") && (
+                <WarningModal
+                  InitiateComponent={CancelBtn}
+                  warningContent={"Bạn có chắc muốn hủy đơn hàng này không?"}
+                  confirmFunction={handleCancelOrder}
+                  parameters={order}
+                />
+              )}
               {order.orderStatusList.length !== 0 &&
               (order.orderStatusList[0].status === "Quản lý đã nhận tiền" ||
                 order.orderStatusList[0].status === "Giao hàng thành công") &&

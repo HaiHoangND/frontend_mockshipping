@@ -12,10 +12,15 @@ import "./coordinatorDashboard.scss";
 import { useEffect, useState } from "react";
 import { publicRequest } from "../../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
+import { Searchbar } from "../../../components/searchbar/Searchbar";
 
 const CoordinatorDashboard = () => {
   const authUser = useAuthUser();
   const [stats, setStats] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchQueryChange = (newQuery) => {
+    setSearchQuery(newQuery);
+  };
 
   const getStats = async () => {
     const res = await publicRequest.get(`/order/coordinatorStatistic`);
@@ -72,10 +77,16 @@ const CoordinatorDashboard = () => {
         </div>
 
         <div className="coordinatorOrderListTableContainer">
-          <h3>
-            <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
-          </h3>
-          <OrderListTable />
+          <div className="titleWrapper">
+            <h3>
+              <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
+            </h3>
+            <Searchbar
+              onInputChange={handleSearchQueryChange}
+              placeholderText={"Mã vận đơn"}
+            />
+          </div>
+          <OrderListTable searchQuery={searchQuery} />
         </div>
       </div>
     </div>
