@@ -18,6 +18,7 @@ import {
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import "./createOrder.scss";
 import { ProductTable } from "../../../components/createOrderProductTable/ProductTable";
+import { Button } from "antd";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
@@ -53,8 +54,6 @@ const CreateOrder = () => {
   const handleProductChange = (newProducts) => {
     setProducts(newProducts);
   };
-
-  console.log(receiverInfo);
 
   const getCurrentShop = async () => {
     try {
@@ -183,9 +182,9 @@ const CreateOrder = () => {
             <span>Tổng giá trị đơn hàng</span>
             <span>{convertCurrency(productPrice + calculateServiceFee())}</span>
           </div>
-          <div className="createOrderBtn">
-            <button onClick={handleCreateOrder}>Tạo đơn hàng</button>
-          </div>
+          <Button style={{ width: "100%" }} className="mt-6" type="primary" onClick={handleCreateOrder}>
+            Tạo đơn hàng
+          </Button>
         </div>
       </div>
     </div>
