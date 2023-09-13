@@ -8,7 +8,7 @@ import {
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import "./adminDashboard.scss";
-import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
+import { OrderListTableAnt } from "../../../components/orderListTable/OrderListTableAnt";
 import { ProfitChart } from "../../../components/profitChart/ProfitChart";
 import { useEffect, useState } from "react";
 import { publicRequest } from "../../../requestMethods";
@@ -124,9 +124,12 @@ const AdminDashboard = () => {
               <h3>
                 <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
               </h3>
-              <Searchbar onInputChange={handleSearchQueryChange} placeholderText={"Mã vận đơn"}/>
+              <Searchbar
+                onInputChange={handleSearchQueryChange}
+                placeholderText={"Mã vận đơn"}
+              />
             </div>
-            <OrderListTable searchQuery={searchQuery} />
+            <OrderListTableAnt />
           </div>
         </div>
       </div>

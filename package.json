@@ -11,11 +11,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.15",
     "@mui/icons-material": "^5.14.7",
     "@mui/material": "^5.14.7",
+    "antd": "^5.9.0",
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
     "firebase": "^10.3.0",

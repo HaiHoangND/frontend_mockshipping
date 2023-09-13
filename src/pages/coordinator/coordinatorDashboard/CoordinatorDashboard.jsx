@@ -5,7 +5,7 @@ import {
   PeopleAlt,
   ReceiptLong,
 } from "@mui/icons-material";
-import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
+import { OrderListTableAnt } from "../../../components/orderListTable/OrderListTableAnt";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import "./coordinatorDashboard.scss";
@@ -86,7 +86,7 @@ const CoordinatorDashboard = () => {
               placeholderText={"Mã vận đơn"}
             />
           </div>
-          <OrderListTable searchQuery={searchQuery} />
+          <OrderListTableAnt />
         </div>
       </div>
     </div>

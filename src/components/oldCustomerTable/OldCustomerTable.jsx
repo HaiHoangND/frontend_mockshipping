@@ -1,7 +1,7 @@
+import { Divider, Radio, Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { publicRequest } from "../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
-import { RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
+import { publicRequest } from "../../requestMethods";
 
 export const OldCustomerTable = ({ onCustomerChange }) => {
   const authUser = useAuthUser();
@@ -31,52 +31,48 @@ export const OldCustomerTable = ({ onCustomerChange }) => {
     });
   };
 
+  const columns = [
+    {
+      title: "Mã số khách hàng",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Tên khách hàng",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Số điện thoại",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+    },
+  ];
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        "selectedRows: ",
+        selectedRows
+      );
+    },
+  };
+console.log(oldCustomers);
   return (
-    <div className="mt-6">
-      <table>
-        <thead>
-          <tr>
-            <th>Tên khách hàng</th>
-            <th>Địa chỉ</th>
-            <th>Số điện thoại</th>
-            <th style={{ textAlign: "center" }}>Chọn</th>
-          </tr>
-        </thead>
-        <tbody>
-          {oldCustomers.length === 0 ? (
-            <tr>
-              <td colSpan={3} className="text-center">
-                Không có khách hàng nào
-              </td>
-            </tr>
-          ) : (
-            oldCustomers.map((customer, index) => (
-              <tr
-                key={customer.id}
-                style={{
-                  background: customerIndex === index ? "#7ceaaf" : "",
-                }}
-                onClick={() => handleChooseCustomer(index, customer)}
-              >
-                <td>{customer.name}</td>
-                <td>{customer.address}</td>
-                <td>{customer.phone}</td>
-                <td style={{ textAlign: "center" }}>
-                  <div>
-                    <button>
-                      {customerIndex === index ? (
-                        <RadioButtonChecked />
-                      ) : (
-                        <RadioButtonUnchecked />
-                      )}
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+    <div>
+      <Table
+        rowSelection={{
+          type: "radio",
+          ...rowSelection,
+        }}
+        columns={columns}
+        dataSource={oldCustomers}
+      />
     </div>
   );
 };

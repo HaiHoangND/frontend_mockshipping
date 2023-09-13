@@ -290,7 +290,9 @@ const OrderDetail = () => {
               <h3>
                 <ReceiptLongOutlined fontSize="inherit" /> Danh sách sản phẩm
               </h3>
-              <OrderDetailProductTable products={order.products} />
+              <div className="orderDetailProductTable">
+                <OrderDetailProductTable products={order.products} />
+              </div>
             </div>
             <div className="orderDetailJourneyContainer">
               <h3>

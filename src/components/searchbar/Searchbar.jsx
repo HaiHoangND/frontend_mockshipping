@@ -1,19 +1,19 @@
+import { Input, Space } from "antd";
 import React from "react";
 import "./searchbar.scss";
-import { Search } from "@mui/icons-material";
 
+const { Search } = Input;
 export const Searchbar = ({ onInputChange, placeholderText }) => {
-  const handleInputChange = (e) => {
-    onInputChange(e.target.value);
-  };
+  const onSearch = (value, _e, info) => onInputChange(value);
   return (
-    <div className="searchbarContainer">
-      <Search />
-      <input
-        type="text"
-        placeholder={placeholderText}
-        onChange={handleInputChange}
+    <Space>
+      <Search
+        placeholder="Mã vận đơn"
+        onSearch={onSearch}
+        style={{
+          width: 200,
+        }}
       />
-    </div>
+    </Space>
   );
 };

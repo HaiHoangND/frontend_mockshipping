@@ -1,37 +1,37 @@
-table{
-    border-collapse: collapse;
-    width: 100%;
-    border-radius: 15px;
-}
+// table{
+//     border-collapse: collapse;
+//     width: 100%;
+//     border-radius: 15px;
+// }
 
-th,
-td {
-    padding: 10px 50px;
-}
+// th,
+// td {
+//     padding: 10px 50px;
+// }
 
-th {
-    text-align: left;
-    background: hsla(0, 0%, 84%, 0.5);
-    border-bottom: 0.5px solid gray;
-}
+// th {
+//     text-align: left;
+//     background: hsla(0, 0%, 84%, 0.5);
+//     border-bottom: 0.5px solid gray;
+// }
 
-tr:nth-of-type(2n) {
-    background: hsla(0, 0%, 63%, 0.1);
-}
+// tr:nth-of-type(2n) {
+//     background: hsla(0, 0%, 63%, 0.1);
+// }
 
-tr {
-    transition: all ease 0.3s;
-    height: 80px;
-}
+// tr {
+//     transition: all ease 0.3s;
+//     height: 80px;
+// }
 
-tbody tr:hover {
-    background: hsla(0, 0%, 82%, 0.7);
-}
+// tbody tr:hover {
+//     background: hsla(0, 0%, 82%, 0.7);
+// }
 
-.pagination{
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px 20px;
-    background: hsla(0, 0%, 84%, 0.5);
-    border-top: 0.5px solid gray;
-}
+// .pagination{
+//     display: flex;
+//     justify-content: flex-end;
+//     padding: 10px 20px;
+//     background: hsla(0, 0%, 84%, 0.5);
+//     border-top: 0.5px solid gray;
+// }

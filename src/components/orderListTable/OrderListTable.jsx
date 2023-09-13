@@ -64,7 +64,6 @@ export const OrderListTable = ({ searchQuery }) => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     getOrders();
   }, [page, searchQuery]);

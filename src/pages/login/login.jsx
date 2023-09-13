@@ -50,7 +50,6 @@ export default function Login() {
     if (res.status !== 200) {
       return useToastError("Thông tin tài khoản chưa đúng!");
     } else {
-      useToastSuccess("Đăng nhập thành công");
       signIn({
         token: res.data.access_token,
         expiresIn: 3600,

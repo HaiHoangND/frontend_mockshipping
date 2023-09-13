@@ -15,6 +15,7 @@ import { publicRequest } from "../../../requestMethods";
 import { convertCurrency } from "../../../utils/formatStrings";
 import "./shopOwnerDashboard.scss";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
+import { OrderListTableAnt } from "../../../components/orderListTable/OrderListTableAnt";
 
 const ShopOwnerDashboard = () => {
   const [statistics, setStatistics] = useState({});
@@ -103,7 +104,8 @@ const ShopOwnerDashboard = () => {
             </h3>
             <Searchbar onInputChange={handleSearchQueryChange} placeholderText={"Mã vận đơn"}/>
           </div>
-          <OrderListTable searchQuery={searchQuery} />
+          {/* <OrderListTable searchQuery={searchQuery} /> */}
+          <OrderListTableAnt/>
         </div>
       </div>
     </div>

@@ -97,11 +97,11 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
             style={{
               backgroundColor: "#0d99ff",
               color: "white",
-              padding: "10px",
+              padding: "8px",
               borderRadius: "10px",
             }}
           >
-            <Edit />
+            <Edit fontSize="small"/>
           </button>
         </div>
       ) : (
