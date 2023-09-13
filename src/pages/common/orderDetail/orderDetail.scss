@@ -1,7 +1,7 @@
 .orderDetailStatus {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     h3 {
@@ -34,7 +34,7 @@
             div {
                 display: inline-block;
                 text-align: center;
-                width: 100px;
+                width: 60px;
                 font-size: 15px;
                 margin-top: -50px;
                 color: transparent;
@@ -49,7 +49,7 @@
                 align-items: center;
                 justify-content: center;
                 padding: 15px;
-                font-size: 100px;
+                font-size: 50px;
                 border: 2px solid black;
                 border-radius: 50%;
             }
@@ -83,7 +83,7 @@
 .orderDetailPersonalInfos {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     h3 {
@@ -104,7 +104,7 @@
 .orderDetailProductTableWrapper {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     h3 {
@@ -125,7 +125,7 @@
 .orderDetailJourneyContainer {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     h3 {
@@ -133,7 +133,6 @@
         align-items: center;
         font-size: 30px;
         margin: 0;
-        margin-bottom: 20px;
         svg {
             margin-right: 10px;
         }
@@ -141,22 +140,22 @@
     .orderDetailJourneyContent {
         display: flex;
         .orderDetailShipperDetail {
-            flex: 2;
+            flex: 3;
             font-size: 20px;
             border-right: 1px solid black;
             .shipperDetailTitle {
                 display: flex;
                 align-items: center;
                 margin-bottom: 10px;
-                font-size: 24px;
-                span {
-                    margin-left: 10px;
-                }
+                font-size: 20px;
+                justify-content: space-between;
+
             }
             .shipperDetailItem {
                 display: flex;
                 align-items: center;
                 margin-bottom: 9px;
+                font-size: 17px;
                 span {
                     margin-right: 10px;
                     flex: 1;
@@ -231,7 +230,7 @@
 .orderDetailSummaryContainer {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     h3 {
@@ -248,7 +247,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 25px;
+        font-size: 20px;
         padding: 10px;
     }
     .cancelOrderBtn {

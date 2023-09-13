@@ -62,7 +62,6 @@ export const OldCustomerTable = ({ onCustomerChange }) => {
       );
     },
   };
-console.log(oldCustomers);
   return (
     <div>
       <Table
@@ -72,6 +71,7 @@ console.log(oldCustomers);
         }}
         columns={columns}
         dataSource={oldCustomers}
+        rowKey={(record) => record.id}
       />
     </div>
   );

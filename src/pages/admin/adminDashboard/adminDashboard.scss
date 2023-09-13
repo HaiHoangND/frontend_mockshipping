@@ -5,7 +5,7 @@
     padding: 20px 20px;
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     justify-content: space-between;
@@ -37,17 +37,18 @@
               background-color: rgb(223, 223, 223);
               display: flex;
               justify-content: space-between;
-              padding: 20px;
+              padding:  20px;
               box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1);
               border-radius: 15px;
               width: 260px;
               .left {
                 span {
-                  font-size: 20px;
+                  font-size: 17px;
                 }
                 .bigNumber {
-                  font-size: 60px;
+                  font-size: 50px;
                   font-weight: bold;
+                  padding: 10px 0px
                 }
               }
               .right {
@@ -77,6 +78,7 @@
               .bigNumber {
                 font-size: 60px;
                 font-weight: bold;
+                padding: 15px 0px;
               }
             }
             .right {
@@ -95,7 +97,7 @@
   .adminListTableContainer {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     h3 {

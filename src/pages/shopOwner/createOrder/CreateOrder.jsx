@@ -17,6 +17,7 @@ import {
 } from "../../../utils/formatStrings";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import "./createOrder.scss";
+import { ProductTable } from "../../../components/createOrderProductTable/ProductTable";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
@@ -139,9 +140,6 @@ const CreateOrder = () => {
       <div className="contentContainer">
         <Topbar />
         <div className="personalInformationFormContainer">
-          <h3>
-            <AddShoppingCartOutlined fontSize="inherit" /> Tạo đơn hàng
-          </h3>
           <div className="personalInformationFormsWrapper">
             <CreateOrderPersonalInfoForm
               person={"Người nhận"}
@@ -154,11 +152,12 @@ const CreateOrder = () => {
           <h3>
             <ReceiptLong fontSize="inherit" /> Danh sách sản phẩm
           </h3>
-          <CreateOrderProductTable
+          {/* <CreateOrderProductTable
             onProductWeightChange={handleProductWeightChange}
             onProductPriceChange={handleProductPriceChange}
             onProductChange={handleProductChange}
-          />
+          /> */}
+          <ProductTable />
         </div>
         <div className="orderSummaryCreation">
           <h3>

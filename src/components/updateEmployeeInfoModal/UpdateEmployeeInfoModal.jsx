@@ -7,6 +7,8 @@ import "./updateEmployeeInfoModal.scss";
 import { publicRequest } from "../../requestMethods";
 import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { useNavigate } from "react-router-dom";
+import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
 export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
   const navigate = useNavigate();
@@ -34,7 +36,6 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
   function openModal() {
     setIsOpen(true);
   }
-
 
   const handleConfirm = async () => {
     if (type === "add") {
@@ -93,22 +94,13 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
           className="flex justify-center"
           style={{ cursor: "pointer" }}
         >
-          <button
-            style={{
-              backgroundColor: "#0d99ff",
-              color: "white",
-              padding: "8px",
-              borderRadius: "10px",
-            }}
-          >
-            <Edit fontSize="small"/>
-          </button>
+          <Button type="primary" icon={<EditOutlined />} />
         </div>
       ) : (
         <div className="shipperTableAddEmployeeBtn" onClick={openModal}>
-          <button>
-            <AddCircle /> Thêm mới nhân viên
-          </button>
+          <Button type="primary" icon={<PlusCircleOutlined />}>
+            Thêm mới nhân viên
+          </Button>
         </div>
       )}
 

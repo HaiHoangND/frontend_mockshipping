@@ -1,9 +1,8 @@
 .personalInformationFormContainer {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
     h3 {
         display: flex;
         align-items: center;
@@ -63,9 +62,8 @@
 .createOrderProductTableContainer {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
     h3 {
         display: flex;
         align-items: center;
@@ -79,9 +77,8 @@
 .orderSummaryCreation {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
     h3 {
         display: flex;
         align-items: center;
@@ -95,7 +92,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 25px;
+        font-size: 17px;
         padding: 10px;
     }
     .createOrderBtn{
@@ -105,10 +102,10 @@
         margin-top: 15px;
         button{
             width: 100%;
-            padding: 10px 0px;
+            padding: 8px 0px;
             background-color: #0d99ff;
             border-radius: 10px;
-            font-size: 20px;
+            font-size: 17px;
             color:white;
             transition: all ease 0.2s;
             &:hover{
