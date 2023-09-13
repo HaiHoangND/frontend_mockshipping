@@ -40,3 +40,17 @@ export const generateOrderCode = () => {
   const orderCode = `ORD${timestamp}${uppercaseRandomString}`;
   return orderCode;
 };
+
+export const districtNames = [
+  { value: "Ba Đình", label: "Ba Đình" },
+  { value: "Hoàn Kiếm", label: "Hoàn Kiếm" },
+  { value: "Đống Đa", label: "Đống Đa" },
+  { value: "Thanh Xuân", label: "Thanh Xuân" },
+  { value: "Hai Bà Trưng", label: "Hai Bà Trưng" },
+  { value: "Cầu Giấy", label: "Cầu Giấy" },
+  { value: "Nam Từ Liêm", label: "Nam Từ Liêm" },
+  { value: "Bắc Từ Liêm", label: "Bắc Từ Liêm" },
+  { value: "Tây Hồ", label: "Tây Hồ" },
+  { value: "Hoàng Mai", label: "Hoàng Mai" },
+  // Add other districts here...
+];

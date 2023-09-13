@@ -10,7 +10,7 @@ export const Topbar = () => {
   const pathname = useLocation().pathname.split("/");
   return (
     <div className="topbarContainer">
-      <div style={{ fontSize: "20px", paddingLeft: "10px" }}>
+      <div style={{ fontSize: "17px", paddingLeft: "10px" }}>
         {pathname[1] === "orderDetail" ? `Mã vận đơn: ${pathname[2]}` : ""}
       </div>
       <div className="profilePicture">

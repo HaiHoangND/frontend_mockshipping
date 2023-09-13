@@ -53,7 +53,9 @@ export const OrderListTableAnt = () => {
       dataIndex: "orderCode",
       key: "id",
       render: (orderCode) => (
-        <Link to={`/orderDetail/${orderCode}`} target="_blank">{orderCode}</Link>
+        <Link to={`/orderDetail/${orderCode}`} target="_blank">
+          {orderCode}
+        </Link>
       ),
     },
     {
@@ -150,5 +152,11 @@ export const OrderListTableAnt = () => {
       },
     },
   ];
-  return <Table columns={columns} dataSource={orders} />;
+  return (
+    <Table
+      columns={columns}
+      dataSource={orders}
+      rowKey={(record) => record.id}
+    />
+  );
 };

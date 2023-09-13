@@ -63,7 +63,7 @@ export const districts = [
     name: "Kho Tây Hồ",
   },
   {
-    id: 12,
+    id: 13,
     district: "Hoàng Mai",
     lat: 21.0683576,
     lon: 105.8240984,

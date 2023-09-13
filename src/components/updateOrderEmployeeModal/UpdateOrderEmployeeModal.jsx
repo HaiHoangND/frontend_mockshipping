@@ -6,6 +6,8 @@ import { getArrayLastItem, getIndexOfItem } from "../../utils/getLastArrayItem";
 import { InputLabel, MenuItem, Select } from "@mui/material";
 import { publicRequest } from "../../requestMethods";
 import { useNavigate } from "react-router-dom";
+import { Button } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 export const UpdateOrderEmployeeModal = ({ order }) => {
   const navigate = useNavigate();
@@ -92,14 +94,14 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
   return (
     <>
       {role !== "SHOP" ? (
-        <button
+        <Button
+          type="primary"
+          icon={<EditOutlined />}
+          className=" ml-10"
           onClick={openModal}
-          style={{ cursor: "pointer" }}
-          className="updateEmployeeModalBtn"
-          disabled={isDisabled()}
         >
           Cập nhật nhân viên
-        </button>
+        </Button>
       ) : (
         <div></div>
       )}

@@ -28,6 +28,7 @@ import {
 import { WarningModal } from "../../../components/warningModal/WarningModal";
 import { useAuthUser } from "react-auth-kit";
 import { UpdateOrderEmployeeModal } from "../../../components/updateOrderEmployeeModal/UpdateOrderEmployeeModal";
+import { Button } from "antd";
 
 const OrderDetail = () => {
   const [order, setOrder] = useState();
@@ -118,7 +119,7 @@ const OrderDetail = () => {
   };
 
   const CancelBtn = () => {
-    return <button className="cancelOrderBtn">Hủy đơn hàng</button>;
+    return <Button type="primary" danger style={{width:"100%"}} className="mt-5">Hủy đơn hàng</Button>;
   };
   const ChangeStatusBtn = () => {
     return (
@@ -295,13 +296,22 @@ const OrderDetail = () => {
               </div>
             </div>
             <div className="orderDetailJourneyContainer">
-              <h3>
-                <LocalShippingOutlined fontSize="inherit" /> Hành trình đơn hàng
-              </h3>
+              <div className="flex items-center mb-5">
+                <h3>
+                  <LocalShippingOutlined fontSize="inherit" /> Hành trình đơn
+                  hàng
+                </h3>
+                {!isDisabled() && <UpdateOrderEmployeeModal order={order} />}
+              </div>
               <div className="orderDetailJourneyContent">
                 <div className="orderDetailShipperDetail">
                   <div className="shipperDetailTitle">
-                    <Person /> <span>Nhân viên đảm nhận</span>
+                    <div className="flex items-center">
+                      <Person />{" "}
+                      <span style={{ marginLeft: "10px" }}>
+                        Nhân viên đảm nhận
+                      </span>
+                    </div>
                   </div>
                   {order.orderStatusList.length !== 0 ? (
                     <>
@@ -360,7 +370,6 @@ const OrderDetail = () => {
                       Chưa có nhân viên nào đảm nhận
                     </div>
                   )}
-                  {!isDisabled() && <UpdateOrderEmployeeModal order={order} />}
                 </div>
 
                 <div className="orderDetailJourney">
