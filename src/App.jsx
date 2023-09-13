@@ -14,6 +14,7 @@ import OrderDetail from "./pages/common/orderDetail/OrderDetail";
 import WarehouseList from "./pages/admin/warehouseList/WarehouseList";
 import ShopOwnerDashboard from "./pages/shopOwner/shopOwnerDashboard/ShopOwnerDashboard";
 import Register from "./pages/common/register/Register";
+import ManageProducts from "./pages/shopOwner/manageProducts/manageProducts";
 
 function App() {
   const isAuthenticated = useIsAuthenticated();
@@ -106,7 +107,12 @@ function App() {
         />
         <Route
           path="/shop"
-          element={<ShopRoute Component={ShopOwnerDashboard} />}
+          element
+          ={<ShopRoute Component={ShopOwnerDashboard} />}
+        />
+        <Route
+          path="/shop/manageProducts"
+          element={<ShopRoute Component={ManageProducts} />}
         />
       </Routes>
     </HashRouter>

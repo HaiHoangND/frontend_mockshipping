@@ -4,20 +4,24 @@
     margin: 30px 20px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
+
     h3 {
         display: flex;
         align-items: center;
         font-size: 30px;
         margin: 0;
+
         svg {
             margin-right: 10px;
         }
     }
+
     .shopOwnerOverviewTilesContainer {
         margin: 30px 0px;
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 30px;
+
         .shopOwnerOverviewTile {
             background-color: rgb(223, 223, 223);
             display: flex;
@@ -25,15 +29,18 @@
             padding: 20px;
             box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
+
             .left {
                 span {
                     font-size: 25px;
                 }
+
                 .bigNumber {
                     font-size: 50px;
                     font-weight: bold;
                 }
             }
+
             .right {
                 svg {
                     font-size: 70px;
@@ -49,19 +56,22 @@
 .shopOwnerOrderListTableContainer {
     background-color: white;
     padding: 25px;
-    margin: 30px 20px;
+    margin: 30px 120px;
     box-shadow: 0px 10px 15px -4px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
+
     h3 {
         display: flex;
         align-items: center;
         font-size: 30px;
         margin: 0;
         margin-bottom: 20px;
+
         svg {
             margin-right: 10px;
         }
     }
+
     .titleWrapper {
         display: flex;
         align-items: center;

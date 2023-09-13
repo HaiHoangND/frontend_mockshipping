@@ -3,27 +3,32 @@
     margin-top: 0px;
     display: flex;
     justify-content: flex-end;
-    button {
+
+    .blueBtn {
         padding: 10px 20px;
         background-color: #0d99ff;
         border-radius: 10px;
         margin-right: 10px;
         color: white;
         transition: all ease 0.2s;
+
         &:hover {
             background-color: #1085d8;
         }
     }
-    div {
-        button {
-            padding: 10px 20px;
-            background-color: #f24822;
-            border-radius: 10px;
-            &:hover {
-                background-color: #d23f1e;
-            }
+
+    .deleteAllProducts {
+        padding: 10px 20px;
+        background-color: #f24822;
+        border-radius: 10px;
+        color: white;
+
+        &:hover {
+            background-color: #d23f1e;
         }
     }
+
+
     input {
         display: none;
     }

@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Space, Table, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
-import { publicRequest } from "../../requestMethods";
-import { getArrayLastItem } from "../../utils/getLastArrayItem";
+import { publicRequest } from "../../../requestMethods";
+import { getArrayLastItem } from "../../../utils/getLastArrayItem";
 import {
   convertCurrency,
   convertDateTime,
   productsPrice,
-} from "../../utils/formatStrings";
+} from "../../../utils/formatStrings";
 
-export const OrderListTableAnt = () => {
+export const ProductsListTableAnt = () => {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
   const authUser = useAuthUser();
@@ -118,34 +118,15 @@ export const OrderListTableAnt = () => {
         const lastStatus = getArrayLastItem(orderStatusList)?.status;
         let tagColor;
 
-        switch (lastStatus) {
-          case "Đơn hủy":
-            tagColor = "volcano";
-            break;
-          case "Giao hàng thành công":
-            tagColor = "green";
-            break;
-          case "Đã đưa tiền cho chủ shop":
-            tagColor = "green";
-            break;
-          case "Đang giao hàng":
-            tagColor = "yellow";
-            break;
-          case "Láy hàng thành công":
-            tagColor = "yellow";
-            break;
-          case "Đang lấy hàng":
-            tagColor = "yellow";
-            break;
-          default:
-            tagColor = "geekblue"; // You can change this to another color for other statuses
-            break;
-        }
-
         return (
-          <Tag color={tagColor}>
-            {orderStatusList.length !== 0 ? lastStatus : "Tạo đơn"}
-          </Tag>
+          <>
+            <Tag color="yellow">
+              Chỉnh sửa
+            </Tag>
+            <Tag color="volcano">
+              Xóa sản phẩm
+            </Tag>
+          </>
         );
       },
     },

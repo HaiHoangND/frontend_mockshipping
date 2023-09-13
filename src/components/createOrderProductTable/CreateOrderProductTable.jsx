@@ -6,6 +6,7 @@ import { AddProductModal } from "../addProductModal/AddProductModal";
 import { WarningModal } from "../warningModal/WarningModal";
 import { Delete } from "@mui/icons-material";
 import { removeItemByIndex } from "../../utils/getLastArrayItem";
+import CustomizedMenus from "../../pages/shopOwner/manageProducts/CustomizedMenus";
 
 const DeleteProductBtn = () => {
   return (
@@ -16,7 +17,7 @@ const DeleteProductBtn = () => {
 };
 
 const ClearProductsBtn = () => {
-  return <button>Xóa tất cả sản phẩm</button>;
+  return <button className="deleteAllProducts">Xóa tất cả sản phẩm</button>;
 };
 
 export const CreateOrderProductTable = ({
@@ -104,7 +105,7 @@ export const CreateOrderProductTable = ({
   return (
     <div>
       <div className="uploadExcelBtn">
-        <button onClick={handleUploadExcel}>Tải lên file .xlsx</button>
+        <CustomizedMenus handleExelClick={handleUploadExcel} />
         <WarningModal
           InitiateComponent={ClearProductsBtn}
           warningContent={"Ban có chắc muốn xóa tát cả sản phẩm không?"}
