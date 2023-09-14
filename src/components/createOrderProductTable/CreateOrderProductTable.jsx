@@ -202,7 +202,7 @@ export const CreateOrderProductTable = ({
               <a>Cancel</a>
             </Button>
             <Button type="primary"
-              onClick={handleDeleteSingleProduct(record.productCode)}
+              onClick={() => handleDeleteSingleProduct(record.productCode)}
               danger>Xóa sản phẩm</Button>
           </span>
         ) : (
@@ -369,8 +369,9 @@ export const CreateOrderProductTable = ({
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // This clears the selected file
     }
-    setData(products);
+    setProducts(newData);
     onProductChange(products);
+    setEditingKey('');
   };
 
 
