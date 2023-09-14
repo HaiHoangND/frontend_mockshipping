@@ -3,7 +3,7 @@ import {
   Group,
   Home,
   Logout,
-  Inventory,
+  PeopleAlt,
   ReceiptLong,
   Warehouse,
 } from "@mui/icons-material";
@@ -114,7 +114,18 @@ export const Sidebar = () => {
                     : "sidebarItem"
                 }
               >
-                <Inventory /> Quản lý hàng
+                <Add /> Tạo đơn hàng
+              </div>
+            </Link>
+            <Link to={"/shop/clients"}>
+              <div
+                className={
+                  pathname[2] === "clients"
+                    ? "sidebarItem selected"
+                    : "sidebarItem"
+                }
+              >
+                <PeopleAlt /> Danh sách khách hàng
               </div>
             </Link>
           </>

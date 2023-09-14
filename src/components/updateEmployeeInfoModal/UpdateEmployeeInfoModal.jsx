@@ -8,8 +8,9 @@ import { publicRequest } from "../../requestMethods";
 import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { useNavigate } from "react-router-dom";
 import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, Form, Input, Modal, Row, Select, Space, Tag } from "antd";
 
+const { Option } = Select;
 export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
   const navigate = useNavigate();
   let [isOpen, setIsOpen] = useState(false);
@@ -24,6 +25,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
     workingStatus: employeeInfo ? employeeInfo.user.workingStatus : true,
   });
   const authUser = useAuthUser();
+  const role = authUser().role;
 
   const handleInputsChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -62,7 +64,6 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
           workingStatus: inputs.workingStatus,
         });
         if (res.data.type === "success") {
-          useToastSuccess("Tạo nhân viên thành công");
           navigate(0);
           closeModal();
         }
@@ -86,6 +87,13 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
     }
   };
 
+  const handleRoleChange = (value) => {
+    setInputs({ ...inputs, role: value });
+  };
+  const handleGenderChange = (value) => {
+    setInputs({ ...inputs, gender: value });
+  };
+
   return (
     <>
       {type === "update" ? (
@@ -103,183 +111,109 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
           </Button>
         </div>
       )}
-
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
+      <Modal
+        title={type === "update" ? "Cập nhật thông tin" : "Thêm mới nhân viên"}
+        open={isOpen}
+        onOk={handleConfirm}
+        onCancel={closeModal}
+        cancelText="Hủy"
+        okText="Xác nhận"
+        width={590}
+      >
+        <Form
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 20 }}
+          layout="horizontal"
+          className="mt-5"
+        >
+          <Form.Item label="Tên">
+            <Input
+              name="fullName"
+              placeholder={employeeInfo ? inputs.fullName : "Trần Phi Long"}
+              onChange={handleInputsChange}
+            />
+          </Form.Item>
+          <Form.Item label="Giới tính">
+            <Select
+              placeholder={employeeInfo ? inputs.gender : "Nam"}
+              onChange={handleGenderChange}
+              defaultValue={"Nam"}
+            >
+              <Option value={"Nam"} label={"Nam"}>
+                <Space>Nam</Space>
+              </Option>
+              <Option value={"Nữ"} label={"Nữ"}>
+                <Space>Nữ</Space>
+              </Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="Số điện thoại">
+            <Input
+              name="phone"
+              placeholder={employeeInfo ? inputs.phone : "0123456789"}
+              onChange={handleInputsChange}
+            />
+          </Form.Item>
+          <Form.Item label="Email">
+            <Input
+              name="email"
+              placeholder={employeeInfo ? inputs.email : "example@email.com"}
+              onChange={handleInputsChange}
+            />
+          </Form.Item>
+          <Form.Item label="Địa chỉ">
+            <Input
+              name="address"
+              placeholder={
+                employeeInfo ? inputs.address : "256 Đội Cấn, Ba Đình"
+              }
+              onChange={handleInputsChange}
+            />
+          </Form.Item>
+          <Form.Item label="Chức vụ">
+            <Select
+              placeholder={employeeInfo ? inputs.role : "Nhân viên giao vận"}
+              onChange={handleRoleChange}
+            >
+              <Option value={"SHIPPER"} label={"Nhân viên giao vận"}>
+                <Space>Nhân viên giao vận</Space>
+              </Option>
+              {role === "ADMIN" && (
+                <Option value={"COORDINATOR"} label={"Điều phối viên"}>
+                  <Space>Điều phối viên</Space>
+                </Option>
+              )}
+              {role === "ADMIN" && (
+                <Option value={"ADMIN"} label={"Quản lí giao hàng"}>
+                  <Space>Quản lí giao hàng</Space>
+                </Option>
+              )}
+            </Select>
+          </Form.Item>
+          {type === "update" && (
+            <Form.Item label="Trạng thái">
+              <Select
+                onChange={handleGenderChange}
+                defaultValue={employeeInfo?.user.workingStatus}
               >
-                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-7 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    className="text-lg font-medium leading-6 "
-                  >
-                    {type === "update" ? (
-                      <>
-                        <Edit />{" "}
-                        <p style={{ marginLeft: "10px" }}>Cập nhật thông tin</p>
-                      </>
-                    ) : (
-                      <>
-                        <AddCircle />
-                        <p style={{ marginLeft: "10px" }}>Thêm mới nhân viên</p>
-                      </>
-                    )}
-                  </Dialog.Title>
-                  <div className="mt-2 updateEmployeeInputsWrapper">
-                    <div className="employeeInfoInputContainer">
-                      <TextField
-                        label="Tên"
-                        name="fullName"
-                        onChange={handleInputsChange}
-                        placeholder={
-                          !employeeInfo
-                            ? "Trần Phi Long"
-                            : employeeInfo.user.fullName
-                        }
-                      />
-                    </div>
-                    <div className="employeeInfoInputContainer">
-                      <TextField
-                        select
-                        label="Giới tính"
-                        name="gender"
-                        defaultValue={
-                          !employeeInfo ? "Nam" : employeeInfo.user.gender
-                        }
-                        onChange={handleInputsChange}
-                        sx={{ width: "200px" }}
-                      >
-                        <MenuItem value={"Nam"}>Nam</MenuItem>
-                        <MenuItem value={"Nữ"}>Nữ</MenuItem>
-                      </TextField>
-                    </div>
-                    <div className="employeeInfoInputContainer">
-                      <TextField
-                        label="Số điện thoại"
-                        name="phone"
-                        onChange={handleInputsChange}
-                        placeholder={
-                          !employeeInfo
-                            ? "01234567889"
-                            : employeeInfo.user.phone
-                        }
-                      />
-                    </div>
-                    <div className="employeeInfoInputContainer">
-                      <TextField
-                        label="Email"
-                        name="email"
-                        onChange={handleInputsChange}
-                        placeholder={
-                          !employeeInfo
-                            ? "example@email.com"
-                            : employeeInfo.user.email
-                        }
-                      />
-                    </div>
-                    <div className="employeeInfoInputContainer">
-                      <TextField
-                        label="Địa chỉ"
-                        name="address"
-                        onChange={handleInputsChange}
-                        placeholder={
-                          !employeeInfo
-                            ? "256 Đội Cấn"
-                            : employeeInfo.user.address
-                        }
-                      />
-                    </div>
-                    <div className="employeeInfoInputContainer">
-                      <TextField
-                        select
-                        label="Trạng thái làm việc"
-                        name="workingStatus"
-                        defaultValue={
-                          !employeeInfo ? true : employeeInfo.user.workingStatus
-                        }
-                        onChange={handleInputsChange}
-                        sx={{ width: "200px" }}
-                      >
-                        <MenuItem value={true}>Đang làm việc</MenuItem>
-                        <MenuItem value={false}>Đình chỉ</MenuItem>
-                      </TextField>
-                    </div>
-                    <div className="employeeInfoInputContainer">
-                      <TextField
-                        select
-                        label="Chức vụ"
-                        name="role"
-                        defaultValue={
-                          !employeeInfo ? "SHIPPER" : employeeInfo.user.role
-                        }
-                        onChange={handleInputsChange}
-                        sx={{ width: "200px" }}
-                      >
-                        {authUser().role === "ADMIN" && (
-                          <MenuItem value={"COORDINATOR"}>
-                            Điều phối viên
-                          </MenuItem>
-                        )}
-                        <MenuItem value={"SHIPPER"}>
-                          Nhân viên giao hàng
-                        </MenuItem>
-
-                        {authUser().role === "ADMIN" && (
-                          <MenuItem value={"ADMIN"}>Quản lí giao hàng</MenuItem>
-                        )}
-                      </TextField>
-                    </div>
-                    {type === "add" && (
-                      <div className="employeeInfoInputContainer">
-                        <TextField
-                          label="Mật khẩu"
-                          name="password"
-                          onChange={handleInputsChange}
-                          type="password"
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="confirmModalBtns mt-4">
-                    <button type="button" onClick={handleConfirm}>
-                      Xác nhận
-                    </button>
-                    <button type="button" onClick={closeModal}>
-                      Hủy
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+                <Option value={true} label={"Đang làm việc"}>
+                  <Space>
+                    <Tag color="green">Đang làm việc</Tag>
+                  </Space>
+                </Option>
+                <Option value={false} label={"Nghỉ việc"}>
+                  <Space>
+                    <Tag color="volcano">Nghỉ việc</Tag>
+                  </Space>
+                </Option>
+              </Select>
+            </Form.Item>
+          )}
+          <Form.Item label="Mật khẩu">
+            <Input.Password name="password" onChange={handleInputsChange} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };

@@ -129,7 +129,7 @@ const AdminDashboard = () => {
                 placeholderText={"Mã vận đơn"}
               />
             </div>
-            <OrderListTableAnt />
+            <OrderListTableAnt searchQuery={searchQuery} />
           </div>
         </div>
       </div>

@@ -1,39 +1,48 @@
+import { Table, Tag } from "antd";
 import React, { useEffect, useState } from "react";
-import { Space, Table, Tag } from "antd";
-import { Link } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
+import { Link } from "react-router-dom";
 import { publicRequest } from "../../requestMethods";
-import { getArrayLastItem } from "../../utils/getLastArrayItem";
 import {
   convertCurrency,
   convertDateTime,
   productsPrice,
 } from "../../utils/formatStrings";
+import { getArrayLastItem } from "../../utils/getLastArrayItem";
 
-export const OrderListTableAnt = () => {
+export const OrderListTableAnt = ({ searchQuery }) => {
   const [orders, setOrders] = useState([]);
+  const [totalCount, setTotalCount] = useState(1);
   const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const authUser = useAuthUser();
   const role = authUser().role;
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const getOrders = async () => {
+  const getOrders = async (currentPage) => {
     let res;
     try {
       if (role === "ADMIN" || role === "COORDINATOR") {
+        setIsLoading(true);
         res = await publicRequest.get(
-          `/order?pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
+          `/order?pageNumber=${currentPage}&pageSize=${5}&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
           setOrders(res.data.data.content);
+          setTotalCount(res.data.data.totalElements);
+          setPage(currentPage);
+          setIsLoading(false);
         } else return useToastError("Something went wrong!");
       } else if (role === "SHOP") {
+        setIsLoading(true);
         res = await publicRequest.get(
           `/order/getByShopOwnerId?ShopOwnerId=${authUser().id
-          }&pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
+          }&pageNumber=${currentPage}&pageSize=${5}&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
           setOrders(res.data.data.content);
+          setTotalCount(res.data.data.totalElements);
+          setPage(currentPage);
+          setIsLoading(false);
         } else return useToastError("Something went wrong!");
       }
     } catch (error) {
@@ -44,8 +53,8 @@ export const OrderListTableAnt = () => {
   console.log(orders);
 
   useEffect(() => {
-    getOrders();
-  }, [page, searchQuery]);
+    getOrders(1);
+  }, [searchQuery]);
 
   const columns = [
     {
@@ -156,7 +165,16 @@ export const OrderListTableAnt = () => {
     <Table
       columns={columns}
       dataSource={orders}
+      loading={isLoading}
       rowKey={(record) => record.id}
+      pagination={{
+        pageSize: 5,
+        current: page,
+        total: totalCount,
+        onChange: (page) => {
+          getOrders(page);
+        },
+      }}
     />
   );
 };

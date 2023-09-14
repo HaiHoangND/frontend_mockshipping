@@ -24,7 +24,9 @@
         display: flex;
         justify-content: space-between;
         .profitChartWrapper {
-          width: 700px;
+          width: 600px;
+          display: flex;
+          align-items: center;
         }
         .adminOverviewStatistic {
           display: flex;

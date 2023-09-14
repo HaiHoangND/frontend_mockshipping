@@ -8,7 +8,7 @@ export const Searchbar = ({ onInputChange, placeholderText }) => {
   return (
     <Space>
       <Search
-        placeholder="Mã vận đơn"
+        placeholder={placeholderText}
         onSearch={onSearch}
         style={{
           width: 200,

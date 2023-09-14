@@ -41,7 +41,6 @@ export default function Login() {
 
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
-    console.log(user);
   };
 
   const handleSubmit = async (event) => {
