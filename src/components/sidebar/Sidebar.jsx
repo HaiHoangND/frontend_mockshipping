@@ -81,10 +81,10 @@ export const Sidebar = () => {
                 <Group /> Danh sách nhân viên
               </div>
             </Link>
-            <Link to={"/admin/clients"}>
+            <Link to={"/admin/shops"}>
               <div
                 className={
-                  pathname[2] === "clients"
+                  pathname[2] === "shops"
                     ? "sidebarItem selected"
                     : "sidebarItem"
                 }

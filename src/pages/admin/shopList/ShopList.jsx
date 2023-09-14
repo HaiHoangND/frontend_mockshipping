@@ -1,35 +1,29 @@
 import React, { useEffect, useState } from "react";
-import "./receiverList.scss";
+import "./shopList.scss";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
-import { PeopleAlt } from "@mui/icons-material";
+import { ShoppingCart } from "@mui/icons-material";
 import { publicRequest } from "../../../requestMethods";
-import { useAuthUser } from "react-auth-kit";
 import { Table } from "antd";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
 
-const ReceiverList = () => {
-  const [receivers, setReceivers] = useState([]);
+const ShopList = () => {
+  const [shops, setShops] = useState([]);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(1);
-  const authUser = useAuthUser();
   const [isLoading, setIsLoading] = useState(true);
-  const pageSize = 10;
-
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearchQueryChange = (newQuery) => {
     setSearchQuery(newQuery);
   };
 
-  const getReceivers = async (currentPage) => {
+  const getShops = async (currentPage) => {
     try {
       setIsLoading(true);
       const res = await publicRequest.get(
-        `/receiver/getByShopOwnerId?shopOwnerId=${
-          authUser().id
-        }&pageNumber=${currentPage}&pageSize=${pageSize}`
+        `/user/getAllShopOwners?pageNumber=${currentPage}&pageSize=10`
       );
-      setReceivers(res.data.data.content);
+      setShops(res.data.data.content);
       setTotalCount(res.data.data.totalElements);
       setPage(currentPage);
       setIsLoading(false);
@@ -39,63 +33,72 @@ const ReceiverList = () => {
   };
 
   useEffect(() => {
-    getReceivers(1);
+    getShops(1);
   }, []);
 
   const columns = [
     {
       title: "ID",
-      dataIndex: "receiver",
-      render: (text) => text.id,
+      dataIndex: "id",
     },
     {
-      title: "Họ và tên",
-      dataIndex: "receiver",
-      render: (text) => text.name,
+      title: "Tên chủ shop",
+      dataIndex: "fullName",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
     },
     {
       title: "Số điện thoại",
-      dataIndex: "receiver",
-      render: (text) => text.phone,
+      dataIndex: "phone",
     },
     {
       title: "Địa chỉ",
-      dataIndex: "receiver",
-      render: (text) => text.address,
+      dataIndex: "address",
     },
     {
-      title: "Đơn đã đặt",
-      dataIndex: "numberOfOrders",
+      title: "Số lượng khách hàng",
+      dataIndex: "receiverList",
+      render: (list) => list.length,
+      align: "center",
     },
     {
-      title: "Đơn thành công",
-      dataIndex: "successfulOrders",
+      title: "Sản phẩm trong kho",
+      dataIndex: "productShops",
+      render: (list) => list.length,
+      align: "center",
     },
   ];
+
   return (
     <div className="bodyContainer">
       <Sidebar />
       <div className="contentContainer">
         <Topbar />
-        <div className="receiverListContainer">
-          <div className="">
+        <div className="shopListContainer">
+          <div className="titleWrapper flex justify-between">
             <h3>
-              <PeopleAlt /> Danh sách khách hàng
+              <ShoppingCart fontSize="inherit" />
+              Danh sách các shop
             </h3>
-            <Searchbar onInputChange={handleSearchQueryChange} placeholderText={"Tìm kiếm khách hàng"}/>
+            <Searchbar
+              placeholderText={"Tìm kiếm chủ shop"}
+              onInputChange={handleSearchQueryChange}
+            />
           </div>
           <Table
             className="mt-5"
             columns={columns}
-            dataSource={receivers}
+            dataSource={shops}
             loading={isLoading}
-            rowKey={(record) => record.receiver.id}
+            rowKey={(record) => record.id}
             pagination={{
-              pageSize: pageSize,
+              pageSize: 10,
               current: page,
               total: totalCount,
               onChange: (page) => {
-                getReceivers(page);
+                getOrders(page);
               },
             }}
           />
@@ -105,4 +108,4 @@ const ReceiverList = () => {
   );
 };
 
-export default ReceiverList;
+export default ShopList;

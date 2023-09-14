@@ -104,8 +104,7 @@ const ShopOwnerDashboard = () => {
             </h3>
             <Searchbar onInputChange={handleSearchQueryChange} placeholderText={"Mã vận đơn"}/>
           </div>
-          {/* <OrderListTable searchQuery={searchQuery} /> */}
-          <OrderListTableAnt/>
+          <OrderListTableAnt searchQuery={searchQuery}/>
         </div>
       </div>
     </div>
