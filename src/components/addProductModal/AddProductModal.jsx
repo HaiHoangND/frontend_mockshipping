@@ -6,17 +6,21 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { storage } from "../../firebase";
 import { useToastShow } from "../../utils/toastSettings";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import "./addProductModal.scss";
 
-export const AddProductModal = ({ handleAddProduct, isOpenModal, handleOpenChange }) => {
+export const AddProductModal = ({
+  handleAddProduct,
+  isOpenModal,
+  handleOpenChange,
+}) => {
   const [inputs, setInputs] = useState({});
   const [imgFile, setImgFile] = useState(null);
   const [imgURL, setImgURL] = useState("");
   const fileInputRef = useRef(null);
 
   function closeModal() {
-    handleOpenChange(false)
+    handleOpenChange(false);
   }
 
   const handleInputsChange = (e) => {
@@ -42,24 +46,15 @@ export const AddProductModal = ({ handleAddProduct, isOpenModal, handleOpenChang
     useToastShow("Đang thêm sản phẩm");
     await handleUploadImg();
     if (imgURL.length === 0) {
-      handleAddProduct(inputs, "temporayLink")
+      handleAddProduct(inputs, "temporayLink");
     } else {
       handleAddProduct(inputs, imgURL);
     }
   };
 
-  // const handleCheckProductCode = () => {
-  //   try {
-  //     let res =
-  //   } catch (error) {
-
-  //   }
-  // }
-
   return (
     <>
-
-      <Transition appear show={isOpenModal} as={Fragment}>
+      {/* <Transition appear show={isOpenModal} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
@@ -180,7 +175,16 @@ export const AddProductModal = ({ handleAddProduct, isOpenModal, handleOpenChang
             </div>
           </div>
         </Dialog>
-      </Transition>
+      </Transition> */}
+
+      <Modal
+        title={"Cảnh báo"}
+        open={isOpenModal}
+        onCancel={closeModal}
+        cancelText="Hủy"
+        okText="Xác nhận"
+        width={570}
+      ></Modal>
     </>
   );
 };
