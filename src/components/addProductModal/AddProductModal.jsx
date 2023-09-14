@@ -2,25 +2,20 @@ import { Dialog, Transition } from "@headlessui/react";
 import { AddCircleOutline } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { storage } from "../../firebase";
 import { useToastShow } from "../../utils/toastSettings";
 import "./addProductModal.scss";
 
-export const AddProductModal = ({ handleAddProduct }) => {
-  let [isOpen, setIsOpen] = useState(false);
+export const AddProductModal = ({ handleAddProduct, isOpenModal, handleOpenChange }) => {
   const [inputs, setInputs] = useState({});
   const [imgFile, setImgFile] = useState(null);
   const [imgURL, setImgURL] = useState("");
   const fileInputRef = useRef(null);
 
   function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
+    handleOpenChange(false)
   }
 
   const handleInputsChange = (e) => {
@@ -50,21 +45,8 @@ export const AddProductModal = ({ handleAddProduct }) => {
 
   return (
     <>
-      <div
-        onClick={openModal}
-        style={{
-          cursor: "pointer",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "20px",
-        }}
-      >
-        <AddCircleOutline />
-        <span style={{ marginLeft: "8px" }}>Thêm sản phẩm</span>
-      </div>
 
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={isOpenModal} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}

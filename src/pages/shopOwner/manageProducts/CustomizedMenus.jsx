@@ -48,7 +48,7 @@ const StyledMenu = styled((props) => (
     },
 }));
 
-export default function CustomizedMenus({ handleExelClick }) {
+export default function CustomizedMenus({ handleExelClick, isOpenModal, handleOpenChange }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -64,18 +64,21 @@ export default function CustomizedMenus({ handleExelClick }) {
         handleClose();
     }
 
+    const handleModalProps = () => {
+        handleOpenChange(true);
+        handleClose();
+    }
+
     return (
         <div>
             <Button
                 // className='blueBtn'
-                // id="demo-customized-button"
-                // aria-controls={open ? 'demo-customized-menu' : undefined}
-                // aria-haspopup="true"
-                // aria-expanded={open ? 'true' : undefined}
-                // variant="contained"
-                // disableElevation
-                // onClick={handleClick}
-                // endIcon={<KeyboardArrowDownIcon />}
+                id="demo-customized-button"
+                aria-controls={open ? 'demo-customized-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                variant="contained"
+                onClick={handleClick}
                 type='primary'
             >
                 Tải lên
@@ -94,7 +97,7 @@ export default function CustomizedMenus({ handleExelClick }) {
                     <FileCopyIcon />
                     Tải lên file .xlsx
                 </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
+                <MenuItem onClick={handleModalProps} disableRipple>
                     <EditIcon />
                     Nhập tay
                 </MenuItem>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Tag } from "antd";
+import { Space, Table, Tag, Button } from "antd";
 import { Link } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
+import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import { publicRequest } from "../../../requestMethods";
 import { getArrayLastItem } from "../../../utils/getLastArrayItem";
 import {
@@ -11,125 +12,79 @@ import {
 } from "../../../utils/formatStrings";
 
 export const ProductsListTableAnt = () => {
-  const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const authUser = useAuthUser();
   const role = authUser().role;
   const [searchQuery, setSearchQuery] = useState("");
 
-  const getOrders = async () => {
-    let res;
+  const getProducts = async () => {
     try {
-      if (role === "ADMIN" || role === "COORDINATOR") {
-        res = await publicRequest.get(
-          `/order?pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
-        );
-        if (res.data.type === "success") {
-          setOrders(res.data.data.content);
-        } else return useToastError("Something went wrong!");
-      } else if (role === "SHOP") {
-        res = await publicRequest.get(
-          `/order/getByShopOwnerId?ShopOwnerId=${authUser().id
-          }&pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
-        );
-        if (res.data.type === "success") {
-          setOrders(res.data.data.content);
-        } else return useToastError("Something went wrong!");
-      }
+      let res = await publicRequest.get(
+        `/user/${authUser().id
+        }`
+      );
+      if (res.data.type === "success") {
+        console.log(res);
+        setProducts(res.data.data.productShops);
+      } else return useToastError("Something went wrong!");
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(orders);
-
   useEffect(() => {
-    getOrders();
-  }, [page, searchQuery]);
+    getProducts();
+  }, []);
 
   const columns = [
     {
-      title: "Mã vận đơn",
-      dataIndex: "orderCode",
-      key: "id",
-      render: (orderCode) => (
-        <Link to={`/orderDetail/${orderCode}`} target="_blank">{orderCode}</Link>
+      title: "Hình ảnh",
+      dataIndex: "image",
+      render: (image) => (
+        <div style={{ maxWidth: "100px", height: "130px" }}>
+          <img style={{ width: "100%" }} src={image} />
+        </div>
       ),
     },
     {
-      title: "Người gửi",
-      dataIndex: "shopOwner",
-      key: "id",
-      render: (shopOwner, row) => (
-        <Link to={`/orderDetail/${row.orderCode}`} target="_blank">
-          <span>{shopOwner.fullName}</span>
-        </Link>
-      ),
+      title: "Tên mặt hàng",
+      dataIndex: "name",
     },
     {
-      title: "Người nhận",
-      dataIndex: "receiver",
-      key: "id",
-      render: (receiver, row) => (
-        <Link to={`/orderDetail/${row.orderCode}`} target="_blank">
-          <span>{receiver.name}</span>
-        </Link>
-      ),
+      title: "Cân nặng",
+      dataIndex: "weight",
     },
     {
-      title: "Nhân viên giao hàng",
-      dataIndex: "orderStatusList",
-      key: "id",
-      render: (orderStatusList, row) => (
-        <Link to={`/orderDetail/${row.orderCode}`} target="_blank">
-          <span>
-            {orderStatusList.length !== 0
-              ? getArrayLastItem(orderStatusList)?.shipper.fullName
-              : "Chưa phân công"}
-          </span>
-        </Link>
-      ),
+      title: "Đơn giá",
+      dataIndex: "price",
     },
     {
-      title: "Giá trị mặt hàng",
-      dataIndex: "products",
-      key: "id",
-      render: (products, row) => (
-        <Link to={`/orderDetail/${row.orderCode}`} target="_blank">
-          <span>{convertCurrency(productsPrice(products))}</span>
-        </Link>
-      ),
+      title: "Mô tả sản phẩm",
+      dataIndex: "description",
     },
     {
-      title: "Ngày tạo",
-      dataIndex: "createdAt",
-      key: "id",
-      render: (createdAt, row) => (
-        <Link to={`/orderDetail/${row.orderCode}`} target="_blank">
-          <span>{convertDateTime(createdAt)}</span>
-        </Link>
-      ),
+      title: "Số lượng",
+      dataIndex: "quantity",
     },
     {
-      title: "Trạng thái",
-      dataIndex: "orderStatusList",
-      key: "id",
-      render: (orderStatusList) => {
-        const lastStatus = getArrayLastItem(orderStatusList)?.status;
-        let tagColor;
-
+      title: "Actions",
+      dataIndex: "action",
+      render: () => {
         return (
           <>
-            <Tag color="yellow">
+            <Button type="primary" color="geekblue" style={{ marginRight: '20px', marginLeft: '30px' }}>
               Chỉnh sửa
-            </Tag>
-            <Tag color="volcano">
+            </Button>
+            <Button type="primary" danger>
               Xóa sản phẩm
-            </Tag>
+            </Button>
           </>
         );
       },
     },
   ];
-  return <Table columns={columns} dataSource={orders} />;
+  return <Table columns={columns}
+    rowKey={(record) => record.id}
+    dataSource={products} />;
 };

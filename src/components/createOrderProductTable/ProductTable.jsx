@@ -1,41 +1,25 @@
-import { DeleteOutlined } from "@ant-design/icons";
-import { Button, InputNumber, Select, Space, Table } from "antd";
+import { ReceiptLong } from "@mui/icons-material";
+import { Col, Row, Select, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { publicRequest } from "../../requestMethods";
-import { removeItemByIndex } from "../../utils/getLastArrayItem";
+import { useAuthUser } from "react-auth-kit";
 
 const { Option } = Select;
-export const ProductTable = ({
-  onProductWeightChange,
-  onProductPriceChange,
-  onProductChange,
-}) => {
+export const ProductTable = () => {
   const [orderProducts, setOrderProducts] = useState([]);
   const [inStockProducts, setInStockProducts] = useState([]);
+  const authUser = useAuthUser()
 
   const getInStockProducts = async () => {
     try {
       const res = await publicRequest.get(
-        "/productShop/getByShopOwnerId?ShopOwnerId=1&pageNumber=1&pageSize=10"
+        `/productShop/getByShopOwnerId?ShopOwnerId=${authUser().id}&pageNumber=1&pageSize=10`
       );
       setInStockProducts(res.data.data.content);
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    let productWeight = 0;
-    let productPrice = 0;
-    for (const product of orderProducts) {
-      if (product.weight && product.price) {
-        productWeight = productWeight + product.weight * product.shipQuantity;
-        productPrice = productPrice + product.price * product.shipQuantity;
-      }
-    }
-    onProductWeightChange(productWeight);
-    onProductPriceChange(productPrice);
-  }, [orderProducts]);
 
   useEffect(() => {
     getInStockProducts();
@@ -46,7 +30,7 @@ export const ProductTable = ({
       dataIndex: "image",
       render: (image) => (
         <div style={{ maxWidth: "100px" }}>
-          <img style={{ width: "100%", objectFit: "cover" }} src={image} />
+          <img style={{ width: "100%" }} src={image} />
         </div>
       ),
     },
@@ -67,51 +51,10 @@ export const ProductTable = ({
       dataIndex: "description",
     },
     {
-      title: "Trong kho",
+      title: "Số lượng",
       dataIndex: "quantity",
     },
-    {
-      title: "Số lượng",
-      render: (_, record) => (
-        <InputNumber
-          min={1}
-          max={record.quantity}
-          value={record.shipQuantity} // Set the value from the product's shipQuantity
-          onChange={
-            (newValue) => onProductQuantityChange(record.id, newValue) // Update the product's shipQuantity
-          }
-        />
-      ),
-    },
-    {
-      title: "Xóa sản phẩm",
-      align: "center",
-      render: (text, record, index) => (
-        <Button
-          icon={<DeleteOutlined />}
-          danger
-          onClick={() => handleDeleteProduct(index)}
-        />
-      ),
-    },
   ];
-
-  const handleDeleteProduct = (index) => {
-    const newArr = removeItemByIndex(orderProducts, index);
-    setOrderProducts(newArr);
-    onProductChange(newArr);
-  };
-
-  const onProductQuantityChange = (productId, newQuantity) => {
-    setOrderProducts((prevOrderProducts) => {
-      return prevOrderProducts.map((product) => {
-        if (product.id === productId) {
-          return { ...product, shipQuantity: newQuantity };
-        }
-        return product;
-      });
-    });
-  };
 
   const handleOrderProductChange = (values) => {
     const filteredProducts = [];
@@ -119,19 +62,11 @@ export const ProductTable = ({
       const filteredProduct = inStockProducts.find(
         (product) => product.id === value
       );
-      const existingProduct = orderProducts.find(
-        (product) => product.id === value
-      );
-
-      if (existingProduct) {
-        filteredProducts.push(existingProduct); // Use the existing product if it exists
-      } else {
-        filteredProducts.push({ ...filteredProduct, shipQuantity: 0 }); // Otherwise, initialize shipQuantity to 0
-      }
+      filteredProducts.push(filteredProduct);
     }
     setOrderProducts(filteredProducts);
-    onProductChange(filteredProducts);
   };
+  console.log(orderProducts);
   return (
     <>
       <Select
