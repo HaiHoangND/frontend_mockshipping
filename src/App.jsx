@@ -13,6 +13,7 @@ import CreateOrder from "./pages/shopOwner/createOrder/CreateOrder";
 import ShopList from "./pages/admin/shopList/ShopList";
 import OrderDetail from "./pages/common/orderDetail/OrderDetail";
 import Register from "./pages/common/register/Register";
+import ManageProducts from "./pages/shopOwner/manageProducts/manageProducts";
 import ReceiverList from "./pages/shopOwner/receiverList/ReceiverList";
 import ShopOwnerDashboard from "./pages/shopOwner/shopOwnerDashboard/ShopOwnerDashboard";
 
@@ -108,7 +109,12 @@ function App() {
         />
         <Route
           path="/shop"
-          element={<ShopRoute Component={ShopOwnerDashboard} />}
+          element
+          ={<ShopRoute Component={ShopOwnerDashboard} />}
+        />
+        <Route
+          path="/shop/manageProducts"
+          element={<ShopRoute Component={ManageProducts} />}
         />
         <Route
           path="/shop/clients"

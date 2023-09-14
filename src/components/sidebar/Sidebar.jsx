@@ -118,6 +118,17 @@ export const Sidebar = () => {
                 <Add /> Tạo đơn hàng
               </div>
             </Link>
+            <Link to={"/shop/manageProducts"}>
+              <div
+                className={
+                  pathname[2] === "manageProducts"
+                    ? "sidebarItem selected"
+                    : "sidebarItem"
+                }
+              >
+                <Add /> Quản lý hàng
+              </div>
+            </Link>
             <Link to={"/shop/clients"}>
               <div
                 className={
@@ -126,7 +137,7 @@ export const Sidebar = () => {
                     : "sidebarItem"
                 }
               >
-                <PeopleAlt/> Danh sách khách hàng
+                <PeopleAlt /> Danh sách khách hàng
               </div>
             </Link>
           </>

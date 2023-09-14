@@ -10,7 +10,7 @@ import {
 } from "../../utils/formatStrings";
 import { getArrayLastItem } from "../../utils/getLastArrayItem";
 
-export const OrderListTableAnt = ({searchQuery}) => {
+export const OrderListTableAnt = ({ searchQuery }) => {
   const [orders, setOrders] = useState([]);
   const [totalCount, setTotalCount] = useState(1);
   const [page, setPage] = useState(1);
@@ -35,8 +35,7 @@ export const OrderListTableAnt = ({searchQuery}) => {
       } else if (role === "SHOP") {
         setIsLoading(true);
         res = await publicRequest.get(
-          `/order/getByShopOwnerId?ShopOwnerId=${
-            authUser().id
+          `/order/getByShopOwnerId?ShopOwnerId=${authUser().id
           }&pageNumber=${currentPage}&pageSize=${5}&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
@@ -50,6 +49,8 @@ export const OrderListTableAnt = ({searchQuery}) => {
       console.log(error);
     }
   };
+
+  console.log(orders);
 
   useEffect(() => {
     getOrders(1);
