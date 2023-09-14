@@ -7,7 +7,15 @@ import { WarningModal } from "../warningModal/WarningModal";
 import { Delete, LibraryAdd } from "@mui/icons-material";
 import { removeItemByIndex } from "../../utils/getLastArrayItem";
 import CustomizedMenus from "../../pages/shopOwner/manageProducts/CustomizedMenus";
-import { Button, Table, Form, Input, InputNumber, Typography, Upload } from "antd";
+import {
+  Button,
+  Table,
+  Form,
+  Input,
+  InputNumber,
+  Typography,
+  Upload,
+} from "antd";
 import { useAuthUser } from "react-auth-kit";
 import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { publicRequest } from "../../requestMethods";
@@ -24,7 +32,7 @@ const EditableCell = ({
   children,
   ...restProps
 }) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
   return (
     <td {...restProps}>
       {editing ? (
@@ -42,34 +50,42 @@ const EditableCell = ({
         >
           {inputNode}
         </Form.Item>
-      ) : (<div className="centered-cell">{children}</div>
+      ) : (
+        <div className="centered-cell">{children}</div>
         // children
       )}
     </td>
   );
 };
 
-
 const SaveProductBtn = () => {
   return (
-    <Button type='primary' style={{
-      marginRight: "10px",
-      display: "flex",
-      alignItems: "center",
-      backgroundColor: "green"
-    }}
-
+    <Button
+      type="primary"
+      style={{
+        marginRight: "10px",
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "green",
+      }}
     >
-
-      <LibraryAdd style={{
-        paddingRight: "5px",
-        fontSize: "17px"
-      }} /> Xác nhận</Button>
-  )
-}
+      <LibraryAdd
+        style={{
+          paddingRight: "5px",
+          fontSize: "17px",
+        }}
+      />{" "}
+      Xác nhận
+    </Button>
+  );
+};
 
 const ClearProductsBtn = () => {
-  return <Button danger type="primary" style={{ marginLeft: '10px' }}>Xóa tất cả sản phẩm</Button>;
+  return (
+    <Button danger type="primary" style={{ marginLeft: "10px" }}>
+      Xóa tất cả sản phẩm
+    </Button>
+  );
 };
 
 export const CreateOrderProductTable = ({
@@ -83,7 +99,7 @@ export const CreateOrderProductTable = ({
   const authUser = useAuthUser();
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
-  const [editingKey, setEditingKey] = useState('');
+  const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.productCode === editingKey;
 
   useEffect(() => {
@@ -96,7 +112,7 @@ export const CreateOrderProductTable = ({
       quantity: 0,
       price: 0.0,
       image: "",
-      productCode: '',
+      productCode: "",
       weight: 0.0,
       description: "",
       ...record,
@@ -104,7 +120,7 @@ export const CreateOrderProductTable = ({
     setEditingKey(record.productCode);
   };
   const cancel = () => {
-    setEditingKey('');
+    setEditingKey("");
   };
   const save = async (key) => {
     try {
@@ -112,7 +128,7 @@ export const CreateOrderProductTable = ({
       console.log(key);
       console.log(data);
       const newData = [...data];
-      console.log(newData)
+      console.log(newData);
       const index = newData.findIndex((item) => key === item.productCode);
       if (index > -1) {
         const item = newData[index];
@@ -121,19 +137,16 @@ export const CreateOrderProductTable = ({
           ...row,
         });
         setData(newData);
-        setEditingKey('');
+        setEditingKey("");
       } else {
         newData.push(row);
         setData(newData);
-        setEditingKey('');
+        setEditingKey("");
       }
-    }
-    catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
+    } catch (errInfo) {
+      console.log("Validate Failed:", errInfo);
     }
   };
-
-
 
   const columns = [
     {
@@ -145,8 +158,8 @@ export const CreateOrderProductTable = ({
           <div style={{ maxWidth: "100px", height: "130px" }}>
             <img style={{ width: "100%" }} src={image} />
           </div>
-        )
-      }
+        );
+      },
     },
     {
       title: "Tên mặt hàng",
@@ -181,7 +194,7 @@ export const CreateOrderProductTable = ({
     {
       title: "Actions",
       dataIndex: "action",
-      width: '18vw',
+      width: "18vw",
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
@@ -195,20 +208,28 @@ export const CreateOrderProductTable = ({
             >
               Save
             </Button>
-            <Button onClick={cancel}
+            <Button
+              onClick={cancel}
               style={{
                 marginRight: 8,
-              }}>
+              }}
+            >
               <a>Cancel</a>
             </Button>
-            <Button type="primary"
+            <Button
+              type="primary"
               onClick={() => handleDeleteSingleProduct(record.productCode)}
-              danger>Xóa sản phẩm</Button>
+              danger
+            >
+              Xóa sản phẩm
+            </Button>
           </span>
         ) : (
           <Button
-            style={{ width: '100px' }}
-            disabled={editingKey !== ''} onClick={() => edit(record)}>
+            style={{ width: "100px" }}
+            disabled={editingKey !== ""}
+            onClick={() => edit(record)}
+          >
             Edit
           </Button>
         );
@@ -224,7 +245,7 @@ export const CreateOrderProductTable = ({
       ...col,
       onCell: (record) => ({
         record,
-        inputType: col.dataIndex === ('quantity') ? 'number' : 'text',
+        inputType: col.dataIndex === "quantity" ? "number" : "text",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -237,8 +258,11 @@ export const CreateOrderProductTable = ({
     for (let i = 0; i < data.length; ++i) {
       try {
         let res = await publicRequest.get(
-          `/productShop/checkNotExistedProductCode?ShopOwnerId=${authUser().id}&productCode=${data[i].productCode}`);
-        if (res && res.data.type === 'failed') {
+          `/productShop/checkNotExistedProductCode?ShopOwnerId=${
+            authUser().id
+          }&productCode=${data[i].productCode}`
+        );
+        if (res && res.data.type === "failed") {
           messArray.push(res.data.message);
         }
       } catch (error) {
@@ -247,7 +271,7 @@ export const CreateOrderProductTable = ({
     }
     console.log(messArray);
     return messArray;
-  }
+  };
 
   const handlePostProducts = async () => {
     if (data && data.length === 0) {
@@ -257,11 +281,10 @@ export const CreateOrderProductTable = ({
       let checkedArray = await handleCheckProductCode();
       console.log(checkedArray);
       if (checkedArray.length === 0) {
-        useToastSuccess("Không có mã sản phẩm nào bị trùng")
+        useToastSuccess("Không có mã sản phẩm nào bị trùng");
         for (let i = 0; i < data.length; ++i) {
           try {
-            let res = await publicRequest.post(
-              `/productShop`, {
+            let res = await publicRequest.post(`/productShop`, {
               name: data[i].name,
               quantity: data[i].quantity,
               price: data[i].price,
@@ -269,9 +292,8 @@ export const CreateOrderProductTable = ({
               weight: data[i].weight,
               description: data[i].description,
               productCode: data[i].productCode,
-              shopOwnerId: authUser().id
-            }
-            );
+              shopOwnerId: authUser().id,
+            });
             console.log(res);
             if (res.data.type === "success") {
               console.log(res);
@@ -288,11 +310,11 @@ export const CreateOrderProductTable = ({
         }
       }
     }
-  }
+  };
 
   const handleOpenChange = (newValue) => {
     setIsOpen(newValue);
-  }
+  };
 
   const handleUploadExcel = () => {
     fileInputRef.current.click();
@@ -365,33 +387,35 @@ export const CreateOrderProductTable = ({
   const handleDeleteSingleProduct = (productCode) => {
     // const changedProductsArray = removeItemByIndex(products, index);
     console.log("đã vô");
-    const newData = products.filter(item => item.productCode !== productCode);
+    const newData = products.filter((item) => item.productCode !== productCode);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // This clears the selected file
     }
     setProducts(newData);
     onProductChange(products);
-    setEditingKey('');
+    setEditingKey("");
   };
-
-
 
   return (
     <div>
-      <AddProductModal style={{ textAlign: "center" }} isOpenModal={isOpen}
+      <AddProductModal
+        style={{ textAlign: "center" }}
+        isOpenModal={isOpen}
         handleOpenChange={handleOpenChange}
-        handleAddProduct={handleAddProduct} />
+        handleAddProduct={handleAddProduct}
+      />
       <div className="uploadExcelBtn">
-
         <WarningModal
           InitiateComponent={SaveProductBtn}
           warningContent={"Ban có chắc muốn thêm những sản phẩm này không?"}
           confirmFunction={handlePostProducts}
         />
 
-        <CustomizedMenus handleExelClick={handleUploadExcel}
+        <CustomizedMenus
+          handleExelClick={handleUploadExcel}
           handleOpenChange={handleOpenChange}
-          isOpenModal={isOpen} />
+          isOpenModal={isOpen}
+        />
 
         <WarningModal
           InitiateComponent={ClearProductsBtn}

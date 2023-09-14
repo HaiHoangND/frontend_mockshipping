@@ -27,7 +27,7 @@ const ReceiverList = () => {
       const res = await publicRequest.get(
         `/receiver/getByShopOwnerId?shopOwnerId=${
           authUser().id
-        }&pageNumber=${currentPage}&pageSize=${pageSize}`
+        }&pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
       setReceivers(res.data.data.content);
       setTotalCount(res.data.data.totalElements);
@@ -40,7 +40,7 @@ const ReceiverList = () => {
 
   useEffect(() => {
     getReceivers(1);
-  }, []);
+  }, [searchQuery]);
 
   const columns = [
     {
@@ -66,10 +66,12 @@ const ReceiverList = () => {
     {
       title: "Đơn đã đặt",
       dataIndex: "numberOfOrders",
+      align:"center",
     },
     {
       title: "Đơn thành công",
       dataIndex: "successfulOrders",
+      align:"center",
     },
   ];
   return (
@@ -78,11 +80,14 @@ const ReceiverList = () => {
       <div className="contentContainer">
         <Topbar />
         <div className="receiverListContainer">
-          <div className="">
+          <div className="flex justify-between">
             <h3>
               <PeopleAlt /> Danh sách khách hàng
             </h3>
-            <Searchbar onInputChange={handleSearchQueryChange} placeholderText={"Tìm kiếm khách hàng"}/>
+            <Searchbar
+              onInputChange={handleSearchQueryChange}
+              placeholderText={"Tìm kiếm khách hàng"}
+            />
           </div>
           <Table
             className="mt-5"
