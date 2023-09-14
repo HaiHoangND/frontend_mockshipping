@@ -1,20 +1,21 @@
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
-import CoordinatorDashboard from "./pages/coordinator/coordinatorDashboard/CoordinatorDashboard";
-import Login from "./pages/login/login";
-import ShipperAllOrders from "./pages/shipper/shippingOrder/ShipperAllOrders";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
-import CoordinatorShipperList from "./pages/coordinator/coordinatorShipperList/CoordinatorShipperList";
-import ShipperOrderDetail from "./pages/shipper/orderDetail/ShipperOrderDetail";
-import CreateOrder from "./pages/shopOwner/createOrder/CreateOrder";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "./pages/admin/adminDashboard/AdminDashboard";
+import CoordinatorDashboard from "./pages/coordinator/coordinatorDashboard/CoordinatorDashboard";
+import CoordinatorShipperList from "./pages/coordinator/coordinatorShipperList/CoordinatorShipperList";
+import Login from "./pages/login/login";
+import ShipperOrderDetail from "./pages/shipper/orderDetail/ShipperOrderDetail";
+import ShipperAllOrders from "./pages/shipper/shippingOrder/ShipperAllOrders";
+import CreateOrder from "./pages/shopOwner/createOrder/CreateOrder";
 
+import ShopList from "./pages/admin/shopList/ShopList";
 import OrderDetail from "./pages/common/orderDetail/OrderDetail";
-import WarehouseList from "./pages/admin/warehouseList/WarehouseList";
-import ShopOwnerDashboard from "./pages/shopOwner/shopOwnerDashboard/ShopOwnerDashboard";
 import Register from "./pages/common/register/Register";
 import ReceiverList from "./pages/shopOwner/receiverList/ReceiverList";
+import ShopOwnerDashboard from "./pages/shopOwner/shopOwnerDashboard/ShopOwnerDashboard";
+
 
 function App() {
   const isAuthenticated = useIsAuthenticated();
@@ -87,8 +88,8 @@ function App() {
           element={<AdminRoute Component={AdminDashboard} />}
         />
         <Route
-          path="/admin/warehouses"
-          element={<AdminRoute Component={WarehouseList} />}
+          path="/admin/shops"
+          element={<AdminRoute Component={ShopList} />}
         />
         {/* <Route path='/shipper' element={<ShipperAllOrders />} /> */}
 

@@ -33,6 +33,10 @@ const CreateOrder = () => {
     setReceiverInfo(newAddress);
   };
 
+  const handleCustomerChange = () => {
+    setReceiverInfo();
+  };
+
   const handleProductWeightChange = (newWeight) => {
     setProductWeight(newWeight);
   };
@@ -45,9 +49,55 @@ const CreateOrder = () => {
     else return routeFee;
   };
 
+  const validatePhoneNumber = (number) => {
+    const convertedNumber = number.parseInt().toString();
+    if (number === convertedNumber) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const validateReceiverInfo = () => {
+    if (!receiverInfo) {
+      useToastError("Chưa điền thông tin khách hàng");
+      return false;
+    } else if (!receiverInfo.name) {
+      useToastError("Chưa điền tên khách hàng");
+      return false;
+    } else if (
+      !receiverInfo.id &&
+      !receiverInfo.detailedAddress &&
+      !receiverInfo.districts
+    ) {
+      useToastError("Chưa điền địa chỉ khách hàng");
+      return false;
+    } else if (!receiverInfo.phone) {
+      useToastError("Chưa điền số điện thoại khách hàng");
+      return false;
+    } else if (!validatePhoneNumber(receiverInfo.phone)) {
+      useToastError("Số điện thoại chưa đúng định dạng");
+      return false;
+    } else if (receiverInfo.email) {
+      if (!validateEmail(receiverInfo.email)) {
+        useToastError("Email chưa đúng định dạng");
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+  const validateProductInfo = () => {
+    if (products.length === 0) {
+      useToastError("Chưa có sản phẩm nào được thêm");
+      return false;
+    }
   };
 
   const handleProductChange = (newProducts) => {
@@ -69,8 +119,8 @@ const CreateOrder = () => {
 
   const handleCreateOrder = async () => {
     try {
-      if (!isValid) {
-        return useToastError("Thông tin đơn hàng chưa hợp lệ!");
+      if (!validateReceiverInfo() || !validateProductInfo()) {
+        return;
       } else {
         let receiver;
         if (!receiverInfo.id) {
@@ -124,13 +174,6 @@ const CreateOrder = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    if (products.length === 0) {
-      setIsValid(false);
-    } else {
-      setIsValid(true);
-    }
-  }, [products]);
 
   return (
     <div className="bodyContainer">
@@ -140,9 +183,8 @@ const CreateOrder = () => {
         <div className="personalInformationFormContainer">
           <div className="personalInformationFormsWrapper">
             <CreateOrderPersonalInfoForm
-              person={"Người nhận"}
+              onCustomerChange={handleCustomerChange}
               onInputsChange={handleReceiverAddressChange}
-              key={"receiver"}
             />
           </div>
         </div>
@@ -150,11 +192,6 @@ const CreateOrder = () => {
           <h3>
             <ReceiptLong fontSize="inherit" /> Danh sách sản phẩm
           </h3>
-          {/* <CreateOrderProductTable
-            onProductWeightChange={handleProductWeightChange}
-            onProductPriceChange={handleProductPriceChange}
-            onProductChange={handleProductChange}
-          /> */}
           <ProductTable
             onProductWeightChange={handleProductWeightChange}
             onProductPriceChange={handleProductPriceChange}

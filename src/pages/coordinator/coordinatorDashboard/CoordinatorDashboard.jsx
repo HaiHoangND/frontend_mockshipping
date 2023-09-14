@@ -87,7 +87,7 @@ const CoordinatorDashboard = () => {
               placeholderText={"Mã vận đơn"}
             />
           </div>
-          <OrderListTableAnt />
+          <OrderListTableAnt searchQuery={searchQuery}/>
         </div>
       </div>
     </div>

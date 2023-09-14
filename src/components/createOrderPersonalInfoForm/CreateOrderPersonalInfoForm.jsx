@@ -5,7 +5,10 @@ import { districtNames } from "../../utils/formatStrings";
 import { OldCustomerTable } from "../oldCustomerTable/OldCustomerTable";
 import "./createOrderPersonalInfoForm.scss";
 
-export const CreateOrderPersonalInfoForm = ({ person, onInputsChange }) => {
+export const CreateOrderPersonalInfoForm = ({
+  onInputsChange,
+  onCustomerChange,
+}) => {
   const [customerType, setCustomerType] = useState("oldCustomer");
   const [form] = Form.useForm();
   const [inputs, setInputs] = useState({
@@ -17,6 +20,7 @@ export const CreateOrderPersonalInfoForm = ({ person, onInputsChange }) => {
     setInputs({
       districts: newCustomerType === "oldCustomer" ? "" : "Ba Đình", // Use the new value here
     });
+    onCustomerChange();
   };
 
   const handleOldCustomerChange = (customer) => {
