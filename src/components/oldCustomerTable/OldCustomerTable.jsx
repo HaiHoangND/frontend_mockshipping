@@ -3,17 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { publicRequest } from "../../requestMethods";
 
-export const OldCustomerTable = ({ onCustomerChange }) => {
+export const OldCustomerTable = ({ onCustomerChange , searchQuery}) => {
   const authUser = useAuthUser();
   const [oldCustomers, setOldCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(1);
   const pageSize = 10;
-  const [searchQuery, setSearchQuery] = useState("");
-  const handleSearchQueryChange = (newQuery) => {
-    setSearchQuery(newQuery);
-  };
 
   const getOldCustomers = async (currentPage) => {
     try {
@@ -23,7 +19,9 @@ export const OldCustomerTable = ({ onCustomerChange }) => {
           authUser().id
         }&pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
-      setOldCustomers(res.data.data.receiverList);
+      setOldCustomers(res.data.data.content);
+      setTotalCount(res.data.data.totalElements);
+      setPage(currentPage);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -31,25 +29,30 @@ export const OldCustomerTable = ({ onCustomerChange }) => {
   };
 
   useEffect(() => {
-    getOldCustomers();
-  }, []);
+    getOldCustomers(1);
+  }, [searchQuery]);
+
 
   const columns = [
     {
       title: "ID",
-      dataIndex: "id",
+      dataIndex: "receiver",
+      render: (text) => text.id,
     },
     {
       title: "Tên khách hàng",
-      dataIndex: "name",
+      dataIndex: "receiver",
+      render: (text) => text.name,
     },
     {
       title: "Số điện thoại",
-      dataIndex: "phone",
+      dataIndex: "receiver",
+      render: (text) => text.phone,
     },
     {
       title: "Địa chỉ",
-      dataIndex: "address",
+      dataIndex: "receiver",
+      render: (text) => text.address,
     },
   ];
   const rowSelection = {
@@ -72,7 +75,15 @@ export const OldCustomerTable = ({ onCustomerChange }) => {
         }}
         columns={columns}
         dataSource={oldCustomers}
-        rowKey={(record) => record.id}
+        rowKey={(record) => record.receiver.id}
+        pagination={{
+          pageSize: pageSize,
+          current: page,
+          total: totalCount,
+          onChange: (page) => {
+            getOldCustomers(page);
+          },
+        }}
       />
     </div>
   );

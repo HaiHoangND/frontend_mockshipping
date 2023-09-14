@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { districtNames } from "../../utils/formatStrings";
 import { OldCustomerTable } from "../oldCustomerTable/OldCustomerTable";
 import "./createOrderPersonalInfoForm.scss";
+import { Searchbar } from "../../components/searchbar/Searchbar";
 
 export const CreateOrderPersonalInfoForm = ({
   onInputsChange,
@@ -14,6 +15,11 @@ export const CreateOrderPersonalInfoForm = ({
   const [inputs, setInputs] = useState({
     districts: customerType === "oldCustomer" ? "" : "Ba Đình",
   });
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchQueryChange = (newQuery) => {
+    setSearchQuery(newQuery);
+  };
 
   const handleCustomerTypeChange = (newCustomerType) => {
     setCustomerType(newCustomerType);
@@ -70,15 +76,21 @@ export const CreateOrderPersonalInfoForm = ({
 
   return (
     <div className="createOrderPersonalInfoFormContainer">
-      <div className="personalInfoFormTitle">
-        <h3 style={{ marginRight: "20px" }}>
-          <Person /> Người nhận
-        </h3>
-        <Select
-          defaultValue="oldCustomer"
-          style={{ width: 120 }}
-          onChange={handleCustomerTypeChange}
-          options={customerTypeOptions}
+      <div className="personalInfoFormTitle justify-between">
+        <div className="flex items-center">
+          <h3 style={{ marginRight: "20px" }}>
+            <Person /> Người nhận
+          </h3>
+          <Select
+            defaultValue="oldCustomer"
+            style={{ width: 120 }}
+            onChange={handleCustomerTypeChange}
+            options={customerTypeOptions}
+          />
+        </div>
+        <Searchbar
+          placeholderText={"Tìm kiếm khách hàng"}
+          onInputChange={handleSearchQueryChange}
         />
       </div>
       {customerType === "newCustomer" ? (
@@ -154,72 +166,10 @@ export const CreateOrderPersonalInfoForm = ({
           </Row>
         </Form>
       ) : (
-        // <div>
-        //   <div className="personalInfoFormInputWrapper">
-        //     <span>
-        //       Tên <b style={{ color: "red" }}>(*)</b> :
-        //     </span>
-        //     <TextField
-        //       label="Tên"
-        //       placeholder="Trần Phi Long"
-        //       size="small"
-        //       name="name"
-        //       onChange={handleInputsChange}
-        //     />
-        //   </div>
-        //   <div className="personalInfoFormInputWrapper">
-        //     <span>
-        //       Địa chỉ <b style={{ color: "red" }}>(*)</b> :
-        //     </span>
-        //     <TextField
-        //       label="Địa chỉ"
-        //       placeholder="256 Đội Cấn"
-        //       size="small"
-        //       name="detailedAddress"
-        //       onChange={handleInputsChange}
-        //     />
-        //   </div>
-        //   <div className="personalInfoFormInputWrapper">
-        //     <span></span>
-        //     <TextField
-        //       select
-        //       defaultValue="Ba Đình"
-        //       helperText="Chọn quận"
-        //       size="small"
-        //       name="district"
-        //       onChange={handleInputsChange}
-        //     >
-        //       {districts.map((option, index) => (
-        //         <MenuItem key={index} value={option.district}>
-        //           {option.district}
-        //         </MenuItem>
-        //       ))}
-        //     </TextField>
-        //   </div>
-        //   <div className="personalInfoFormInputWrapper">
-        //     <span>
-        //       Số điện thoại <b style={{ color: "red" }}>(*)</b> :
-        //     </span>
-        //     <TextField
-        //       label="Sđt"
-        //       placeholder="0123456789"
-        //       size="small"
-        //       name="phone"
-        //       onChange={handleInputsChange}
-        //     />
-        //   </div>
-        //   <div className="personalInfoFormInputWrapper">
-        //     <span>Email :</span>
-        //     <TextField
-        //       label="Email"
-        //       placeholder="example@email.com"
-        //       size="small"
-        //       name="email"
-        //       onChange={handleInputsChange}
-        //     />
-        //   </div>
-        // </div>
-        <OldCustomerTable onCustomerChange={handleOldCustomerChange} />
+        <OldCustomerTable
+          onCustomerChange={handleOldCustomerChange}
+          searchQuery={searchQuery}
+        />
       )}
     </div>
   );
