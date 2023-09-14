@@ -37,6 +37,7 @@ const DeliveryStatus = styled.div`
 export const OrderListTable = ({ searchQuery }) => {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const authUser = useAuthUser();
   const role = authUser().role;
 
@@ -44,13 +45,16 @@ export const OrderListTable = ({ searchQuery }) => {
     let res;
     try {
       if (role === "ADMIN" || role === "COORDINATOR") {
+        setIsLoading(true);
         res = await publicRequest.get(
           `/order?pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
           setOrders(res.data.data.content);
+          setIsLoading(false);
         } else return useToastError("Something went wrong!");
       } else if (role === "SHOP") {
+        setIsLoading(true);
         res = await publicRequest.get(
           `/order/getByShopOwnerId?ShopOwnerId=${
             authUser().id
@@ -58,6 +62,7 @@ export const OrderListTable = ({ searchQuery }) => {
         );
         if (res.data.type === "success") {
           setOrders(res.data.data.content);
+          setIsLoading(false);
         } else return useToastError("Something went wrong!");
       }
     } catch (error) {

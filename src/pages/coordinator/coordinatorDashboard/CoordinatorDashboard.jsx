@@ -30,6 +30,7 @@ const CoordinatorDashboard = () => {
     getStats();
   }, []);
 
+  console.log(searchQuery);
   return (
     <div className="bodyContainer">
       <Sidebar />

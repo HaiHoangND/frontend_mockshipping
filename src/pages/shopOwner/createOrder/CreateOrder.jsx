@@ -29,7 +29,6 @@ const CreateOrder = () => {
   const [productPrice, setProductPrice] = useState(0);
   const [products, setProducts] = useState([]);
   const [currentShop, setCurrentShop] = useState({});
-
   const handleReceiverAddressChange = (newAddress) => {
     setReceiverInfo(newAddress);
   };
@@ -109,7 +108,7 @@ const CreateOrder = () => {
         for (const product of products) {
           await publicRequest.post("/product", {
             name: product.name,
-            quantity: product.quantity,
+            quantity: product.shipQuantity,
             price: product.price,
             image: product.image,
             weight: product.weight,
@@ -156,7 +155,11 @@ const CreateOrder = () => {
             onProductPriceChange={handleProductPriceChange}
             onProductChange={handleProductChange}
           /> */}
-          <ProductTable />
+          <ProductTable
+            onProductWeightChange={handleProductWeightChange}
+            onProductPriceChange={handleProductPriceChange}
+            onProductChange={handleProductChange}
+          />
         </div>
         <div className="orderSummaryCreation">
           <h3>
@@ -182,7 +185,12 @@ const CreateOrder = () => {
             <span>Tổng giá trị đơn hàng</span>
             <span>{convertCurrency(productPrice + calculateServiceFee())}</span>
           </div>
-          <Button style={{ width: "100%" }} className="mt-6" type="primary" onClick={handleCreateOrder}>
+          <Button
+            style={{ width: "100%" }}
+            className="mt-6"
+            type="primary"
+            onClick={handleCreateOrder}
+          >
             Tạo đơn hàng
           </Button>
         </div>

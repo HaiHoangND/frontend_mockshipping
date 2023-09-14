@@ -8,30 +8,27 @@ export const ShippersTable = ({ shipperData }) => {
     {
       title: "ID",
       dataIndex: "user",
-      key: "id",
       render: (user) => <span>{user.id}</span>,
     },
     {
       title: "Tên",
       dataIndex: "user",
-      key: "id",
       render: (user) => <span>{user.fullName}</span>,
     },
     {
       title: "Số điện thoại",
       dataIndex: "user",
-      key: "phone",
       render: (user) => <span>{user.phone}</span>,
     },
     {
-      title: "Số lượng đơn hàng",
+      title: "Đơn hàng",
       dataIndex: "ordersInProgress",
-      key: "ordersInProgress",
+      align:"center"
     },
     {
       title: "Trạng thái nhân viên",
       dataIndex: "user",
-      key: "id",
+      align:"center",
       render: (user) => {
         let workingStatus = user.workingStatus;
         let tagColor;
@@ -53,11 +50,17 @@ export const ShippersTable = ({ shipperData }) => {
     },
     {
       title: "Cập nhật thông tin",
-      align:"center",
-      render:(_, record)=>(
-        <UpdateEmployeeInfoModal type={"update"} employeeInfo={record}/>
-      )
+      align: "center",
+      render: (_, record) => (
+        <UpdateEmployeeInfoModal type={"update"} employeeInfo={record} />
+      ),
     },
   ];
-  return <Table columns={columns} dataSource={shipperData} />;
+  return (
+    <Table
+      columns={columns}
+      dataSource={shipperData}
+      rowKey={(record) => record.user.id}
+    />
+  );
 };

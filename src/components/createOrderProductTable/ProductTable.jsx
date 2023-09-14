@@ -1,10 +1,15 @@
-import { ReceiptLong } from "@mui/icons-material";
-import { Col, Row, Select, Space, Table } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Button, InputNumber, Select, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { publicRequest } from "../../requestMethods";
+import { removeItemByIndex } from "../../utils/getLastArrayItem";
 
 const { Option } = Select;
-export const ProductTable = () => {
+export const ProductTable = ({
+  onProductWeightChange,
+  onProductPriceChange,
+  onProductChange,
+}) => {
   const [orderProducts, setOrderProducts] = useState([]);
   const [inStockProducts, setInStockProducts] = useState([]);
 
@@ -20,6 +25,19 @@ export const ProductTable = () => {
   };
 
   useEffect(() => {
+    let productWeight = 0;
+    let productPrice = 0;
+    for (const product of orderProducts) {
+      if (product.weight && product.price) {
+        productWeight = productWeight + product.weight * product.shipQuantity;
+        productPrice = productPrice + product.price * product.shipQuantity;
+      }
+    }
+    onProductWeightChange(productWeight);
+    onProductPriceChange(productPrice);
+  }, [orderProducts]);
+
+  useEffect(() => {
     getInStockProducts();
   }, []);
   const columns = [
@@ -28,7 +46,7 @@ export const ProductTable = () => {
       dataIndex: "image",
       render: (image) => (
         <div style={{ maxWidth: "100px" }}>
-          <img style={{ width: "100%" }} src={image} />
+          <img style={{ width: "100%", objectFit: "cover" }} src={image} />
         </div>
       ),
     },
@@ -49,10 +67,51 @@ export const ProductTable = () => {
       dataIndex: "description",
     },
     {
-      title: "Số lượng",
+      title: "Trong kho",
       dataIndex: "quantity",
     },
+    {
+      title: "Số lượng",
+      render: (_, record) => (
+        <InputNumber
+          min={1}
+          max={record.quantity}
+          value={record.shipQuantity} // Set the value from the product's shipQuantity
+          onChange={
+            (newValue) => onProductQuantityChange(record.id, newValue) // Update the product's shipQuantity
+          }
+        />
+      ),
+    },
+    {
+      title: "Xóa sản phẩm",
+      align: "center",
+      render: (text, record, index) => (
+        <Button
+          icon={<DeleteOutlined />}
+          danger
+          onClick={() => handleDeleteProduct(index)}
+        />
+      ),
+    },
   ];
+
+  const handleDeleteProduct = (index) => {
+    const newArr = removeItemByIndex(orderProducts, index);
+    setOrderProducts(newArr);
+    onProductChange(newArr);
+  };
+
+  const onProductQuantityChange = (productId, newQuantity) => {
+    setOrderProducts((prevOrderProducts) => {
+      return prevOrderProducts.map((product) => {
+        if (product.id === productId) {
+          return { ...product, shipQuantity: newQuantity };
+        }
+        return product;
+      });
+    });
+  };
 
   const handleOrderProductChange = (values) => {
     const filteredProducts = [];
@@ -60,11 +119,19 @@ export const ProductTable = () => {
       const filteredProduct = inStockProducts.find(
         (product) => product.id === value
       );
-      filteredProducts.push(filteredProduct);
+      const existingProduct = orderProducts.find(
+        (product) => product.id === value
+      );
+
+      if (existingProduct) {
+        filteredProducts.push(existingProduct); // Use the existing product if it exists
+      } else {
+        filteredProducts.push({ ...filteredProduct, shipQuantity: 0 }); // Otherwise, initialize shipQuantity to 0
+      }
     }
     setOrderProducts(filteredProducts);
+    onProductChange(filteredProducts);
   };
-  console.log(orderProducts);
   return (
     <>
       <Select

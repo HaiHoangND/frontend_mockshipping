@@ -45,7 +45,6 @@ const OrderDetail = () => {
         `/order/getByCode?orderCode=${orderCode}`
       );
       if (res.data.type === "success") {
-        useToastSuccess("Lấy thông tin thành công!");
         setOrder(res.data.data);
       }
     } catch (error) {
@@ -119,7 +118,11 @@ const OrderDetail = () => {
   };
 
   const CancelBtn = () => {
-    return <Button type="primary" danger style={{width:"100%"}} className="mt-5">Hủy đơn hàng</Button>;
+    return (
+      <Button type="primary" danger style={{ width: "100%" }} className="mt-5">
+        Hủy đơn hàng
+      </Button>
+    );
   };
   const ChangeStatusBtn = () => {
     return (
@@ -275,18 +278,6 @@ const OrderDetail = () => {
                 </div>
               </div>
             </div>
-            <div className="orderDetailPersonalInfos">
-              <h3>
-                <InfoOutlined fontSize="inherit" />
-                Thông tin khách hàng
-              </h3>
-              <div className="orderDetailPersonalInfosWrapper">
-                <OrderDetailPersonalInfo
-                  person={order.receiver}
-                  type={"Người nhận"}
-                />
-              </div>
-            </div>
             <div className="orderDetailProductTableWrapper">
               <h3>
                 <ReceiptLongOutlined fontSize="inherit" /> Danh sách sản phẩm
@@ -305,11 +296,15 @@ const OrderDetail = () => {
               </div>
               <div className="orderDetailJourneyContent">
                 <div className="orderDetailShipperDetail">
+                  <OrderDetailPersonalInfo
+                    person={order.receiver}
+                    type={"Người nhận"}
+                  />
                   <div className="shipperDetailTitle">
                     <div className="flex items-center">
                       <Person />{" "}
                       <span style={{ marginLeft: "10px" }}>
-                        Nhân viên đảm nhận
+                        Nhân viên giao vận
                       </span>
                     </div>
                   </div>
@@ -348,15 +343,6 @@ const OrderDetail = () => {
                           }
                         </span>
                       </div>
-                      <div className="shipperDetailItem">
-                        <span>Chức vụ:</span>
-                        <span>
-                          {order.orderStatusList.length === 0
-                            ? authUser().role
-                            : getArrayLastItem(order.orderStatusList).shipper
-                                .role}
-                        </span>
-                      </div>
                     </>
                   ) : (
                     <div
@@ -365,6 +351,7 @@ const OrderDetail = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+                        fontSize:"17px"
                       }}
                     >
                       Chưa có nhân viên nào đảm nhận

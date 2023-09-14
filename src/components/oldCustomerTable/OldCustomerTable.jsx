@@ -6,12 +6,14 @@ import { publicRequest } from "../../requestMethods";
 export const OldCustomerTable = ({ onCustomerChange }) => {
   const authUser = useAuthUser();
   const [oldCustomers, setOldCustomers] = useState([]);
-  const [customerIndex, setCustomerIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getOldCustomers = async () => {
     try {
+      setIsLoading(true);
       const res = await publicRequest.get(`/user/${authUser().id}`);
       setOldCustomers(res.data.data.receiverList);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -21,45 +23,33 @@ export const OldCustomerTable = ({ onCustomerChange }) => {
     getOldCustomers();
   }, []);
 
-  const handleChooseCustomer = (index, customer) => {
-    setCustomerIndex(index);
-    onCustomerChange({
-      id: customer.id,
-      name: customer.name,
-      address: customer.address,
-      phone: customer.phone,
-    });
-  };
-
   const columns = [
     {
-      title: "Mã số khách hàng",
+      title: "ID",
       dataIndex: "id",
-      key: "id",
     },
     {
       title: "Tên khách hàng",
       dataIndex: "name",
-      key: "name",
     },
     {
       title: "Số điện thoại",
       dataIndex: "phone",
-      key: "phone",
     },
     {
       title: "Địa chỉ",
       dataIndex: "address",
-      key: "address",
     },
   ];
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
+      const customer = selectedRows[0];
+      onCustomerChange({
+        id: customer.id,
+        name: customer.name,
+        address: customer.address,
+        phone: customer.phone,
+      });
     },
   };
   return (

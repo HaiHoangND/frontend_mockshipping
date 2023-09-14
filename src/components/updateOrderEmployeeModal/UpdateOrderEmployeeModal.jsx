@@ -1,14 +1,13 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
-import "./updateOrderEmployeeModal.scss";
-import { useAuthUser } from "react-auth-kit";
-import { getArrayLastItem, getIndexOfItem } from "../../utils/getLastArrayItem";
-import { InputLabel, MenuItem, Select } from "@mui/material";
-import { publicRequest } from "../../requestMethods";
-import { useNavigate } from "react-router-dom";
-import { Button } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { Button, Modal, Select, Table, Tag } from "antd";
+import { useEffect, useState } from "react";
+import { useAuthUser } from "react-auth-kit";
+import { useNavigate } from "react-router-dom";
+import { publicRequest } from "../../requestMethods";
+import "./updateOrderEmployeeModal.scss";
+import { getArrayLastItem } from "../../utils/getLastArrayItem";
 
+const { Option } = Select;
 export const UpdateOrderEmployeeModal = ({ order }) => {
   const navigate = useNavigate();
   let [isOpen, setIsOpen] = useState(false);
@@ -27,16 +26,22 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
 
   const getShippers = async () => {
     const res = await publicRequest.get(`/user/getShippersWithStatus`);
-    const filteredResult = res.data.data.map((item) => item.user);
-    setShippers(filteredResult);
+    const filteredArray = res.data.data.filter(
+      (shipper) =>
+        shipper.user.id !== getArrayLastItem(order.orderStatusList).shipper.id
+    );
+    setShippers(filteredArray);
   };
-
+  console.log(shippers);
   useEffect(() => {
     getShippers();
   }, []);
 
-  const handleShipperChange = (e) => {
-    setSelectedShipper(e.target.value);
+  const handleShipperChange = (value) => {
+    const selectedShipper = shippers.find(
+      (shipper) => shipper.user.id === value
+    );
+    setSelectedShipper(selectedShipper);
   };
 
   const isDisabled = () => {
@@ -60,7 +65,6 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
 
     return false;
   };
-  console.log(order);
   const handleUpdateEmployee = async () => {
     let nextOrderRouteId;
     if (order.orderStatusList.length === 0) {
@@ -91,6 +95,49 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     }
   };
 
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "user",
+      render: (user) => <span>{user?.id}</span>,
+    },
+    {
+      title: "Tên",
+      dataIndex: "user",
+      render: (user) => <span>{user?.fullName}</span>,
+    },
+    {
+      title: "Số điện thoại",
+      dataIndex: "user",
+      render: (user) => <span>{user?.phone}</span>,
+    },
+    {
+      title: "Đơn đang giao",
+      align: "center",
+      dataIndex: "ordersInProgress",
+    },
+    {
+      title: "Trạng thái nhân viên",
+      dataIndex: "ordersInProgress",
+      render: (numberOfOrders) => {
+        const tagColor = numberOfOrders === 0 ? "green" : "yellow";
+
+        return (
+          <Tag color={tagColor}>
+            {numberOfOrders === 0 ? "Đang rảnh" : "Đang giao hàng"}
+          </Tag>
+        );
+      },
+    },
+  ];
+
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      const shipper = selectedRows[0].user.id;
+      setSelectedShipper(shipper);
+    },
+  };
+
   return (
     <>
       {role !== "SHOP" ? (
@@ -106,73 +153,25 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
         <div></div>
       )}
 
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    className="text-lg font-medium leading-6 "
-                  >
-                    Cập nhật nhân viên đảm nhận
-                  </Dialog.Title>
-                  <div className="mt-2 selectInput">
-                    <Select
-                      labelId="select-label"
-                      value={selectedShipper}
-                      onChange={handleShipperChange}
-                      defaultValue={
-                        shippers.length > 0 ? shippers[0].fullName : ""
-                      }
-                    >
-                      {shippers.map((shipper) => (
-                        <MenuItem key={shipper.id} value={shipper.id}>
-                          {shipper.fullName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </div>
-
-                  <div className="confirmModalBtns mt-4">
-                    <button type="button" onClick={handleUpdateEmployee}>
-                      Xác nhận
-                    </button>
-                    <button type="button" onClick={closeModal}>
-                      Hủy
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+      <Modal
+        title="Cập nhật nhân viên"
+        open={isOpen}
+        onOk={handleUpdateEmployee}
+        onCancel={closeModal}
+        cancelText="Hủy"
+        okText="Xác nhận"
+        width={700}
+      >
+        <Table
+          rowSelection={{
+            type: "radio",
+            ...rowSelection,
+          }}
+          columns={columns}
+          dataSource={shippers}
+          rowKey={(record) => record.user.id}
+        />
+      </Modal>
     </>
   );
 };
