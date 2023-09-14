@@ -7,11 +7,22 @@ export const OldCustomerTable = ({ onCustomerChange }) => {
   const authUser = useAuthUser();
   const [oldCustomers, setOldCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(1);
+  const pageSize = 10;
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchQueryChange = (newQuery) => {
+    setSearchQuery(newQuery);
+  };
 
-  const getOldCustomers = async () => {
+  const getOldCustomers = async (currentPage) => {
     try {
       setIsLoading(true);
-      const res = await publicRequest.get(`/user/${authUser().id}`);
+      const res = await publicRequest.get(
+        `/receiver/getByShopOwnerId?shopOwnerId=${
+          authUser().id
+        }&pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
+      );
       setOldCustomers(res.data.data.receiverList);
       setIsLoading(false);
     } catch (error) {
