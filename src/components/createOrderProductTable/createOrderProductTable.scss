@@ -40,3 +40,16 @@
     color: white;
     border-radius: 10px;
 }
+
+.centered-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // height: 100%;
+}
+
+.imageRow {
+    input {
+        display: none;
+    }
+}

@@ -7,21 +7,66 @@ import { WarningModal } from "../warningModal/WarningModal";
 import { Delete, LibraryAdd } from "@mui/icons-material";
 import { removeItemByIndex } from "../../utils/getLastArrayItem";
 import CustomizedMenus from "../../pages/shopOwner/manageProducts/CustomizedMenus";
-import { Button, Table, Form, Input, InputNumber, Typography } from "antd";
+import { Button, Table, Form, Input, InputNumber, Typography, Upload } from "antd";
 import { useAuthUser } from "react-auth-kit";
 import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { publicRequest } from "../../requestMethods";
 
 import { toast } from "react-toastify";
 
-
-const DeleteProductBtn = () => {
+const EditableCell = ({
+  editing,
+  dataIndex,
+  title,
+  inputType,
+  record,
+  index,
+  children,
+  ...restProps
+}) => {
+  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
   return (
-    <button className="deleteSingleProductBtn">
-      <Delete />
-    </button>
+    <td {...restProps}>
+      {editing ? (
+        <Form.Item
+          name={dataIndex}
+          style={{
+            margin: 0,
+          }}
+          rules={[
+            {
+              required: true,
+              message: `Hãy điền ${title}!`,
+            },
+          ]}
+        >
+          {inputNode}
+        </Form.Item>
+      ) : (<div className="centered-cell">{children}</div>
+        // children
+      )}
+    </td>
   );
 };
+
+
+const SaveProductBtn = () => {
+  return (
+    <Button type='primary' style={{
+      marginRight: "10px",
+      display: "flex",
+      alignItems: "center",
+      backgroundColor: "green"
+    }}
+
+    >
+
+      <LibraryAdd style={{
+        paddingRight: "5px",
+        fontSize: "17px"
+      }} /> Xác nhận</Button>
+  )
+}
 
 const ClearProductsBtn = () => {
   return <Button danger type="primary" style={{ marginLeft: '10px' }}>Xóa tất cả sản phẩm</Button>;
@@ -35,235 +80,213 @@ export const CreateOrderProductTable = ({
   const [products, setProducts] = useState([]);
   const fileInputRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [editingRow, setEditingRow] = useState(null);
   const authUser = useAuthUser();
   const [form] = Form.useForm();
-  const [isEditing, setEditing] = useState(false);
-  const [temp, setTemp] = useState({
-    image: '',
-    name: '',
-    weight: '',
-    price: '',
-    description: '',
-  })
-
+  const [data, setData] = useState([]);
+  const [editingKey, setEditingKey] = useState('');
+  const isEditing = (record) => record.productCode === editingKey;
 
   useEffect(() => {
-    console.log(temp);
-    form.setFieldValue({
-      image: temp.image,
-      name: temp.name,
-      weight: temp.weight,
-      price: temp.price,
-      description: temp.description,
-    })
-  }, [temp]);
+    setData(products);
+  }, [products]);
+
+  const edit = (record) => {
+    form.setFieldsValue({
+      name: "",
+      quantity: 0,
+      price: 0.0,
+      image: "",
+      productCode: '',
+      weight: 0.0,
+      description: "",
+      ...record,
+    });
+    setEditingKey(record.productCode);
+  };
+  const cancel = () => {
+    setEditingKey('');
+  };
+  const save = async (key) => {
+    try {
+      const row = await form.validateFields();
+      console.log(key);
+      console.log(data);
+      const newData = [...data];
+      console.log(newData)
+      const index = newData.findIndex((item) => key === item.productCode);
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
+        setData(newData);
+        setEditingKey('');
+      } else {
+        newData.push(row);
+        setData(newData);
+        setEditingKey('');
+      }
+    }
+    catch (errInfo) {
+      console.log('Validate Failed:', errInfo);
+    }
+  };
+
+
 
   const columns = [
     {
       title: "Hình ảnh",
       dataIndex: "image",
-      render: (image, record) => {
-        if (editingRow === record.id) {
-          return <Form.Item
-            name="image"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Hãy điền đủ thông tin`,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        } else {
-          return <div style={{ maxWidth: "100px" }}>
+      // editable: true,
+      render: (image) => {
+        return (
+          <div style={{ maxWidth: "100px", height: "130px" }}>
             <img style={{ width: "100%" }} src={image} />
           </div>
-        }
-      },
+        )
+      }
     },
     {
       title: "Tên mặt hàng",
       dataIndex: "name",
-      render: (text, record) => {
-        if (editingRow === record.id) {
-          return <Form.Item
-            name="name"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Hãy điền đủ thông tin`,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        } else {
-          return <p>{text}</p>
-        }
-      }
+      editable: true,
+    },
+    {
+      title: "Mã mặt hàng",
+      dataIndex: "productCode",
+      editable: true,
     },
     {
       title: "Cân nặng",
       dataIndex: "weight",
-      render: (text, record) => {
-        if (editingRow === record.id) {
-          return <Form.Item name="weight"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Hãy điền đủ thông tin`,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        } else {
-          return <p>{text}</p>
-        }
-      }
+      editable: true,
     },
     {
       title: "Đơn giá",
       dataIndex: "price",
-      render: (text, record) => {
-        if (editingRow === record.id) {
-          return <Form.Item name="price"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Hãy điền đủ thông tin!`,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        } else {
-          return <p>{text}</p>
-        }
-      }
+      editable: true,
     },
     {
       title: "Mô tả sản phẩm",
       dataIndex: "description",
-      render: (text, record) => {
-        if (editingRow === record.id) {
-          return <Form.Item name="description"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Hãy điền đủ thông tin!`,
-              },
-            ]}
-          >
-            <Input />
-
-          </Form.Item>
-        } else {
-          return <p>{text}</p>
-        }
-      }
+      editable: true,
     },
     {
       title: "Số lượng",
       dataIndex: "quantity",
-      render: (text, record) => {
-        if (editingRow === record.id) {
-          return <Form.Item
-            style={{ margin: 0 }}
-            name="quantity"
-            rules={[
-              {
-                required: true,
-                message: `Hãy điền đủ thông tin!`,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        } else {
-          return <p>{text}</p>
-        }
-      }
+      editable: true,
     },
     {
       title: "Actions",
       dataIndex: "action",
-      render: (_, record, index) => {
-        return (
-          <div style={{ width: "18vw" }}>
-            {/* {editingRow && editingRow === record.id ?
-              <Button
-                htmlType="submit"
-                type="primary"
-                color="geekblue"
-                // onClick={() => handleSaveProductTemporary(record)}
-                style={{ marginRight: '20px' }}
-
-              >Lưu lại
-              </Button> : */}
+      width: '18vw',
+      render: (_, record) => {
+        const editable = isEditing(record);
+        return editable ? (
+          <span>
             <Button
               type="primary"
-              color="geekblue"
-              onClick={() => {
-                // setEditingRow(index);
-                console.log(index);
-                // setTemp({
-                //   image: record.image,
-                //   name: record.name,
-                //   weight: record.weight,
-                //   price: record.price,
-                //   description: record.description,
-                // })
+              onClick={() => save(record.productCode)}
+              style={{
+                marginRight: 8,
               }}
-              style={{ marginRight: '20px' }}>
-              Chỉnh sửa
-            </Button>
-            {/* } */}
-            <Button type="primary" danger
-
             >
-              Xóa sản phẩm
+              Save
             </Button>
-          </div>
+            <Button onClick={cancel}
+              style={{
+                marginRight: 8,
+              }}>
+              <a>Cancel</a>
+            </Button>
+            <Button type="primary"
+              onClick={handleDeleteSingleProduct(record.productCode)}
+              danger>Xóa sản phẩm</Button>
+          </span>
+        ) : (
+          <Button
+            style={{ width: '100px' }}
+            disabled={editingKey !== ''} onClick={() => edit(record)}>
+            Edit
+          </Button>
         );
       },
     },
   ];
 
+  const mergedColumns = columns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        inputType: col.dataIndex === ('quantity') ? 'number' : 'text',
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record),
+      }),
+    };
+  });
+
+  const handleCheckProductCode = async () => {
+    let messArray = [];
+    for (let i = 0; i < data.length; ++i) {
+      try {
+        let res = await publicRequest.get(
+          `/productShop/checkNotExistedProductCode?ShopOwnerId=${authUser().id}&productCode=${data[i].productCode}`);
+        if (res && res.data.type === 'failed') {
+          messArray.push(res.data.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    console.log(messArray);
+    return messArray;
+  }
+
   const handlePostProducts = async () => {
-    console.log(products);
-    if (products && products.length === 0) {
+    if (data && data.length === 0) {
       useToastError("Hàng chưa được tải lên !");
     } else {
-      for (let i = 0; i < products.length; ++i) {
-        try {
-          let res = await publicRequest.post(
-            `/productShop`, {
-            name: products[i].name,
-            quantity: products[i].quantity,
-            price: products[i].price,
-            image: products[i].image,
-            weight: products[i].weight,
-            description: products[i].description,
-            shopOwnerId: authUser().id
-          }
-          );
-          if (res.data.type === "success") {
+      console.log(data);
+      let checkedArray = await handleCheckProductCode();
+      console.log(checkedArray);
+      if (checkedArray.length === 0) {
+        useToastSuccess("Không có mã sản phẩm nào bị trùng")
+        for (let i = 0; i < data.length; ++i) {
+          try {
+            let res = await publicRequest.post(
+              `/productShop`, {
+              name: data[i].name,
+              quantity: data[i].quantity,
+              price: data[i].price,
+              image: data[i].image,
+              weight: data[i].weight,
+              description: data[i].description,
+              productCode: data[i].productCode,
+              shopOwnerId: authUser().id
+            }
+            );
             console.log(res);
-          } else return useToastError("Something went wrong!");
-        } catch (error) {
-          console.log(error);
+            if (res.data.type === "success") {
+              console.log(res);
+            } else console.log(res);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        useToastSuccess("Thêm vào kho thành công");
+        handleClearProducts();
+      } else {
+        for (let i = 0; i < checkedArray.length; i++) {
+          useToastError(checkedArray[i]);
         }
       }
-      useToastSuccess("Thêm vào kho thành công");
-      handleClearProducts();
     }
   }
 
@@ -308,18 +331,21 @@ export const CreateOrderProductTable = ({
         quantity: parseInt(inputs.quantity),
         description: inputs.description,
         weight: parseFloat(inputs.weight),
+        productCode: inputs.productCode,
       },
     ]);
 
     onProductChange((prevProducts) => [
       ...prevProducts,
       {
+        productCode: inputs.productCode,
         image: imageURL,
         name: inputs.name,
         price: parseInt(inputs.price),
         quantity: parseInt(inputs.quantity),
         description: inputs.description,
         weight: parseFloat(inputs.weight),
+        productCode: inputs.productCode,
       },
     ]);
   };
@@ -336,20 +362,18 @@ export const CreateOrderProductTable = ({
     onProductPriceChange(productPrice);
   }, [products]);
 
-  const handleDeleteSingleProduct = (index) => {
-    const changedProductsArray = removeItemByIndex(products, index);
+  const handleDeleteSingleProduct = (productCode) => {
+    // const changedProductsArray = removeItemByIndex(products, index);
+    console.log("đã vô");
+    const newData = products.filter(item => item.productCode !== productCode);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // This clears the selected file
     }
-    setProducts(changedProductsArray);
-    onProductChange(changedProductsArray);
+    setData(products);
+    onProductChange(products);
   };
 
-  const onFinish = (values) => {
-    console.log({ values });
-    // const updateData =[...products]
-    // updateData.splice(editingRow,1,values)
-  }
+
 
   return (
     <div>
@@ -357,19 +381,13 @@ export const CreateOrderProductTable = ({
         handleOpenChange={handleOpenChange}
         handleAddProduct={handleAddProduct} />
       <div className="uploadExcelBtn">
-        <Button type='primary' style={{
-          marginRight: "10px",
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "green"
-        }}
-          onClick={handlePostProducts}
-        >
 
-          <LibraryAdd style={{
-            paddingRight: "5px",
-            fontSize: "17px"
-          }} /> Thêm hàng</Button>
+        <WarningModal
+          InitiateComponent={SaveProductBtn}
+          warningContent={"Ban có chắc muốn thêm những sản phẩm này không?"}
+          confirmFunction={handlePostProducts}
+        />
+
         <CustomizedMenus handleExelClick={handleUploadExcel}
           handleOpenChange={handleOpenChange}
           isOpenModal={isOpen} />
@@ -386,64 +404,23 @@ export const CreateOrderProductTable = ({
           ref={fileInputRef}
         />
       </div>
-      <Form form={form} onFinish={onFinish}>
+      <Form form={form} component={false}>
         <Table
-          columns={columns}
-          dataSource={products}
-          rowKey={(record, index) => index}
+          rowKey={(_, record) => record.productCode}
+          components={{
+            body: {
+              cell: EditableCell,
+            },
+          }}
+          bordered
+          dataSource={data}
+          columns={mergedColumns}
+          rowClassName="editable-row"
+          pagination={{
+            onChange: cancel,
+          }}
         />
       </Form>
-
-      {/* <table>
-        <thead>
-          <tr>
-            <th>Hình ảnh</th>
-            <th>Tên mặt hàng</th>
-            <th>Số lượng</th>
-            <th>Cân nặng</th>
-            <th>Đơn giá</th>
-            <th>Mô tả sản phẩm</th>
-            <th style={{ textAlign: "center" }}>Xóa sản phẩm</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {products.length > 0 &&
-            products.map((product, index) => (
-              <tr key={index}>
-                <td>
-                  <div style={{ width: "100px" }}>
-                    <img
-                      src={product.image}
-                      alt=""
-                      style={{ maxWidth: "100%", objectFit: "cover" }}
-                    />
-                  </div>
-                </td>
-                <td>{product.name}</td>
-                <td>{product.quantity}</td>
-                <td>{product.weight} KG</td>
-                <td>{convertCurrency(product.price)}</td>
-                <td>{product.description}</td>
-                <td style={{ textAlign: "center" }}>
-                  <WarningModal
-                    InitiateComponent={DeleteProductBtn}
-                    warningContent={"Bạn có chắc muốn xóa sản phẩm này chứ"}
-                    confirmFunction={handleDeleteSingleProduct}
-                    parameters={index}
-                  />
-                </td>
-              </tr>
-            ))}
-          <tr>
-            <td style={{ textAlign: "center" }} colSpan={7}>
-              <AddProductModal isOpenModal={isOpen}
-                handleOpenChange={handleOpenChange}
-                handleAddProduct={handleAddProduct} />
-            </td>
-          </tr>
-        </tbody>
-      </table> */}
     </div>
   );
 };

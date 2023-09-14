@@ -6,6 +6,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { storage } from "../../firebase";
 import { useToastShow } from "../../utils/toastSettings";
+import { Button } from "antd";
 import "./addProductModal.scss";
 
 export const AddProductModal = ({ handleAddProduct, isOpenModal, handleOpenChange }) => {
@@ -40,8 +41,20 @@ export const AddProductModal = ({ handleAddProduct, isOpenModal, handleOpenChang
   const addProduct = async () => {
     useToastShow("Đang thêm sản phẩm");
     await handleUploadImg();
-    handleAddProduct(inputs, imgURL);
+    if (imgURL.length === 0) {
+      handleAddProduct(inputs, "temporayLink")
+    } else {
+      handleAddProduct(inputs, imgURL);
+    }
   };
+
+  // const handleCheckProductCode = () => {
+  //   try {
+  //     let res =
+  //   } catch (error) {
+
+  //   }
+  // }
 
   return (
     <>
@@ -80,6 +93,21 @@ export const AddProductModal = ({ handleAddProduct, isOpenModal, handleOpenChang
                   </Dialog.Title>
                   <div className="mt-2">
                     <div className="createProductModalInputsWrapper">
+                      <div className="createProductModalInputWrapper">
+                        <TextField
+                          name="productCode"
+                          label="Mã sản phẩm"
+                          multiline
+                          maxRows={4}
+                          placeholder="ABC1234"
+                          onChange={handleInputsChange}
+                        />
+                      </div>
+                      <div className="createProductModalInputWrapper">
+                        <Button
+                        // onClick={handleCheckProductCode}
+                        >Kiểm tra</Button>
+                      </div>
                       <div className="createProductModalInputWrapper col-span-2">
                         <TextField
                           name="name"
