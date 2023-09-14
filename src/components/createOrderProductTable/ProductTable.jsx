@@ -3,6 +3,7 @@ import { Button, InputNumber, Select, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { publicRequest } from "../../requestMethods";
 import { removeItemByIndex } from "../../utils/getLastArrayItem";
+import { useAuthUser } from "react-auth-kit";
 
 const { Option } = Select;
 export const ProductTable = ({
@@ -12,11 +13,12 @@ export const ProductTable = ({
 }) => {
   const [orderProducts, setOrderProducts] = useState([]);
   const [inStockProducts, setInStockProducts] = useState([]);
+  const authUser = useAuthUser();
 
   const getInStockProducts = async () => {
     try {
       const res = await publicRequest.get(
-        "/productShop/getByShopOwnerId?ShopOwnerId=1&pageNumber=1&pageSize=10"
+        `/productShop/getByShopOwnerId?ShopOwnerId=${authUser().id}&pageNumber=1&pageSize=10`
       );
       setInStockProducts(res.data.data.content);
     } catch (error) {

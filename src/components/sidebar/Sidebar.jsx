@@ -5,6 +5,7 @@ import {
   Logout,
   PeopleAlt,
   ReceiptLong,
+  ShoppingCart,
   Warehouse,
 } from "@mui/icons-material";
 import "./sidebar.scss";
@@ -78,6 +79,17 @@ export const Sidebar = () => {
                 }
               >
                 <Group /> Danh sách nhân viên
+              </div>
+            </Link>
+            <Link to={"/admin/clients"}>
+              <div
+                className={
+                  pathname[2] === "clients"
+                    ? "sidebarItem selected"
+                    : "sidebarItem"
+                }
+              >
+                <ShoppingCart/> Danh sách các shop
               </div>
             </Link>
           </>
