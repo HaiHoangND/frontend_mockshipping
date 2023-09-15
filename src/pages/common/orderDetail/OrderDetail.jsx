@@ -176,6 +176,8 @@ const OrderDetail = () => {
   const canUpdateEmployee = () => {
     if (role === "SHOP") {
       return false;
+    } else if (order.orderStatusList.length === 0) {
+      return true;
     } else if (
       order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
       order.orderStatusList[0].status === "Giao hàng thành công" ||
