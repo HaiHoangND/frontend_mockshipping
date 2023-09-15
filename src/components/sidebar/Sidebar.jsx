@@ -126,7 +126,7 @@ export const Sidebar = () => {
                     : "sidebarItem"
                 }
               >
-                <Add /> Quản lý hàng
+                <Warehouse /> Quản lý hàng
               </div>
             </Link>
             <Link to={"/shop/clients"}>

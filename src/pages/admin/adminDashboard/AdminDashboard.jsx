@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import { publicRequest } from "../../../requestMethods";
 import { convertCurrency } from "../../../utils/formatStrings";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
 
 const AdminDashboard = () => {
   const [successfulOrders, setSuccessfulOrders] = useState(0);
@@ -28,6 +30,21 @@ const AdminDashboard = () => {
     setSearchQuery(newQuery);
   };
 
+  const [date, setDate] = useState({
+    day: currentDay,
+    month: currentMonth,
+    year: currentYear,
+  });
+
+  const handleDateChange = (date) => {
+    console.log(date);
+    setDate({
+      day: date.$D,
+      month: date.$M + 1,
+      year: date.$y,
+    });
+  };
+
   const getStats = async () => {
     try {
       const getSuccess = await publicRequest.get(
@@ -39,7 +56,7 @@ const AdminDashboard = () => {
       );
       setDeliveringOrders(getDelivering.data.data);
       const getProfit = await publicRequest.get(
-        `/order/getTotalRevenueForDay?day=${currentDay}&month=${currentMonth}&year=${currentYear}`
+        `/order/getTotalRevenueForDay?day=${date.day}&month=${date.month}&year=${date.year}`
       );
       if (!getProfit.data.data) {
         setProfit(0);
@@ -53,8 +70,8 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     getStats();
-  }, []);
-
+  }, [date]);
+  console.log(date);
   return (
     <div className="bodyContainer">
       <Sidebar />
@@ -63,12 +80,19 @@ const AdminDashboard = () => {
         <div className="adminOverviewContainer">
           <div className="adminOverviewTilesContainer">
             <div className="adminOverviewSumSale">
-              <h3>
-                <TrendingUp fontSize="inherit" /> Doanh thu
-              </h3>
+              <div className="flex items-center mb-5">
+                <h3>
+                  <TrendingUp fontSize="inherit" /> Doanh thu
+                </h3>
+                <DatePicker
+                  onChange={handleDateChange}
+                  defaultValue={dayjs()}
+                  className="ml-5"
+                />
+              </div>
               <div className="adminOverviewWrap">
                 <div className="profitChartWrapper">
-                  <ProfitChart />
+                  <ProfitChart month={date.month} year={date.year} />
                 </div>
                 <div className="adminOverviewStatistic">
                   <div className="adminStatisticOrders">

@@ -1,21 +1,19 @@
-import * as React from "react";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import "./login.scss";
-import { publicRequest } from "../../requestMethods";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
 import { useState } from "react";
-import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { useSignIn } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
+import { publicRequest } from "../../requestMethods";
+import { useToastError } from "../../utils/toastSettings";
+import { Link } from "react-router-dom";
+import "./login.scss";
 
 function Copyright(props) {
   return (
@@ -24,8 +22,7 @@ function Copyright(props) {
       color="text.secondary"
       align="center"
       {...props}
-    >
-    </Typography>
+    ></Typography>
   );
 }
 
@@ -62,29 +59,20 @@ export default function Login() {
         },
       });
       if (res.data.role === "COORDINATOR") return navigate("/coordinator");
-      else if (res.data.role === "SHIPPER") return navigate("/shipper")
-      else if (res.data.role === "ADMIN") return navigate("/admin")
-      else if (res.data.role === "SHOP") return navigate("/shop")
+      else if (res.data.role === "SHIPPER") return navigate("/shipper");
+      else if (res.data.role === "ADMIN") return navigate("/admin");
+      else if (res.data.role === "SHOP") return navigate("/shop");
     }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <div className="main-container">
-
-        <Grid
-          container
-          component="main"
-          sx={{ height: '100vh' }}
-        >
+        <Grid container component="main" sx={{ height: "100vh" }}>
           <CssBaseline />
-          <Grid
-            className="left-logo"
-            item
-            xs={2}
-            sm={3}
-            md={7}
-          ><div className="sapo-logo"></div></Grid>
+          <Grid className="left-logo" item xs={2} sm={3} md={7}>
+            <div className="sapo-logo"></div>
+          </Grid>
 
           <Grid
             className="right-side"
@@ -92,7 +80,7 @@ export default function Login() {
             xs={8}
             sm={6}
             md={4}
-            sx={{ my: 20, height: '60vh' }}
+            sx={{ my: 20, height: "60vh" }}
             component={Paper}
             elevation={6}
             square
@@ -102,15 +90,13 @@ export default function Login() {
               sx={{
                 my: 8,
                 mx: 4,
-                height: '25vh',
+                height: "25vh",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
               }}
             >
-              <Typography
-                className="form-title"
-                component="h1" variant="h5">
+              <Typography className="form-title" component="h1" variant="h5">
                 Đăng nhập
               </Typography>
               <Box
@@ -139,7 +125,7 @@ export default function Login() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Mật khẩu"
                   type="password"
                   id="password"
                   autoComplete="current-password"
@@ -152,8 +138,13 @@ export default function Login() {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign In
+                  Đăng nhập
                 </Button>
+                <div className="flex items-center justify-center">
+                  <Link to="/register" className=" text-center italic underline" style={{fontSize:"15px"}}>
+                    Chưa có tài khoản? Đăng kí
+                  </Link>
+                </div>
               </Box>
             </Box>
           </Grid>

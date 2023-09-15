@@ -2,8 +2,35 @@ import { styled } from "styled-components";
 import "./shippersTable.scss";
 import { UpdateEmployeeInfoModal } from "../updateEmployeeInfoModal/UpdateEmployeeInfoModal";
 import { Table, Tag } from "antd";
+import { useEffect, useState } from "react";
+import { publicRequest } from "../../requestMethods";
 
-export const ShippersTable = ({ shipperData }) => {
+export const ShippersTable = ({ searchQuery }) => {
+  const [shippers, setShippers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(1);
+  const pageSize = 10;
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getShippers = async (currentPage) => {
+    try {
+      setIsLoading(true);
+      const res = await publicRequest.get(
+        `/user/getAllShippers?pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
+      );
+      setShippers(res.data.data.content);
+      setTotalCount(res.data.data.totalElements);
+      setPage(currentPage);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getShippers(1);
+  }, [searchQuery]);
+
   const columns = [
     {
       title: "ID",
@@ -16,6 +43,11 @@ export const ShippersTable = ({ shipperData }) => {
       render: (user) => <span>{user.fullName}</span>,
     },
     {
+      title: "Email",
+      dataIndex: "user",
+      render: (user) => <span>{user.email}</span>,
+    },
+    {
       title: "Số điện thoại",
       dataIndex: "user",
       render: (user) => <span>{user.phone}</span>,
@@ -23,12 +55,15 @@ export const ShippersTable = ({ shipperData }) => {
     {
       title: "Đơn hàng",
       dataIndex: "ordersInProgress",
-      align:"center"
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.ordersInProgress - b.ordersInProgress,
+      },
     },
     {
       title: "Trạng thái nhân viên",
       dataIndex: "user",
-      align:"center",
+      align: "center",
       render: (user) => {
         let workingStatus = user.workingStatus;
         let tagColor;
@@ -59,8 +94,17 @@ export const ShippersTable = ({ shipperData }) => {
   return (
     <Table
       columns={columns}
-      dataSource={shipperData}
+      dataSource={shippers}
       rowKey={(record) => record.user.id}
+      loading={isLoading}
+      pagination={{
+        pageSize: pageSize,
+        current: page,
+        total: totalCount,
+        onChange: (page) => {
+          getShippers(page);
+        },
+      }}
     />
   );
 };

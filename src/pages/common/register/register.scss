@@ -34,18 +34,32 @@
             }
         }
         .registerBtn {
-            font-size: 30px;
             width: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             margin-top: 20px;
             button {
                 background: linear-gradient(to right, #2ad38b, #0cceb0);
+                font-size: 20px;
                 color: white;
                 padding: 10px 50px;
-                width: 80%;
+                width: 90%;
                 border-radius: 50px;
                 transition: all ease 0.2s;
+                border: none;
+                cursor: pointer;
+            }
+            a {
+                font-size: 15px;
+                margin-top: 10px;
+                font-style: italic;
+                text-decoration: underline;
+                transition: all ease 0.1s;
+                &:hover {
+                    color: #2ad38b;
+                }
             }
         }
     }

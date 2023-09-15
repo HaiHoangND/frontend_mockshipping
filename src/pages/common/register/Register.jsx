@@ -4,7 +4,7 @@ import { MenuItem, TextField } from "@mui/material";
 import { districts } from "../../../utils/shortestPath";
 import { publicRequest } from "../../../requestMethods";
 import { useToastSuccess } from "../../../utils/toastSettings";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -114,6 +114,7 @@ const Register = () => {
         </div>
         <div className="registerBtn">
           <button onClick={handleRegister}>Đăng kí</button>
+          <Link to="/login">Đã có tài khoản? Đăng nhập</Link>
         </div>
       </div>
     </div>

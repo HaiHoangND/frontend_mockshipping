@@ -2,8 +2,9 @@ import { Divider, Radio, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { publicRequest } from "../../requestMethods";
+import { UpdateReceiverModal } from "../updateReceiverModal/UpdateReceiverModal";
 
-export const OldCustomerTable = ({ onCustomerChange , searchQuery}) => {
+export const OldCustomerTable = ({ onCustomerChange, searchQuery }) => {
   const authUser = useAuthUser();
   const [oldCustomers, setOldCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +33,6 @@ export const OldCustomerTable = ({ onCustomerChange , searchQuery}) => {
     getOldCustomers(1);
   }, [searchQuery]);
 
-
   const columns = [
     {
       title: "ID",
@@ -54,15 +54,20 @@ export const OldCustomerTable = ({ onCustomerChange , searchQuery}) => {
       dataIndex: "receiver",
       render: (text) => text.address,
     },
+    {
+      title: "Sửa",
+      align: "center",
+      render: (_,record) => <UpdateReceiverModal receiver={record.receiver}/>,
+    },
   ];
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       const customer = selectedRows[0];
       onCustomerChange({
-        id: customer.id,
-        name: customer.name,
-        address: customer.address,
-        phone: customer.phone,
+        id: customer.receiver.id,
+        name: customer.receiver.name,
+        address: customer.receiver.address,
+        phone: customer.receiver.phone,
       });
     },
   };

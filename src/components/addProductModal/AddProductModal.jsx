@@ -1,14 +1,11 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { AddCircleOutline } from "@mui/icons-material";
+import { UploadOutlined } from "@ant-design/icons";
 import { TextField } from "@mui/material";
+import { Button, Modal, Upload } from "antd";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { v4 } from "uuid";
 import { storage } from "../../firebase";
-import { useToastError, useToastShow } from "../../utils/toastSettings";
-import { Button, Modal, Upload } from "antd";
 import "./addProductModal.scss";
-import { UploadOutlined } from "@ant-design/icons";
 
 export const AddProductModal = ({
   handleAddProduct,

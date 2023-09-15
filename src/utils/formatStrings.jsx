@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const productsPrice = (products) => {
   const totalPrice = products.reduce((accumulator, product) => {
     return accumulator + product.price * product.quantity;
@@ -33,7 +35,7 @@ export const formatDateTimeDetail = (dateTime) => {
 };
 
 export const generateOrderCode = () => {
-  const timestamp = new Date().getTime(); // Get current timestamp in milliseconds
+  const timestamp = dayjs().format("DDMMYYHHmmss"); // Get current timestamp in milliseconds
   const randomString = Math.random().toString(36).substring(2, 4); // Generate a random string of 6 characters
   const uppercaseRandomString = randomString.toUpperCase(); // Convert the random string to uppercase
 

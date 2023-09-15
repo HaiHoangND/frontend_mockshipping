@@ -1,13 +1,13 @@
 import {
-  AddShoppingCartOutlined,
   ReceiptLong,
-  SummarizeOutlined,
+  SummarizeOutlined
 } from "@mui/icons-material";
+import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import { CreateOrderPersonalInfoForm } from "../../../components/createOrderPersonalInfoForm/CreateOrderPersonalInfoForm";
-import { CreateOrderProductTable } from "../../../components/createOrderProductTable/CreateOrderProductTable";
+import { ProductTable } from "../../../components/createOrderProductTable/ProductTable";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import { publicRequest } from "../../../requestMethods";
@@ -17,8 +17,15 @@ import {
 } from "../../../utils/formatStrings";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import "./createOrder.scss";
-import { ProductTable } from "../../../components/createOrderProductTable/ProductTable";
-import { Button } from "antd";
+
+export const validatePhoneNumber = (number) => {
+  const convertedNumber = parseInt(number).toString();
+  if (number.substr(1) === convertedNumber) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const CreateOrder = () => {
   const navigate = useNavigate();
@@ -48,15 +55,7 @@ const CreateOrder = () => {
     if (productWeight > 5) return routeFee + (routeFee * 30) / 100;
     else return routeFee;
   };
-
-  const validatePhoneNumber = (number) => {
-    const convertedNumber = number.parseInt().toString();
-    if (number === convertedNumber) {
-      return true;
-    } else {
-      return false;
-    }
-  };
+  
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -93,10 +92,25 @@ const CreateOrder = () => {
     }
   };
 
+  const validateProductQuantity = (products) => {
+    for (const product of products) {
+      if (product.shipQuantity === 0) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  };
+
   const validateProductInfo = () => {
     if (products.length === 0) {
       useToastError("Chưa có sản phẩm nào được thêm");
       return false;
+    } else if (!validateProductQuantity(products)) {
+      useToastError("Số lượng sản phẩm không hợp lệ");
+      return false;
+    } else {
+      return true;
     }
   };
 
@@ -116,6 +130,8 @@ const CreateOrder = () => {
   useEffect(() => {
     getCurrentShop();
   }, []);
+
+  console.log(products);
 
   const handleCreateOrder = async () => {
     try {
@@ -164,6 +180,19 @@ const CreateOrder = () => {
             weight: product.weight,
             description: product.description,
             shippingOrderId: shippingOrder.data.data.id,
+          });
+        }
+
+        for (const product of products) {
+          await publicRequest.put(`/productShop/${product.id}`, {
+            name: product.name,
+            quantity: product.quantity - product.shipQuantity,
+            price: product.price,
+            image: product.image,
+            weight: product.weight,
+            description: product.description,
+            productCode: product.productCode,
+            shopOwnerId: authUser().id,
           });
         }
 

@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import {UploadOutlined} from "@ant-design/icons"
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -81,7 +82,7 @@ export default function CustomizedMenus({ handleExelClick, isOpenModal, handleOp
                 onClick={handleClick}
                 type='primary'
             >
-                Tải lên
+                <UploadOutlined /> Tải lên
             </Button>
             <StyledMenu
                 id="demo-customized-menu"

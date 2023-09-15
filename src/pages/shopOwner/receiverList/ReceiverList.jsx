@@ -7,6 +7,8 @@ import { publicRequest } from "../../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
 import { Table } from "antd";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
+import { UpdateReceiverModal } from "../../../components/updateReceiverModal/UpdateReceiverModal";
+import { AddReceiverModal } from "../../../components/addReceiverModal/AddReceiverModal";
 
 const ReceiverList = () => {
   const [receivers, setReceivers] = useState([]);
@@ -66,12 +68,17 @@ const ReceiverList = () => {
     {
       title: "Đơn đã đặt",
       dataIndex: "numberOfOrders",
-      align:"center",
+      align: "center",
     },
     {
       title: "Đơn thành công",
       dataIndex: "successfulOrders",
-      align:"center",
+      align: "center",
+    },
+    {
+      title: "Sửa",
+      align: "center",
+      render: (_, record) => <UpdateReceiverModal receiver={record.receiver} />,
     },
   ];
   return (
@@ -81,13 +88,16 @@ const ReceiverList = () => {
         <Topbar />
         <div className="receiverListContainer">
           <div className="flex justify-between">
-            <h3>
+            <h3 className="flex-1">
               <PeopleAlt /> Danh sách khách hàng
             </h3>
-            <Searchbar
-              onInputChange={handleSearchQueryChange}
-              placeholderText={"Tìm kiếm khách hàng"}
-            />
+            <div className="flex-1 flex items-center justify-between" style={{paddingLeft:"480px"}}>
+              <Searchbar
+                onInputChange={handleSearchQueryChange}
+                placeholderText={"Tìm kiếm khách hàng"}
+              />
+              <AddReceiverModal />
+            </div>
           </div>
           <Table
             className="mt-5"

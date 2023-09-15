@@ -1,5 +1,5 @@
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "./pages/admin/adminDashboard/AdminDashboard";
@@ -57,7 +57,7 @@ function App() {
   };
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <ToastContainer />
       <Routes>
         <Route
@@ -121,7 +121,7 @@ function App() {
           element={<ShopRoute Component={ReceiverList} />}
         />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

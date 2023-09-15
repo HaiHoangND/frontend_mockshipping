@@ -10,28 +10,10 @@ import { UpdateEmployeeInfoModal } from "../../../components/updateEmployeeInfoM
 import { Searchbar } from "../../../components/searchbar/Searchbar";
 
 const CoordinatorShipperList = () => {
-  const authUser = useAuthUser();
-  const [page, setPage] = useState(1);
-  const [shippers, setShippers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearchQueryChange = (newQuery) => {
     setSearchQuery(newQuery);
   };
-  console.log(searchQuery);
-  const getShippers = async () => {
-    try {
-      const res = await publicRequest.get(
-        `/user/getAllShippers?pageNumber=${page}&pageSize=10&keyWord=${searchQuery}`
-      );
-      setShippers(res.data.data.content);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getShippers();
-  }, [searchQuery]);
   return (
     <div className="bodyContainer">
       <Sidebar />
@@ -51,7 +33,7 @@ const CoordinatorShipperList = () => {
               <UpdateEmployeeInfoModal type={"add"} />
             </div>
           </div>
-          <ShippersTable shipperData={shippers} />
+          <ShippersTable searchQuery={searchQuery} />
         </div>
       </div>
     </div>

@@ -80,7 +80,6 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
         workingStatus: inputs.workingStatus,
       });
       if (res.data.type === "success") {
-        useToastSuccess("Cập nhật nhân viên thành công");
         navigate(0);
         closeModal();
       }
@@ -92,6 +91,9 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
   };
   const handleGenderChange = (value) => {
     setInputs({ ...inputs, gender: value });
+  };
+  const handleWorkingStatusChange = (value) => {
+    setInputs({ ...inputs, workingStatus: value });
   };
 
   return (
@@ -193,7 +195,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
           {type === "update" && (
             <Form.Item label="Trạng thái">
               <Select
-                onChange={handleGenderChange}
+                onChange={handleWorkingStatusChange}
                 defaultValue={employeeInfo?.user.workingStatus}
               >
                 <Option value={true} label={"Đang làm việc"}>

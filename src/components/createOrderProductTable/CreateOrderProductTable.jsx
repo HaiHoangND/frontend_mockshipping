@@ -1,26 +1,16 @@
+import { DeleteOutlined, SaveOutlined, EditOutlined } from "@ant-design/icons";
+import { LibraryAdd, Warning } from "@mui/icons-material";
+import { Button, Form, Input, InputNumber, Table } from "antd";
 import { useEffect, useRef, useState } from "react";
-import "./createOrderProductTable.scss";
+import { useAuthUser } from "react-auth-kit";
 import * as XLSX from "xlsx";
-import { convertCurrency } from "../../utils/formatStrings";
+import CustomizedMenus from "../../pages/shopOwner/manageProducts/CustomizedMenus";
+import { publicRequest } from "../../requestMethods";
+import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { AddProductModal } from "../addProductModal/AddProductModal";
 import { WarningModal } from "../warningModal/WarningModal";
-import { Delete, LibraryAdd } from "@mui/icons-material";
-import { removeItemByIndex } from "../../utils/getLastArrayItem";
-import CustomizedMenus from "../../pages/shopOwner/manageProducts/CustomizedMenus";
-import {
-  Button,
-  Table,
-  Form,
-  Input,
-  InputNumber,
-  Typography,
-  Upload,
-} from "antd";
-import { useAuthUser } from "react-auth-kit";
-import { useToastError, useToastSuccess } from "../../utils/toastSettings";
-import { publicRequest } from "../../requestMethods";
-
-import { toast } from "react-toastify";
+import "./createOrderProductTable.scss";
+import { convertCurrency } from "../../utils/formatStrings";
 
 const EditableCell = ({
   editing,
@@ -82,8 +72,23 @@ const SaveProductBtn = () => {
 
 const ClearProductsBtn = () => {
   return (
-    <Button danger type="primary" style={{ marginLeft: "10px" }}>
+    <Button danger type="primary" style={{ marginLeft: "10px" }} icon={<DeleteOutlined />}>
       Xóa tất cả sản phẩm
+    </Button>
+  );
+};
+
+const DeleteSingleProductBtn = () => {
+  return (
+    <Button
+      type="primary"
+      danger
+      style={{
+        marginRight: 8,
+      }}
+      icon={<DeleteOutlined />}
+    >
+      Xóa
     </Button>
   );
 };
@@ -153,6 +158,7 @@ export const CreateOrderProductTable = ({
       title: "Hình ảnh",
       dataIndex: "image",
       // editable: true,
+      align:"center",
       render: (image) => {
         return (
           <div style={{ maxWidth: "100px", height: "130px" }}>
@@ -165,63 +171,77 @@ export const CreateOrderProductTable = ({
       title: "Tên mặt hàng",
       dataIndex: "name",
       editable: true,
+      align:"center"
     },
     {
       title: "Mã mặt hàng",
       dataIndex: "productCode",
       editable: true,
+      align:"center"
     },
     {
       title: "Cân nặng",
       dataIndex: "weight",
       editable: true,
+      align:"center",
+      render: (text)=>(
+        <span>{text} kg</span>
+      )
     },
     {
       title: "Đơn giá",
       dataIndex: "price",
       editable: true,
+      align:"center",
+      render:(text)=>(
+        <span>{convertCurrency(text)}</span>
+      )
     },
     {
       title: "Mô tả sản phẩm",
       dataIndex: "description",
       editable: true,
+      
     },
     {
       title: "Số lượng",
       dataIndex: "quantity",
       editable: true,
+      align:"center"
     },
     {
-      title: "Actions",
+      title: "Sửa",
       dataIndex: "action",
       width: "18vw",
+      align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
-          <span>
+          <span className="flex">
             <Button
               type="primary"
               onClick={() => save(record.productCode)}
               style={{
                 marginRight: 8,
               }}
+              icon={<SaveOutlined />}
             >
-              Save
+              Lưu
             </Button>
+
+            <WarningModal
+              confirmFunction={handleDeleteSingleProduct}
+              parameters={record.productCode}
+              warningContent={"Bạn chắc muốn xóa sản phẩm này khỏi bảng không?"}
+              InitiateComponent={DeleteSingleProductBtn}
+            />
             <Button
               onClick={cancel}
               style={{
                 marginRight: 8,
               }}
             >
-              <a>Cancel</a>
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => handleDeleteSingleProduct(record.productCode)}
-              danger
-            >
-              Xóa sản phẩm
+              Hủy
             </Button>
           </span>
         ) : (
@@ -229,9 +249,9 @@ export const CreateOrderProductTable = ({
             style={{ width: "100px" }}
             disabled={editingKey !== ""}
             onClick={() => edit(record)}
-          >
-            Edit
-          </Button>
+            icon={<EditOutlined />}
+          />
+           
         );
       },
     },

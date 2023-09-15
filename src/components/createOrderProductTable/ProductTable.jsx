@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { publicRequest } from "../../requestMethods";
 import { removeItemByIndex } from "../../utils/getLastArrayItem";
 import { useAuthUser } from "react-auth-kit";
+import {convertCurrency} from "../../utils/formatStrings"
 
 const { Option } = Select;
 export const ProductTable = ({
@@ -14,11 +15,12 @@ export const ProductTable = ({
   const [orderProducts, setOrderProducts] = useState([]);
   const [inStockProducts, setInStockProducts] = useState([]);
   const authUser = useAuthUser();
-
   const getInStockProducts = async () => {
     try {
       const res = await publicRequest.get(
-        `/productShop/getByShopOwnerId?ShopOwnerId=${authUser().id}&pageNumber=1&pageSize=10`
+        `/productShop/getByShopOwnerId?ShopOwnerId=${
+          authUser().id
+        }&pageNumber=1&pageSize=${123}`
       );
       setInStockProducts(res.data.data.content);
     } catch (error) {
@@ -42,6 +44,8 @@ export const ProductTable = ({
   useEffect(() => {
     getInStockProducts();
   }, []);
+
+
   const columns = [
     {
       title: "Hình ảnh",
@@ -57,12 +61,19 @@ export const ProductTable = ({
       dataIndex: "name",
     },
     {
+      title: "Mã mặt hàng",
+      dataIndex: "productCode",
+    },
+    {
       title: "Cân nặng",
       dataIndex: "weight",
     },
     {
       title: "Đơn giá",
       dataIndex: "price",
+      render: (text)=> (
+        <span>{convertCurrency(text)}</span>
+      )
     },
     {
       title: "Mô tả sản phẩm",
@@ -106,6 +117,14 @@ export const ProductTable = ({
 
   const onProductQuantityChange = (productId, newQuantity) => {
     setOrderProducts((prevOrderProducts) => {
+      return prevOrderProducts.map((product) => {
+        if (product.id === productId) {
+          return { ...product, shipQuantity: newQuantity };
+        }
+        return product;
+      });
+    });
+    onProductChange((prevOrderProducts) => {
       return prevOrderProducts.map((product) => {
         if (product.id === productId) {
           return { ...product, shipQuantity: newQuantity };

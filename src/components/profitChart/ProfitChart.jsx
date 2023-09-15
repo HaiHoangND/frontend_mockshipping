@@ -3,14 +3,16 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import { publicRequest } from "../../requestMethods";
 
-export const ProfitChart = () => {
+export const ProfitChart = ({ month, year }) => {
   const [profitData, setProfitData] = useState([]);
   console.log(profitData);
 
   useEffect(() => {
     const getProfitData = async () => {
       try {
-        const res = await publicRequest.get("/order/statisticYear?year=2023");
+        const res = await publicRequest.get(
+          `/order/statisticMonth?month=${month}&year=${year}`
+        );
         setProfitData(res.data.data);
       } catch (error) {
         console.log(error);
@@ -18,11 +20,11 @@ export const ProfitChart = () => {
     };
 
     getProfitData(); // Fetch data when the component mounts
-  }, []);
+  }, [month, year]);
 
   // Create the chart data when profitData is available
   const profit = {
-    labels: profitData.map((data) => data.month),
+    labels: profitData.map((data) => data.date),
     datasets: [
       {
         label: "Profit", // Use 'label' instead of 'labels' for the dataset label
@@ -30,5 +32,23 @@ export const ProfitChart = () => {
       },
     ],
   };
-  return <Line data={profit} />;
+  return (
+    <Line
+      data={profit}
+      options={{
+        scales: {
+          x: {
+            grid: {
+              display: false,
+            },
+          },
+          y: {
+            grid: {
+              display: false,
+            },
+          },
+        },
+      }}
+    />
+  );
 };

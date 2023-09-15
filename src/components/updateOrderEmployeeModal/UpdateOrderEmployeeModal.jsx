@@ -15,6 +15,8 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
   const [selectedShipper, setSelectedShipper] = useState("");
   const authUser = useAuthUser();
   const role = authUser().role;
+  const [totalCount, setTotalCount] = useState(1);
+  const [page, setPage] = useState(1);
 
   function closeModal() {
     setIsOpen(false);
@@ -24,15 +26,24 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     setIsOpen(true);
   }
 
+
   const getShippers = async () => {
-    const res = await publicRequest.get(`/user/getShippersWithStatus`);
-    const filteredArray = res.data.data.filter(
-      (shipper) =>
-        shipper.user.id !== getArrayLastItem(order.orderStatusList).shipper.id
-    );
-    setShippers(filteredArray);
+    try {
+      if (order) {
+        const res = await publicRequest.get(`/user/getShippersWithStatus`);
+        if (order.orderStatusList.length === 0) {
+          setShippers(res.data.data);
+        } else {
+          const filteredArray = res.data.data.filter(
+            (shipper) => shipper.user.id !== order.orderStatusList[0].shipper.id
+          );
+          setShippers(filteredArray);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-  console.log(shippers);
   useEffect(() => {
     getShippers();
   }, []);
@@ -95,6 +106,13 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     }
   };
 
+
+  const [filteredStatus, setFilteredStatus] = useState(null);
+
+  const handleChange = (pagination, filters) => {
+    setFilteredStatus(filters['status']);
+  };
+
   const columns = [
     {
       title: "ID",
@@ -115,10 +133,14 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
       title: "Đơn đang giao",
       align: "center",
       dataIndex: "ordersInProgress",
+      sorter: {
+        compare: (a, b) => a.ordersInProgress - b.ordersInProgress,
+      },
     },
     {
       title: "Trạng thái nhân viên",
       dataIndex: "ordersInProgress",
+      align:"center",
       render: (numberOfOrders) => {
         const tagColor = numberOfOrders === 0 ? "green" : "yellow";
 
@@ -128,6 +150,24 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
           </Tag>
         );
       },
+      filters: [
+        {
+          text: "Đang rảnh",
+          value: "0",
+        },
+        {
+          text: "Đang giao hàng",
+          value: "1",
+        },
+      ],
+      onFilter: (value, record) => {
+        if (value === "0") {
+          return record.ordersInProgress === 0;
+        } else if (value === "1") {
+          return record.ordersInProgress > 0;
+        }
+      },
+      filteredValue: filteredStatus,
     },
   ];
 
@@ -160,7 +200,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
         onCancel={closeModal}
         cancelText="Hủy"
         okText="Xác nhận"
-        width={700}
+        width={800}
       >
         <Table
           rowSelection={{
@@ -170,6 +210,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
           columns={columns}
           dataSource={shippers}
           rowKey={(record) => record.user.id}
+          onChange={handleChange}
         />
       </Modal>
     </>

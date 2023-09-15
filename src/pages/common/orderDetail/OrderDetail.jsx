@@ -29,15 +29,14 @@ import { WarningModal } from "../../../components/warningModal/WarningModal";
 import { useAuthUser } from "react-auth-kit";
 import { UpdateOrderEmployeeModal } from "../../../components/updateOrderEmployeeModal/UpdateOrderEmployeeModal";
 import { Button } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 const OrderDetail = () => {
   const [order, setOrder] = useState();
   const orderCode = useLocation().pathname.split("/")[2];
   const navigate = useNavigate();
-  console.log(order);
   const authUser = useAuthUser();
   const role = authUser().role;
-  console.log(role);
 
   const getOrderByCode = async () => {
     try {
@@ -126,9 +125,9 @@ const OrderDetail = () => {
   };
   const ChangeStatusBtn = () => {
     return (
-      <button className="changeStatusOrderBtn">
+      <Button type="primary" style={{ width: "100%" }} className="mt-5">
         Chuyển trạng thái đơn hàng
-      </button>
+      </Button>
     );
   };
   const isDisabled = (type) => {
@@ -146,6 +145,48 @@ const OrderDetail = () => {
       return false;
     }
   };
+
+  const cancelable = () => {
+    if (
+      order.orderStatusList.length === 0 ||
+      order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
+      order.orderStatusList[0].status === "Giao hàng thành công" ||
+      order.orderStatusList[0].status === "Quản lý đã nhận tiền"
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const canChangeStatus = () => {
+    if (
+      order.orderStatusList.length !== 0 &&
+      (order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
+        order.orderStatusList[0].status === "Giao hàng thành công" ||
+        order.orderStatusList[0].status === "Quản lý đã nhận tiền") &&
+      role === "ADMIN"
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const canUpdateEmployee = () => {
+    if (role === "SHOP") {
+      return false;
+    } else if (
+      order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
+      order.orderStatusList[0].status === "Giao hàng thành công" ||
+      order.orderStatusList[0].status === "Quản lý đã nhận tiền"
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return (
     <div className="bodyContainer">
       <Sidebar />
@@ -292,7 +333,9 @@ const OrderDetail = () => {
                   <LocalShippingOutlined fontSize="inherit" /> Hành trình đơn
                   hàng
                 </h3>
-                {!isDisabled() && <UpdateOrderEmployeeModal order={order} />}
+                {canUpdateEmployee() && (
+                  <UpdateOrderEmployeeModal order={order} />
+                )}
               </div>
               <div className="orderDetailJourneyContent">
                 <div className="orderDetailShipperDetail">
@@ -351,7 +394,7 @@ const OrderDetail = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        fontSize:"17px"
+                        fontSize: "17px",
                       }}
                     >
                       Chưa có nhân viên nào đảm nhận
@@ -411,9 +454,23 @@ const OrderDetail = () => {
               </div>
             </div>
             <div className="orderDetailSummaryContainer">
-              <h3>
-                <SummarizeOutlined fontSize="inherit" /> Tóm tắt đơn hàng
-              </h3>
+              <div className="flex items-center mb-5">
+                <h3>
+                  <SummarizeOutlined fontSize="inherit" /> Tóm tắt đơn hàng
+                </h3>
+                <Button
+                  type="primary"
+                  className="ml-7"
+                  icon={<UploadOutlined />}
+                  onClick={() => {
+                    const origin = window.location.origin;
+                    const relativePath = `/invoice/index.html?orderCode=${orderCode}`;
+                    window.open(origin + relativePath, "_blank");
+                  }}
+                >
+                  Xuất hóa đơn
+                </Button>
+              </div>
               <div className="orderDetailSummaryFeeContainer">
                 <span>Phí dịch vụ</span>
                 <span>{convertCurrency(order.serviceFee)}</span>
@@ -433,7 +490,7 @@ const OrderDetail = () => {
                   )}
                 </span>
               </div>
-              {!isDisabled("cancel") && (
+              {cancelable() && (
                 <WarningModal
                   InitiateComponent={CancelBtn}
                   warningContent={"Bạn có chắc muốn hủy đơn hàng này không?"}
@@ -441,10 +498,7 @@ const OrderDetail = () => {
                   parameters={order}
                 />
               )}
-              {order.orderStatusList.length !== 0 &&
-              (order.orderStatusList[0].status === "Quản lý đã nhận tiền" ||
-                order.orderStatusList[0].status === "Giao hàng thành công") &&
-              role === "ADMIN" ? (
+              {canChangeStatus() && (
                 <WarningModal
                   InitiateComponent={ChangeStatusBtn}
                   warningContent={
@@ -453,8 +507,6 @@ const OrderDetail = () => {
                   confirmFunction={handleChangeOrderStatus}
                   parameters={order}
                 />
-              ) : (
-                <div />
               )}
             </div>
           </div>

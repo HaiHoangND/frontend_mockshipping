@@ -12,16 +12,19 @@ const ShopList = () => {
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const pageSize = 10;
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearchQueryChange = (newQuery) => {
     setSearchQuery(newQuery);
   };
 
+
+
   const getShops = async (currentPage) => {
     try {
       setIsLoading(true);
       const res = await publicRequest.get(
-        `/user/getAllShopOwners?pageNumber=${currentPage}&pageSize=10`
+        `/user/getAllShopOwners?pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
       setShops(res.data.data.content);
       setTotalCount(res.data.data.totalElements);
@@ -32,9 +35,11 @@ const ShopList = () => {
     }
   };
 
+  console.log(shops);
+
   useEffect(() => {
     getShops(1);
-  }, []);
+  }, [searchQuery]);
 
   const columns = [
     {
@@ -60,15 +65,15 @@ const ShopList = () => {
     {
       title: "Số lượng khách hàng",
       dataIndex: "receiverList",
-      render: (list) => list.length,
+      render: (list) => list?.length,
       align: "center",
     },
-    {
-      title: "Sản phẩm trong kho",
-      dataIndex: "productShops",
-      render: (list) => list.length,
-      align: "center",
-    },
+    // {
+    //   title: "Sản phẩm trong kho",
+    //   dataIndex: "productShops",
+    //   render: (list) => list?.length,
+    //   align: "center",
+    // },
   ];
 
   return (
@@ -98,7 +103,7 @@ const ShopList = () => {
               current: page,
               total: totalCount,
               onChange: (page) => {
-                getOrders(page);
+                getShops(page);
               },
             }}
           />
