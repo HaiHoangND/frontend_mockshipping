@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import * as XLSX from "xlsx";
 import CustomizedMenus from "../../pages/shopOwner/manageProducts/CustomizedMenus";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { AddProductModal } from "../addProductModal/AddProductModal";
 import { WarningModal } from "../warningModal/WarningModal";
@@ -270,9 +270,8 @@ export const CreateOrderProductTable = () => {
     let messArray = [];
     for (let i = 0; i < data.length; ++i) {
       try {
-        let res = await publicRequest.get(
-          `/productShop/checkNotExistedProductCode?ShopOwnerId=${
-            authUser().id
+        let res = await userRequest.get(
+          `/productShop/checkNotExistedProductCode?ShopOwnerId=${authUser().id
           }&productCode=${data[i].productCode}`
         );
         if (res && res.data.type === "failed") {
@@ -294,7 +293,7 @@ export const CreateOrderProductTable = () => {
       if (checkedArray.length === 0) {
         for (let i = 0; i < data.length; ++i) {
           try {
-            let res = await publicRequest.post(`/productShop`, {
+            let res = await userRequest.post(`/productShop`, {
               name: data[i].name,
               quantity: data[i].quantity,
               price: data[i].price,
@@ -304,7 +303,7 @@ export const CreateOrderProductTable = () => {
               productCode: v4(),
               shopOwnerId: authUser().id,
             });
-            await publicRequest.put(`/productShop/${res.data.data.id}`, {
+            await userRequest.put(`/productShop/${res.data.data.id}`, {
               name: data[i].name,
               quantity: data[i].quantity,
               price: data[i].price,

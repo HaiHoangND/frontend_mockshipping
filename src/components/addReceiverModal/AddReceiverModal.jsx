@@ -1,7 +1,7 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal } from "antd";
 import React, { useState } from "react";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { validatePhoneNumber } from "../../pages/shopOwner/createOrder/CreateOrder";
 import { useToastError } from "../../utils/toastSettings";
@@ -34,7 +34,7 @@ export const AddReceiverModal = () => {
     } else {
       try {
         setIsLoading(true);
-        const res = await publicRequest.post("/receiver", {
+        const res = await userRequest.post("/receiver", {
           name: inputs.name,
           phone: inputs.phone,
           address: inputs.address,

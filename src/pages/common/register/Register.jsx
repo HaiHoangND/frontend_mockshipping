@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./register.scss";
 import { MenuItem, TextField } from "@mui/material";
 import { districts } from "../../../utils/shortestPath";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -17,7 +17,7 @@ const Register = () => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
   const handleRegister = async () => {
-    const res = await publicRequest.post("/register", {
+    const res = await userRequest.post("/register", {
       fullName: inputs.fullName,
       email: inputs.email,
       password: inputs.password,

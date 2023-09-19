@@ -1,10 +1,10 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, InputNumber, Select, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { removeItemByIndex } from "../../utils/getLastArrayItem";
 import { useAuthUser } from "react-auth-kit";
-import {convertCurrency} from "../../utils/formatStrings"
+import { convertCurrency } from "../../utils/formatStrings"
 
 const { Option } = Select;
 export const ProductTable = ({
@@ -17,9 +17,8 @@ export const ProductTable = ({
   const authUser = useAuthUser();
   const getInStockProducts = async () => {
     try {
-      const res = await publicRequest.get(
-        `/productShop/getByShopOwnerId?ShopOwnerId=${
-          authUser().id
+      const res = await userRequest.get(
+        `/productShop/getByShopOwnerId?ShopOwnerId=${authUser().id
         }&pageNumber=1&pageSize=${123}`
       );
       setInStockProducts(res.data.data.content);
@@ -71,7 +70,7 @@ export const ProductTable = ({
     {
       title: "Đơn giá",
       dataIndex: "price",
-      render: (text)=> (
+      render: (text) => (
         <span>{convertCurrency(text)}</span>
       )
     },

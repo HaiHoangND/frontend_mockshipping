@@ -11,7 +11,7 @@ import "./adminDashboard.scss";
 import { OrderListTableAnt } from "../../../components/orderListTable/OrderListTableAnt";
 import { ProfitChart } from "../../../components/profitChart/ProfitChart";
 import { useEffect, useState } from "react";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { convertCurrency } from "../../../utils/formatStrings";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
 import { DatePicker } from "antd";
@@ -47,15 +47,15 @@ const AdminDashboard = () => {
 
   const getStats = async () => {
     try {
-      const getSuccess = await publicRequest.get(
+      const getSuccess = await userRequest.get(
         "/order/countSuccessfulShippingOrders"
       );
       setSuccessfulOrders(getSuccess.data.data);
-      const getDelivering = await publicRequest.get(
+      const getDelivering = await userRequest.get(
         "/order/countShippingOrdersDelivering"
       );
       setDeliveringOrders(getDelivering.data.data);
-      const getProfit = await publicRequest.get(
+      const getProfit = await userRequest.get(
         `/order/getTotalRevenueForDay?day=${date.day}&month=${date.month}&year=${date.year}`
       );
       if (!getProfit.data.data) {

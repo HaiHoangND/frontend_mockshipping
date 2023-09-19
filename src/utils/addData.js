@@ -432,6 +432,6 @@ const addProducts = async () => {
 
 // addReceivers();
 
-// addShopOwners()
+addShopOwners()
 
 // addShippers();

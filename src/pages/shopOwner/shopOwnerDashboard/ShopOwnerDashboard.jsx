@@ -11,7 +11,7 @@ import { useAuthUser } from "react-auth-kit";
 import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { convertCurrency } from "../../../utils/formatStrings";
 import "./shopOwnerDashboard.scss";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
@@ -52,7 +52,7 @@ const ShopOwnerDashboard = () => {
   };
 
   const getStats = async () => {
-    const stats = await publicRequest.get(
+    const stats = await userRequest.get(
       `order/shopOwnerStatistic?shopOwnerId=${authUser().id}`
     );
     setStatistics(stats.data.data[0]);

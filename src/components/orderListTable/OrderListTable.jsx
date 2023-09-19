@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./orderListTable.scss";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { getArrayLastItem } from "../../utils/getLastArrayItem";
 import {
@@ -22,16 +22,16 @@ const DeliveryStatus = styled.div`
     props.name === "Đang giao hàng"
       ? "#ffcd29"
       : props.name === "Đang lấy hàng"
-      ? "#ffcd29"
-      : props.name === "Lấy hàng thành công"
-      ? "#ffcd29"
-      : props.name === "Giao hàng thành công"
-      ? "#14ae5c"
-      : props.name === "Đã đưa tiền cho chủ shop"
-      ? "#14ae5c"
-      : props.name === "Đơn hủy"
-      ? "#f24822"
-      : "gray"};
+        ? "#ffcd29"
+        : props.name === "Lấy hàng thành công"
+          ? "#ffcd29"
+          : props.name === "Giao hàng thành công"
+            ? "#14ae5c"
+            : props.name === "Đã đưa tiền cho chủ shop"
+              ? "#14ae5c"
+              : props.name === "Đơn hủy"
+                ? "#f24822"
+                : "gray"};
 `;
 
 export const OrderListTable = ({ searchQuery }) => {
@@ -46,7 +46,7 @@ export const OrderListTable = ({ searchQuery }) => {
     try {
       if (role === "ADMIN" || role === "COORDINATOR") {
         setIsLoading(true);
-        res = await publicRequest.get(
+        res = await userRequest.get(
           `/order?pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
@@ -55,9 +55,8 @@ export const OrderListTable = ({ searchQuery }) => {
         } else return useToastError("Something went wrong!");
       } else if (role === "SHOP") {
         setIsLoading(true);
-        res = await publicRequest.get(
-          `/order/getByShopOwnerId?ShopOwnerId=${
-            authUser().id
+        res = await userRequest.get(
+          `/order/getByShopOwnerId?ShopOwnerId=${authUser().id
           }&pageNumber=${page}&pageSize=10&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {

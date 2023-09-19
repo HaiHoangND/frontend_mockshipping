@@ -3,7 +3,7 @@ import "./shopList.scss";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import { ShoppingCart } from "@mui/icons-material";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { Table } from "antd";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
 
@@ -23,7 +23,7 @@ const ShopList = () => {
   const getShops = async (currentPage) => {
     try {
       setIsLoading(true);
-      const res = await publicRequest.get(
+      const res = await userRequest.get(
         `/user/getAllShopOwners?pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
       setShops(res.data.data.content);

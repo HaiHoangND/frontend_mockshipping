@@ -1,7 +1,7 @@
 import { EditOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal } from "antd";
 import React, { useState } from "react";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 
@@ -31,7 +31,7 @@ export const UpdateReceiverModal = ({ receiver }) => {
   const handleUpdateReceiver = async () => {
     try {
       setIsLoading(true);
-      await publicRequest.put(`/receiver/${receiver.id}`, {
+      await userRequest.put(`/receiver/${receiver.id}`, {
         name: inputs.name,
         phone: inputs.phone,
         address: inputs.address,

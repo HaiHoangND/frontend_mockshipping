@@ -7,7 +7,7 @@ import { CreateOrderPersonalInfoForm } from "../../../components/createOrderPers
 import { ProductTable } from "../../../components/createOrderProductTable/ProductTable";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import {
   convertCurrency,
   generateOrderCode,
@@ -111,7 +111,7 @@ const CreateOrder = () => {
 
   const getCurrentShop = async () => {
     try {
-      const res = await publicRequest.get(`/user/${authUser().id}`);
+      const res = await userRequest.get(`/user/${authUser().id}`);
       setCurrentShop(res.data.data);
     } catch (error) {
       console.log(error);
@@ -130,7 +130,7 @@ const CreateOrder = () => {
       } else {
         let receiver;
         if (!receiverInfo.id) {
-          const receiverData = await publicRequest.post("/receiver", {
+          const receiverData = await userRequest.post("/receiver", {
             name: receiverInfo.name,
             address: `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
             phone: receiverInfo.phone,
@@ -141,19 +141,19 @@ const CreateOrder = () => {
           receiver = receiverInfo.id;
         }
         // Create order
-        const shippingOrder = await publicRequest.post("/order", {
+        const shippingOrder = await userRequest.post("/order", {
           orderCode: generateOrderCode(),
           shopOwnerId: authUser().id,
           receiverId: receiver,
           serviceFee: calculateServiceFee(),
         });
         // Create routes
-        await publicRequest.post("/orderRoute", {
+        await userRequest.post("/orderRoute", {
           address: currentShop.address,
           shippingOrderId: shippingOrder.data.data.id,
           routeId: 1,
         });
-        await publicRequest.post("/orderRoute", {
+        await userRequest.post("/orderRoute", {
           address: receiverInfo.id
             ? receiverInfo.address
             : `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
@@ -162,7 +162,7 @@ const CreateOrder = () => {
         });
         // Create products
         for (const product of products) {
-          await publicRequest.post("/product", {
+          await userRequest.post("/product", {
             name: product.name,
             quantity: product.shipQuantity,
             price: product.price,
@@ -174,7 +174,7 @@ const CreateOrder = () => {
         }
 
         for (const product of products) {
-          await publicRequest.put(`/productShop/${product.id}`, {
+          await userRequest.put(`/productShop/${product.id}`, {
             name: product.name,
             quantity: product.quantity - product.shipQuantity,
             price: product.price,

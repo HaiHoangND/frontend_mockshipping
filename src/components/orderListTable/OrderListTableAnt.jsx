@@ -2,7 +2,7 @@ import { Table, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { Link } from "react-router-dom";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import {
   convertCurrency,
   convertDateTime,
@@ -23,7 +23,7 @@ export const OrderListTableAnt = ({ searchQuery }) => {
     try {
       if (role === "ADMIN" || role === "COORDINATOR") {
         setIsLoading(true);
-        res = await publicRequest.get(
+        res = await userRequest.get(
           `/order?pageNumber=${currentPage}&pageSize=${5}&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
@@ -34,7 +34,7 @@ export const OrderListTableAnt = ({ searchQuery }) => {
         } else return useToastError("Something went wrong!");
       } else if (role === "SHOP") {
         setIsLoading(true);
-        res = await publicRequest.get(
+        res = await userRequest.get(
           `/order/getByShopOwnerId?ShopOwnerId=${authUser().id
           }&pageNumber=${currentPage}&pageSize=${5}&orderCode=${searchQuery}`
         );

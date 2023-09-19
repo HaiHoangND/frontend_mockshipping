@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 
 export const ProfitChart = ({ month, year }) => {
   const [profitData, setProfitData] = useState([]);
@@ -10,7 +10,7 @@ export const ProfitChart = ({ month, year }) => {
   useEffect(() => {
     const getProfitData = async () => {
       try {
-        const res = await publicRequest.get(
+        const res = await userRequest.get(
           `/order/statisticMonthForAdmin?month=${month}&year=${year}`
         );
         setProfitData(res.data.data);
