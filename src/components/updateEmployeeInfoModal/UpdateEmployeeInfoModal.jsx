@@ -53,7 +53,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
       ) {
         return useToastError("Chưa điền đầy đủ thông tin");
       } else {
-        const res = await userRequest.post("/register", {
+        const res = await publicRequest.post("/register", {
           fullName: inputs.fullName,
           email: inputs.email,
           password: inputs.password,

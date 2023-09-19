@@ -136,6 +136,7 @@ const CreateOrder = () => {
             phone: receiverInfo.phone,
             shopOwnerId: authUser().id,
           });
+          console.log(receiverData.data);
           receiver = receiverData.data.data.id;
         } else {
           receiver = receiverInfo.id;

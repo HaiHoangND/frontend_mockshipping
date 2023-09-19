@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 
 export const ShopOwnerChart = ({ month, year, onProfitDataChange }) => {
   const [profitData, setProfitData] = useState([]);
@@ -10,7 +10,7 @@ export const ShopOwnerChart = ({ month, year, onProfitDataChange }) => {
   useEffect(() => {
     const getProfitData = async () => {
       try {
-        const res = await publicRequest.get(
+        const res = await userRequest.get(
           `/order/statisticMonthForShop?month=${month}&year=${year}&shopOwnerId=${
             authUser().id
           }`
