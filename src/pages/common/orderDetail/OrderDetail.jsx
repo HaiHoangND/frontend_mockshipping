@@ -148,10 +148,15 @@ const OrderDetail = () => {
 
   const cancelable = () => {
     if (
-      order.orderStatusList.length === 0 ||
-      order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
-      order.orderStatusList[0].status === "Giao hàng thành công" ||
-      order.orderStatusList[0].status === "Quản lý đã nhận tiền"
+      order.orderStatusList.length !== 0 &&
+      order.orderStatusList[0].status === "Đơn hủy"
+    ) {
+      return false;
+    } else if (
+      order.orderStatusList.length !== 0 &&
+      (order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
+        order.orderStatusList[0].status === "Giao hàng thành công" ||
+        order.orderStatusList[0].status === "Quản lý đã nhận tiền")
     ) {
       return false;
     } else {

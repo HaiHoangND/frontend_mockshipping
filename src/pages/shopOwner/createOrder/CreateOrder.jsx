@@ -1,7 +1,4 @@
-import {
-  ReceiptLong,
-  SummarizeOutlined
-} from "@mui/icons-material";
+import { ReceiptLong, SummarizeOutlined } from "@mui/icons-material";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
@@ -55,7 +52,6 @@ const CreateOrder = () => {
     if (productWeight > 5) return routeFee + (routeFee * 30) / 100;
     else return routeFee;
   };
-  
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -66,31 +62,26 @@ const CreateOrder = () => {
     if (!receiverInfo) {
       useToastError("Chưa điền thông tin khách hàng");
       return false;
-    } else if (!receiverInfo.name) {
-      useToastError("Chưa điền tên khách hàng");
-      return false;
-    } else if (
-      !receiverInfo.id &&
-      !receiverInfo.detailedAddress &&
-      !receiverInfo.districts
-    ) {
-      useToastError("Chưa điền địa chỉ khách hàng");
-      return false;
     } else if (!receiverInfo.phone) {
       useToastError("Chưa điền số điện thoại khách hàng");
       return false;
     } else if (!validatePhoneNumber(receiverInfo.phone)) {
       useToastError("Số điện thoại chưa đúng định dạng");
       return false;
-    } else if (receiverInfo.email) {
-      if (!validateEmail(receiverInfo.email)) {
-        useToastError("Email chưa đúng định dạng");
-        return false;
-      }
+    } else if (!receiverInfo.name) {
+      useToastError("Chưa điền tên khách hàng");
+      return false;
+    } else if (
+      !receiverInfo.id &&
+      (!receiverInfo.detailedAddress || !receiverInfo.districts)
+    ) {
+      useToastError("Chưa điền địa chỉ khách hàng");
+      return false;
     } else {
       return true;
     }
   };
+
 
   const validateProductQuantity = (products) => {
     for (const product of products) {
@@ -131,7 +122,6 @@ const CreateOrder = () => {
     getCurrentShop();
   }, []);
 
-  console.log(products);
 
   const handleCreateOrder = async () => {
     try {
