@@ -13,6 +13,7 @@ import "./createOrderProductTable.scss";
 import { convertCurrency } from "../../utils/formatStrings";
 import { v4 } from "uuid";
 import { generateProductCode } from "../../utils/addData";
+import { useNavigate } from "react-router-dom";
 
 const EditableCell = ({
   editing,
@@ -108,8 +109,8 @@ export const CreateOrderProductTable = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState("");
-  // const isEditing = (record) => record.productCode === editingKey;
   const isEditing = (record) => record.id === editingKey;
+  const navigate = useNavigate();
 
   useEffect(() => {
     setData(products);
@@ -121,13 +122,11 @@ export const CreateOrderProductTable = () => {
       quantity: 0,
       price: 0.0,
       image: "",
-      // productCode: "",
       id: "",
       weight: 0.0,
       description: "",
       ...record,
     });
-    // setEditingKey(record.productCode);
     setEditingKey(record.id);
   };
   const cancel = () => {
@@ -136,10 +135,7 @@ export const CreateOrderProductTable = () => {
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      // console.log(key);
-      // console.log(data);
       const newData = [...data];
-      // console.log(newData);
       const index = newData.findIndex((item) => key === item.id);
       if (index > -1) {
         const item = newData[index];
@@ -167,7 +163,10 @@ export const CreateOrderProductTable = () => {
       align: "center",
       render: (image) => {
         return (
-          <div style={{ maxWidth: "100px", height: "130px" }}>
+          <div
+            style={{ maxWidth: "100px", height: "130px" }}
+            className="flex items-center justify-center"
+          >
             <img style={{ width: "100%" }} src={image} />
           </div>
         );
@@ -179,12 +178,6 @@ export const CreateOrderProductTable = () => {
       editable: true,
       align: "center",
     },
-    // {
-    //   title: "Mã mặt hàng",
-    //   dataIndex: "productCode",
-    //   editable: true,
-    //   align: "center",
-    // },
     {
       title: "Cân nặng",
       dataIndex: "weight",
@@ -298,7 +291,6 @@ export const CreateOrderProductTable = () => {
     } else {
       let checkedArray = await handleCheckProductCode();
       if (checkedArray.length === 0) {
-        useToastSuccess("Không có mã sản phẩm nào bị trùng");
         for (let i = 0; i < data.length; ++i) {
           try {
             let res = await userRequest.post(`/productShop`, {
@@ -325,8 +317,8 @@ export const CreateOrderProductTable = () => {
             console.log(error);
           }
         }
-        useToastSuccess("Thêm vào kho thành công");
         handleClearProducts();
+        navigate(0);
       } else {
         for (let i = 0; i < checkedArray.length; i++) {
           useToastError(checkedArray[i]);
@@ -389,10 +381,8 @@ export const CreateOrderProductTable = () => {
       fileInputRef.current.value = ""; // This clears the selected file
     }
     setProducts(newData);
-    onProductChange(products);
     setEditingKey("");
   };
-
 
   return (
     <div>

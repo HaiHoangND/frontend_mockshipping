@@ -1,19 +1,22 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuthUser } from "react-auth-kit";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-import { publicRequest, userRequest } from "../../requestMethods";
+import { publicRequest } from "../../requestMethods";
 
-export const ProfitChart = ({ month, year }) => {
+export const ShopOwnerChart = ({ month, year, onProfitDataChange }) => {
   const [profitData, setProfitData] = useState([]);
-  console.log(profitData);
-
+  const authUser = useAuthUser();
   useEffect(() => {
     const getProfitData = async () => {
       try {
-        const res = await userRequest.get(
-          `/order/statisticMonthForAdmin?month=${month}&year=${year}`
+        const res = await publicRequest.get(
+          `/order/statisticMonthForShop?month=${month}&year=${year}&shopOwnerId=${
+            authUser().id
+          }`
         );
         setProfitData(res.data.data);
+        onProfitDataChange(res.data.data);
       } catch (error) {
         console.log(error);
       }

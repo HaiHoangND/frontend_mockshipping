@@ -50,7 +50,6 @@ export const OrderListTableAnt = ({ searchQuery }) => {
     }
   };
 
-  console.log(orders);
 
   useEffect(() => {
     getOrders(1);

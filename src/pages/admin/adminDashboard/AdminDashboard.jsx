@@ -90,11 +90,11 @@ const AdminDashboard = () => {
                   className="ml-5"
                 />
               </div>
-              <div className="adminOverviewWrap">
-                <div className="profitChartWrapper">
+              <div className="adminOverviewWrap grid grid-cols-5">
+                <div className="profitChartWrapper col-span-3">
                   <ProfitChart month={date.month} year={date.year} />
                 </div>
-                <div className="adminOverviewStatistic">
+                <div className="adminOverviewStatistic col-span-2">
                   <div className="adminStatisticOrders">
                     <div className="adminStatisticOrder">
                       <div className="left">
