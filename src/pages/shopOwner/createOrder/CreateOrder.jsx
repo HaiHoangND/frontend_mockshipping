@@ -101,7 +101,8 @@ const CreateOrder = () => {
       }
     }
   };
-
+  // console.log(receiverInfo);
+  // console.log(products);
   const validateProductInfo = () => {
     if (products.length === 0) {
       useToastError("Chưa có sản phẩm nào được thêm");
@@ -113,6 +114,7 @@ const CreateOrder = () => {
       return true;
     }
   };
+  // console.log(validateProductInfo());
 
   const handleProductChange = (newProducts) => {
     setProducts(newProducts);
@@ -131,13 +133,12 @@ const CreateOrder = () => {
     getCurrentShop();
   }, []);
 
-  console.log(products);
-
   const handleCreateOrder = async () => {
     try {
       if (!validateReceiverInfo() || !validateProductInfo()) {
         return;
       } else {
+        console.log("chạy");
         let receiver;
         if (!receiverInfo.id) {
           const receiverData = await userRequest.post("/receiver", {
