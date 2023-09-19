@@ -6,7 +6,7 @@ import { CreateOrderProductTable } from "../../../components/createOrderProductT
 import { Searchbar } from "../../../components/searchbar/Searchbar";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import { ProductsListTableAnt } from "./ProductsListTableAnt";
 
@@ -23,7 +23,7 @@ const ManageProducts = () => {
 
   const getCurrentShop = async () => {
     try {
-      const res = await publicRequest.get(`/user/${authUser().id}`);
+      const res = await userRequest.get(`/user/${authUser().id}`);
       setCurrentShop(res.data.data);
     } catch (error) {
       console.log(error);

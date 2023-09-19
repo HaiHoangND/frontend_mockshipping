@@ -1,7 +1,7 @@
 import { Divider, Radio, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { UpdateReceiverModal } from "../updateReceiverModal/UpdateReceiverModal";
 
 export const OldCustomerTable = ({ onCustomerChange, searchQuery }) => {
@@ -15,9 +15,8 @@ export const OldCustomerTable = ({ onCustomerChange, searchQuery }) => {
   const getOldCustomers = async (currentPage) => {
     try {
       setIsLoading(true);
-      const res = await publicRequest.get(
-        `/receiver/getByShopOwnerId?shopOwnerId=${
-          authUser().id
+      const res = await userRequest.get(
+        `/receiver/getByShopOwnerId?shopOwnerId=${authUser().id
         }&pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
       setOldCustomers(res.data.data.content);
@@ -57,7 +56,7 @@ export const OldCustomerTable = ({ onCustomerChange, searchQuery }) => {
     {
       title: "Sửa",
       align: "center",
-      render: (_,record) => <UpdateReceiverModal receiver={record.receiver}/>,
+      render: (_, record) => <UpdateReceiverModal receiver={record.receiver} />,
     },
   ];
   const rowSelection = {

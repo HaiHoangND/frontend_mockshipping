@@ -3,7 +3,7 @@ import "./shippersTable.scss";
 import { UpdateEmployeeInfoModal } from "../updateEmployeeInfoModal/UpdateEmployeeInfoModal";
 import { Table, Tag } from "antd";
 import { useEffect, useState } from "react";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 
 export const ShippersTable = ({ searchQuery }) => {
   const [shippers, setShippers] = useState([]);
@@ -15,7 +15,7 @@ export const ShippersTable = ({ searchQuery }) => {
   const getShippers = async (currentPage) => {
     try {
       setIsLoading(true);
-      const res = await publicRequest.get(
+      const res = await userRequest.get(
         `/user/getAllShippers?pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
       setShippers(res.data.data.content);

@@ -10,7 +10,7 @@ import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import "./coordinatorDashboard.scss";
 import { useEffect, useState } from "react";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
 
@@ -23,7 +23,7 @@ const CoordinatorDashboard = () => {
   };
 
   const getStats = async () => {
-    const res = await publicRequest.get(`/order/coordinatorStatistic`);
+    const res = await userRequest.get(`/order/coordinatorStatistic`);
     setStats(res.data.data[0]);
   };
   useEffect(() => {
@@ -87,7 +87,7 @@ const CoordinatorDashboard = () => {
               placeholderText={"Mã vận đơn"}
             />
           </div>
-          <OrderListTableAnt searchQuery={searchQuery}/>
+          <OrderListTableAnt searchQuery={searchQuery} />
         </div>
       </div>
     </div>

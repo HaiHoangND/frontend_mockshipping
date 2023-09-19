@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 
 export const WarehouseListTable = () => {
   const [warehouses, setWarehouses] = useState([]);
 
   const getWarehouses = async () => {
     try {
-      const res = await publicRequest.get("/user/statisticAllWarehouses");
+      const res = await userRequest.get("/user/statisticAllWarehouses");
       setWarehouses(res.data.data);
     } catch (error) {
       console.log(error);
@@ -30,16 +30,16 @@ export const WarehouseListTable = () => {
       </thead>
       <tbody>
         {
-            warehouses.map((warehouse)=>(
-                <tr key={warehouse.warehouse.id}>
-                    <td>{warehouse.warehouse.id}</td>
-                    <td>{warehouse.warehouse.name}</td>
-                    <td>{warehouse.warehouse.address}</td>
-                    <td>{warehouse.shippingOrders}</td>
-                    <td>{warehouse.delivering}</td>
-                    <td>{warehouse.shippers}</td>
-                </tr>
-            ))
+          warehouses.map((warehouse) => (
+            <tr key={warehouse.warehouse.id}>
+              <td>{warehouse.warehouse.id}</td>
+              <td>{warehouse.warehouse.name}</td>
+              <td>{warehouse.warehouse.address}</td>
+              <td>{warehouse.shippingOrders}</td>
+              <td>{warehouse.delivering}</td>
+              <td>{warehouse.shippers}</td>
+            </tr>
+          ))
         }
       </tbody>
     </table>

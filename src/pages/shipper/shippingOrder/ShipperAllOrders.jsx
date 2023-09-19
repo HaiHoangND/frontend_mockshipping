@@ -60,16 +60,14 @@ const ShipperAllOrders = () => {
     console.log(tab);
     if (tab === "Chưa hoàn thành") {
       const res = await userRequest.get(
-        `/user/getFilterShippingOrders?shipperId=${
-          authUser().id
+        `/user/getFilterShippingOrders?shipperId=${authUser().id
         }&statusFilter=unSuccessful`
       );
       console.log(res.data);
       setOrder(res.data.data);
     } else {
       const res = await userRequest.get(
-        `/user/getFilterShippingOrders?shipperId=${
-          authUser().id
+        `/user/getFilterShippingOrders?shipperId=${authUser().id
         }&statusFilter=successful`
       );
       console.log(res.data);
@@ -120,7 +118,7 @@ const ShipperAllOrders = () => {
         nextOrderRouteId = currentOrderRouteIndex + 1;
       }
       try {
-        const res = await publicRequest.post("/orderStatus", {
+        const res = await userRequest.post("/orderStatus", {
           shippingOrderId: order[index].id,
           shipperId: lastestStatus.shipper.id,
           orderRouteId: order[index].orderRoutes[nextOrderRouteId].id,
@@ -200,9 +198,9 @@ const ShipperAllOrders = () => {
                 style={
                   type === tab
                     ? {
-                        color: "white",
-                        backgroundColor: "#0088ff",
-                      }
+                      color: "white",
+                      backgroundColor: "#0088ff",
+                    }
                     : {}
                 }
                 key={tab}
@@ -252,8 +250,8 @@ const ShipperAllOrders = () => {
                     style={
                       type === "Hoàn thành"
                         ? {
-                            backgroundColor: "grey",
-                          }
+                          backgroundColor: "grey",
+                        }
                         : {}
                     }
                   >

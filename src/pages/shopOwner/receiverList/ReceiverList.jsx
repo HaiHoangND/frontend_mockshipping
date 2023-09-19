@@ -3,7 +3,7 @@ import "./receiverList.scss";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
 import { PeopleAlt } from "@mui/icons-material";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
 import { Table } from "antd";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
@@ -26,9 +26,8 @@ const ReceiverList = () => {
   const getReceivers = async (currentPage) => {
     try {
       setIsLoading(true);
-      const res = await publicRequest.get(
-        `/receiver/getByShopOwnerId?shopOwnerId=${
-          authUser().id
+      const res = await userRequest.get(
+        `/receiver/getByShopOwnerId?shopOwnerId=${authUser().id
         }&pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
       setReceivers(res.data.data.content);
@@ -91,7 +90,7 @@ const ReceiverList = () => {
             <h3 className="flex-1">
               <PeopleAlt /> Danh sách khách hàng
             </h3>
-            <div className="flex-1 flex items-center justify-between" style={{paddingLeft:"480px"}}>
+            <div className="flex-1 flex items-center justify-between" style={{ paddingLeft: "480px" }}>
               <Searchbar
                 onInputChange={handleSearchQueryChange}
                 placeholderText={"Tìm kiếm khách hàng"}

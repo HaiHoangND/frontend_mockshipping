@@ -11,7 +11,7 @@ import {
 import { DeleteOutlined, SaveOutlined, EditOutlined } from "@ant-design/icons";
 import { useAuthUser } from "react-auth-kit";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { WarningModal } from "../../../components/warningModal/WarningModal";
 import { convertCurrency } from "../../../utils/formatStrings";
@@ -77,14 +77,13 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
   const isEditing = (record) => record.productCode === editingKey;
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  
+
 
   const getProducts = async (currentPage) => {
     try {
       setIsLoading(true);
-      let res = await publicRequest.get(
-        `/productShop/getByShopOwnerId?ShopOwnerId=${
-          authUser().id
+      let res = await userRequest.get(
+        `/productShop/getByShopOwnerId?ShopOwnerId=${authUser().id
         }&pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
       if (res.data.type === "success") {
@@ -149,7 +148,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
   const handleUpdateProduct = async (data) => {
     console.log(data);
     try {
-      let res = await publicRequest.put(`/productShop/${data.id}`, {
+      let res = await userRequest.put(`/productShop/${data.id}`, {
         name: data.name,
         quantity: data.quantity,
         price: data.price,
@@ -171,7 +170,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
     {
       title: "Hình ảnh",
       dataIndex: "image",
-      align:"center",
+      align: "center",
       // editable: true,
       render: (image) => {
         return (
@@ -185,20 +184,20 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       title: "Tên mặt hàng",
       dataIndex: "name",
       editable: true,
-      align:"center",
+      align: "center",
     },
     {
       title: "Mã mặt hàng",
       dataIndex: "productCode",
       // editable: true,
-      align:"center",
+      align: "center",
     },
     {
       title: "Cân nặng",
       dataIndex: "weight",
       editable: true,
-      align:"center",
-      render:(text)=>(
+      align: "center",
+      render: (text) => (
         <span>{text} kg</span>
       )
     },
@@ -206,8 +205,8 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       title: "Đơn giá",
       dataIndex: "price",
       editable: true,
-      align:"center",
-      render:(text)=>(
+      align: "center",
+      render: (text) => (
         <span>{convertCurrency(text)}</span>
       )
     },
@@ -220,13 +219,13 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       title: "Số lượng",
       dataIndex: "quantity",
       editable: true,
-      align:"center",
+      align: "center",
     },
     {
       title: "Sửa",
       dataIndex: "action",
       width: "18vw",
-      align:"center",
+      align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
@@ -264,7 +263,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
             onClick={() => edit(record)}
             icon={<EditOutlined />}
           />
-          
+
         );
       },
     },
@@ -287,7 +286,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
 
   const handleDeleteSingleProduct = async (data) => {
     try {
-      let res = await publicRequest.delete(`/productShop/${data.id}`);
+      let res = await userRequest.delete(`/productShop/${data.id}`);
       if (res.data.type === "success") {
         navigate(0);
       } else return useToastError("Xóa sản phẩm thất bại");

@@ -4,7 +4,7 @@ import { MenuItem, TextField } from "@mui/material";
 import { Fragment, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import "./updateEmployeeInfoModal.scss";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { useToastError, useToastSuccess } from "../../utils/toastSettings";
 import { useNavigate } from "react-router-dom";
 import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
@@ -53,7 +53,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
       ) {
         return useToastError("Chưa điền đầy đủ thông tin");
       } else {
-        const res = await publicRequest.post("/register", {
+        const res = await userRequest.post("/register", {
           fullName: inputs.fullName,
           email: inputs.email,
           password: inputs.password,
@@ -69,7 +69,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
         }
       }
     } else if (type === "update") {
-      const res = await publicRequest.put(`/user/${employeeInfo.user.id}`, {
+      const res = await userRequest.put(`/user/${employeeInfo.user.id}`, {
         fullName: inputs.fullName,
         email: inputs.email,
         password: inputs.password,

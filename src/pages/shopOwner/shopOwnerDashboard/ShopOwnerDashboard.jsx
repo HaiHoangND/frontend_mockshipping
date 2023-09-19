@@ -11,7 +11,7 @@ import { useAuthUser } from "react-auth-kit";
 import { OrderListTable } from "../../../components/orderListTable/OrderListTable";
 import { Sidebar } from "../../../components/sidebar/Sidebar";
 import { Topbar } from "../../../components/topbar/Topbar";
-import { publicRequest } from "../../../requestMethods";
+import { publicRequest, userRequest } from "../../../requestMethods";
 import { convertCurrency } from "../../../utils/formatStrings";
 import "./shopOwnerDashboard.scss";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
@@ -27,11 +27,11 @@ const ShopOwnerDashboard = () => {
   };
 
   const getStats = async () => {
-    const profit = await publicRequest.get(
+    const profit = await userRequest.get(
       `/order/getTotalRevenue?ShopOwnerId=${authUser().id}`
     );
     setProfit(profit.data.data);
-    const stats = await publicRequest.get(
+    const stats = await userRequest.get(
       `order/shopOwnerStatistic?shopOwnerId=${authUser().id}`
     );
     setStatistics(stats.data.data[0]);
@@ -102,9 +102,9 @@ const ShopOwnerDashboard = () => {
             <h3>
               <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
             </h3>
-            <Searchbar onInputChange={handleSearchQueryChange} placeholderText={"Mã vận đơn"}/>
+            <Searchbar onInputChange={handleSearchQueryChange} placeholderText={"Mã vận đơn"} />
           </div>
-          <OrderListTableAnt searchQuery={searchQuery}/>
+          <OrderListTableAnt searchQuery={searchQuery} />
         </div>
       </div>
     </div>

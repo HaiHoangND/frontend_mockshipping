@@ -99,7 +99,7 @@ const ShipperOrderDetail = () => {
             nextOrderRouteId = currentOrderRouteIndex + 1;
         }
         try {
-            const res = await publicRequest.post("/orderStatus", {
+            const res = await userRequest.post("/orderStatus", {
                 shippingOrderId: orderInfo.id,
                 shipperId: lastestStatus.shipper.id,
                 nextLocation: nextLocation,

@@ -3,7 +3,7 @@ import { Button, Modal, Select, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import "./updateOrderEmployeeModal.scss";
 import { getArrayLastItem } from "../../utils/getLastArrayItem";
 
@@ -30,7 +30,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
   const getShippers = async () => {
     try {
       if (order) {
-        const res = await publicRequest.get(`/user/getShippersWithStatus`);
+        const res = await userRequest.get(`/user/getShippersWithStatus`);
         if (order.orderStatusList.length === 0) {
           setShippers(res.data.data);
         } else {
@@ -85,7 +85,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     }
 
     try {
-      const res = await publicRequest.post("/orderStatus", {
+      const res = await userRequest.post("/orderStatus", {
         shippingOrderId: order.id,
         shipperId: selectedShipper,
         orderRouteId: nextOrderRouteId,
@@ -140,7 +140,7 @@ export const UpdateOrderEmployeeModal = ({ order }) => {
     {
       title: "Trạng thái nhân viên",
       dataIndex: "ordersInProgress",
-      align:"center",
+      align: "center",
       render: (numberOfOrders) => {
         const tagColor = numberOfOrders === 0 ? "green" : "yellow";
 
