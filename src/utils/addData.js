@@ -1,7 +1,8 @@
 import axios from "axios";
 import { districts } from "./shortestPath.js";
 import * as XLSX from "xlsx";
-import fs from "fs"
+import fs from "fs";
+import { v4 } from "uuid";
 
 const warehouses = [
   {
@@ -373,20 +374,24 @@ const products = [
   },
 ];
 
-
 function convertToXLSX(products) {
   // Create a new worksheet
   const ws = XLSX.utils.json_to_sheet(products);
 
   // Create a workbook and add the worksheet
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Products');
+  XLSX.utils.book_append_sheet(wb, ws, "Products");
 
   // Write the workbook to a file
-  XLSX.writeFile(wb, 'products.xlsx');
+  XLSX.writeFile(wb, "products.xlsx");
 }
 
-convertToXLSX(products)
+export const generateProductCode = (number) => {
+  const formattedNumber =
+    number >= 10000 ? String(number) : String(number).padStart(4, "0");
+  const code = `SP${formattedNumber}`;
+  return code;
+};
 
 const addProducts = async () => {
   const getShopOwners = await axios.get(
@@ -396,8 +401,21 @@ const addProducts = async () => {
   const shopOwners = getShopOwners.data.data;
   for (const owner of shopOwners) {
     for (const product of products) {
-      await axios.post("http://localhost:8080/api/productShop", {
-        productCode: product.productCode,
+      const res = await axios.post("http://localhost:8080/api/productShop", {
+        productCode: v4(),
+        name: product.name,
+        quantity: product.quantity,
+        price: product.price,
+        image: product.image,
+        weight: product.weight,
+        description: product.description,
+        shopOwnerId: owner.id,
+      });
+
+      const productId = res.data.data.id;
+
+      await axios.put(`http://localhost:8080/api/productShop/${productId}`, {
+        productCode: generateProductCode(productId),
         name: product.name,
         quantity: product.quantity,
         price: product.price,
@@ -409,8 +427,6 @@ const addProducts = async () => {
     }
   }
 };
-
-
 
 // addProducts();
 

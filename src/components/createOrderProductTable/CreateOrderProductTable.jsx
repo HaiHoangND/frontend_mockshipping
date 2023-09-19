@@ -11,6 +11,8 @@ import { AddProductModal } from "../addProductModal/AddProductModal";
 import { WarningModal } from "../warningModal/WarningModal";
 import "./createOrderProductTable.scss";
 import { convertCurrency } from "../../utils/formatStrings";
+import { v4 } from "uuid";
+import { generateProductCode } from "../../utils/addData";
 
 const EditableCell = ({
   editing,
@@ -72,7 +74,12 @@ const SaveProductBtn = () => {
 
 const ClearProductsBtn = () => {
   return (
-    <Button danger type="primary" style={{ marginLeft: "10px" }} icon={<DeleteOutlined />}>
+    <Button
+      danger
+      type="primary"
+      style={{ marginLeft: "10px" }}
+      icon={<DeleteOutlined />}
+    >
       Xóa tất cả sản phẩm
     </Button>
   );
@@ -93,11 +100,7 @@ const DeleteSingleProductBtn = () => {
   );
 };
 
-export const CreateOrderProductTable = ({
-  onProductPriceChange,
-  onProductWeightChange,
-  onProductChange,
-}) => {
+export const CreateOrderProductTable = () => {
   const [products, setProducts] = useState([]);
   const fileInputRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -105,7 +108,8 @@ export const CreateOrderProductTable = ({
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState("");
-  const isEditing = (record) => record.productCode === editingKey;
+  // const isEditing = (record) => record.productCode === editingKey;
+  const isEditing = (record) => record.id === editingKey;
 
   useEffect(() => {
     setData(products);
@@ -117,12 +121,14 @@ export const CreateOrderProductTable = ({
       quantity: 0,
       price: 0.0,
       image: "",
-      productCode: "",
+      // productCode: "",
+      id: "",
       weight: 0.0,
       description: "",
       ...record,
     });
-    setEditingKey(record.productCode);
+    // setEditingKey(record.productCode);
+    setEditingKey(record.id);
   };
   const cancel = () => {
     setEditingKey("");
@@ -130,11 +136,11 @@ export const CreateOrderProductTable = ({
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      console.log(key);
-      console.log(data);
+      // console.log(key);
+      // console.log(data);
       const newData = [...data];
-      console.log(newData);
-      const index = newData.findIndex((item) => key === item.productCode);
+      // console.log(newData);
+      const index = newData.findIndex((item) => key === item.id);
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, {
@@ -158,7 +164,7 @@ export const CreateOrderProductTable = ({
       title: "Hình ảnh",
       dataIndex: "image",
       // editable: true,
-      align:"center",
+      align: "center",
       render: (image) => {
         return (
           <div style={{ maxWidth: "100px", height: "130px" }}>
@@ -171,43 +177,38 @@ export const CreateOrderProductTable = ({
       title: "Tên mặt hàng",
       dataIndex: "name",
       editable: true,
-      align:"center"
+      align: "center",
     },
-    {
-      title: "Mã mặt hàng",
-      dataIndex: "productCode",
-      editable: true,
-      align:"center"
-    },
+    // {
+    //   title: "Mã mặt hàng",
+    //   dataIndex: "productCode",
+    //   editable: true,
+    //   align: "center",
+    // },
     {
       title: "Cân nặng",
       dataIndex: "weight",
       editable: true,
-      align:"center",
-      render: (text)=>(
-        <span>{text} kg</span>
-      )
+      align: "center",
+      render: (text) => <span>{text} kg</span>,
     },
     {
       title: "Đơn giá",
       dataIndex: "price",
       editable: true,
-      align:"center",
-      render:(text)=>(
-        <span>{convertCurrency(text)}</span>
-      )
+      align: "center",
+      render: (text) => <span>{convertCurrency(text)}</span>,
     },
     {
       title: "Mô tả sản phẩm",
       dataIndex: "description",
       editable: true,
-      
     },
     {
       title: "Số lượng",
       dataIndex: "quantity",
       editable: true,
-      align:"center"
+      align: "center",
     },
     {
       title: "Sửa",
@@ -220,7 +221,7 @@ export const CreateOrderProductTable = ({
           <span className="flex">
             <Button
               type="primary"
-              onClick={() => save(record.productCode)}
+              onClick={() => save(record.id)}
               style={{
                 marginRight: 8,
               }}
@@ -231,7 +232,7 @@ export const CreateOrderProductTable = ({
 
             <WarningModal
               confirmFunction={handleDeleteSingleProduct}
-              parameters={record.productCode}
+              parameters={record.id}
               warningContent={"Bạn chắc muốn xóa sản phẩm này khỏi bảng không?"}
               InitiateComponent={DeleteSingleProductBtn}
             />
@@ -251,7 +252,6 @@ export const CreateOrderProductTable = ({
             onClick={() => edit(record)}
             icon={<EditOutlined />}
           />
-           
         );
       },
     },
@@ -289,7 +289,7 @@ export const CreateOrderProductTable = ({
         console.log(error);
       }
     }
-    console.log(messArray);
+    // console.log(messArray);
     return messArray;
   };
 
@@ -297,9 +297,7 @@ export const CreateOrderProductTable = ({
     if (data && data.length === 0) {
       useToastError("Hàng chưa được tải lên !");
     } else {
-      console.log(data);
       let checkedArray = await handleCheckProductCode();
-      console.log(checkedArray);
       if (checkedArray.length === 0) {
         useToastSuccess("Không có mã sản phẩm nào bị trùng");
         for (let i = 0; i < data.length; ++i) {
@@ -311,13 +309,19 @@ export const CreateOrderProductTable = ({
               image: data[i].image,
               weight: data[i].weight,
               description: data[i].description,
-              productCode: data[i].productCode,
+              productCode: v4(),
               shopOwnerId: authUser().id,
             });
-            console.log(res);
-            if (res.data.type === "success") {
-              console.log(res);
-            } else console.log(res);
+            await publicRequest.put(`/productShop/${res.data.data.id}`, {
+              name: data[i].name,
+              quantity: data[i].quantity,
+              price: data[i].price,
+              image: data[i].image,
+              weight: data[i].weight,
+              description: data[i].description,
+              productCode: generateProductCode(res.data.data.id),
+              shopOwnerId: authUser().id,
+            });
           } catch (error) {
             console.log(error);
           }
@@ -342,7 +346,6 @@ export const CreateOrderProductTable = ({
 
   const handleClearProducts = () => {
     setProducts([]);
-    onProductChange([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // This clears the selected file
     }
@@ -357,57 +360,32 @@ export const CreateOrderProductTable = ({
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
-      setProducts((prevProducts) => [...prevProducts, ...parsedData]);
-      onProductChange((prevProducts) => [...prevProducts, ...parsedData]);
+      const parsedDataWithId = parsedData.map((item) => ({
+        ...item,
+        id: v4(), // Replace 'someValue' with the actual value you want to set
+      }));
+      setProducts((prevProducts) => [...prevProducts, ...parsedDataWithId]);
     };
   };
 
   const handleAddProduct = (inputs, imageURL) => {
-    console.log(inputs, imageURL);
     setProducts((prevProducts) => [
       ...prevProducts,
       {
+        id: inputs.id,
         image: imageURL,
         name: inputs.name,
         price: parseInt(inputs.price),
         quantity: parseInt(inputs.quantity),
         description: inputs.description,
         weight: parseFloat(inputs.weight),
-        productCode: inputs.productCode,
-      },
-    ]);
-
-    onProductChange((prevProducts) => [
-      ...prevProducts,
-      {
-        productCode: inputs.productCode,
-        image: imageURL,
-        name: inputs.name,
-        price: parseInt(inputs.price),
-        quantity: parseInt(inputs.quantity),
-        description: inputs.description,
-        weight: parseFloat(inputs.weight),
-        productCode: inputs.productCode,
       },
     ]);
   };
-  useEffect(() => {
-    let productWeight = 0;
-    let productPrice = 0;
-    for (const product of products) {
-      if (product.weight && product.price) {
-        productWeight = productWeight + product.weight * product.quantity;
-        productPrice = productPrice + product.price * product.quantity;
-      }
-    }
-    onProductWeightChange(productWeight);
-    onProductPriceChange(productPrice);
-  }, [products]);
 
-  const handleDeleteSingleProduct = (productCode) => {
+  const handleDeleteSingleProduct = (id) => {
     // const changedProductsArray = removeItemByIndex(products, index);
-    console.log("đã vô");
-    const newData = products.filter((item) => item.productCode !== productCode);
+    const newData = products.filter((item) => item.id !== id);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // This clears the selected file
     }
@@ -415,6 +393,7 @@ export const CreateOrderProductTable = ({
     onProductChange(products);
     setEditingKey("");
   };
+
 
   return (
     <div>
@@ -451,7 +430,7 @@ export const CreateOrderProductTable = ({
       </div>
       <Form form={form} component={false}>
         <Table
-          rowKey={(_, record) => record.productCode}
+          rowKey={(record) => record.id}
           components={{
             body: {
               cell: EditableCell,

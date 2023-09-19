@@ -2,7 +2,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { TextField } from "@mui/material";
 import { Button, Modal, Upload } from "antd";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { v4 } from "uuid";
 import { storage } from "../../firebase";
 import "./addProductModal.scss";
@@ -15,6 +15,7 @@ export const AddProductModal = ({
   const [inputs, setInputs] = useState({});
   const [imgFile, setImgFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const uploadRef = useRef();
 
   function closeModal() {
     handleOpenChange(false);
@@ -36,16 +37,17 @@ export const AddProductModal = ({
   const addProduct = async () => {
     setIsLoading(true);
     const imgURL = await handleUploadImg();
+
     if (!imgURL) {
       handleAddProduct(
-        inputs,
+        { ...inputs, id: v4() },
         "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
       );
       setIsLoading(false);
       setInputs({});
       closeModal();
     } else {
-      handleAddProduct(inputs, imgURL);
+      handleAddProduct({ ...inputs, id: v4() }, imgURL);
       setIsLoading(false);
       setInputs({});
       closeModal();
@@ -68,17 +70,6 @@ export const AddProductModal = ({
           <div className="createProductModalInputsWrapper">
             <div className="createProductModalInputWrapper col-span-2">
               <TextField
-                name="productCode"
-                label="Mã sản phẩm"
-                multiline
-                maxRows={4}
-                placeholder="ABC1234"
-                onChange={handleInputsChange}
-                size="small"
-              />
-            </div>
-            <div className="createProductModalInputWrapper col-span-2">
-              <TextField
                 name="name"
                 label="Tên sản phẩm"
                 multiline
@@ -86,6 +77,7 @@ export const AddProductModal = ({
                 placeholder="Áo khoác da"
                 onChange={handleInputsChange}
                 size="small"
+                value={inputs.name || ""}
               />
             </div>
             <div className="createProductModalInputWrapper">
@@ -97,6 +89,7 @@ export const AddProductModal = ({
                 placeholder="5"
                 onChange={handleInputsChange}
                 size="small"
+                value={inputs.quantity || ""}
               />
             </div>
             <div className="createProductModalInputWrapper ">
@@ -106,6 +99,7 @@ export const AddProductModal = ({
                 placeholder="3.2"
                 onChange={handleInputsChange}
                 size="small"
+                value={inputs.weight || ""}
               />
             </div>
             <div className="createProductModalInputWrapper col-span-2">
@@ -115,6 +109,7 @@ export const AddProductModal = ({
                 placeholder="23000"
                 onChange={handleInputsChange}
                 size="small"
+                value={inputs.price || ""}
               />
             </div>
             <div className="createProductModalInputWrapper col-span-2">
@@ -125,10 +120,12 @@ export const AddProductModal = ({
                 maxRows={5}
                 onChange={handleInputsChange}
                 size="small"
+                value={inputs.description || ""}
               />
             </div>
 
             <Upload
+              ref={uploadRef}
               listType="picture"
               maxCount={1}
               beforeUpload={(file) => {

@@ -177,10 +177,10 @@ const ShipperAllOrders = () => {
                   </Dialog.Title>
 
                   <div className="confirmModalBtns mt-4">
-                    <button type="button" onClick={() => setAccepted(true)}>
+                    <button type="button" className="border-none cursor-pointer" onClick={() => setAccepted(true)}>
                       Xác nhận
                     </button>
-                    <button type="button" onClick={() => closeModal()}>
+                    <button type="button" className="border-none cursor-pointer" onClick={() => closeModal()}>
                       Hủy
                     </button>
                   </div>

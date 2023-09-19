@@ -162,8 +162,7 @@ const OrderDetail = () => {
   const canChangeStatus = () => {
     if (
       order.orderStatusList.length !== 0 &&
-      (order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
-        order.orderStatusList[0].status === "Giao hàng thành công" ||
+      (order.orderStatusList[0].status === "Giao hàng thành công" ||
         order.orderStatusList[0].status === "Quản lý đã nhận tiền") &&
       role === "ADMIN"
     ) {
@@ -180,15 +179,20 @@ const OrderDetail = () => {
       return true;
     } else if (
       order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
-      order.orderStatusList[0].status === "Giao hàng thành công" ||
-      order.orderStatusList[0].status === "Quản lý đã nhận tiền"
+      getArrayLastItem(order.orderStatusList).status ===
+        "Đã đưa tiền cho chủ shop" ||
+      order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
+      getArrayLastItem(order.orderStatusList).status ===
+        "Giao hàng thành công" ||
+      order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
+      getArrayLastItem(order.orderStatusList).status === "Quản lý đã nhận tiền"
     ) {
       return false;
     } else {
       return true;
     }
   };
-
+  console.log(order);
   return (
     <div className="bodyContainer">
       <Sidebar />

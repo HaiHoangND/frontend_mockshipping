@@ -3,7 +3,7 @@ import "./register.scss";
 import { MenuItem, TextField } from "@mui/material";
 import { districts } from "../../../utils/shortestPath";
 import { publicRequest } from "../../../requestMethods";
-import { useToastSuccess } from "../../../utils/toastSettings";
+import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -30,6 +30,8 @@ const Register = () => {
     if (res.data.type === "success") {
       useToastSuccess("Đăng kí thành công");
       navigate("/login");
+    } else {
+      return useToastError(res.data.message);
     }
   };
 

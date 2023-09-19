@@ -43,8 +43,8 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const res = await publicRequest.post(`/authenticate`, user);
-    if (res.status !== 200) {
-      return useToastError("Thông tin tài khoản chưa đúng!");
+    if (res.data.type === "failed") {
+      return useToastError(res.data.message);
     } else {
       signIn({
         token: res.data.access_token,
@@ -141,7 +141,11 @@ export default function Login() {
                   Đăng nhập
                 </Button>
                 <div className="flex items-center justify-center">
-                  <Link to="/register" className=" text-center italic underline" style={{fontSize:"15px"}}>
+                  <Link
+                    to="/register"
+                    className=" text-center italic underline"
+                    style={{ fontSize: "15px" }}
+                  >
                     Chưa có tài khoản? Đăng kí
                   </Link>
                 </div>
