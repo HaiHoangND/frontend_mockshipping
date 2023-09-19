@@ -57,3 +57,17 @@ export const districtNames = [
   // Add other districts here...
 ];
 
+export const validateFloat = (number) => {
+  if (parseFloat(number).toString() !== number) {
+    return false;
+  } else {
+    return true;
+  }
+};
+export const validateInt = (number) => {
+  if (parseInt(number).toString() !== number) {
+    return false;
+  } else {
+    return true;
+  }
+};

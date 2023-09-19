@@ -17,9 +17,9 @@
     }
 
     .shopOwnerOverviewTilesContainer {
-        margin: 30px 0px;
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        // margin: 30px 0px;
+        display: flex;
+        flex-direction: column;
         gap: 30px;
 
         .shopOwnerOverviewTile {
@@ -36,7 +36,8 @@
                 }
 
                 .bigNumber {
-                    font-size: 30px;
+                    margin-top: 15px;
+                    font-size: 40px;
                     font-weight: bold;
                 }
             }

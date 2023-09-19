@@ -6,6 +6,11 @@ import { useRef, useState } from "react";
 import { v4 } from "uuid";
 import { storage } from "../../firebase";
 import "./addProductModal.scss";
+import { validateFloat, validateInt } from "../../utils/formatStrings";
+import { useToastError } from "../../utils/toastSettings";
+
+const imgPlaceholder =
+  "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg";
 
 export const AddProductModal = ({
   handleAddProduct,
@@ -21,6 +26,24 @@ export const AddProductModal = ({
     handleOpenChange(false);
   }
 
+  const validateInputs = () => {
+    if (!inputs.name || !inputs.price || !inputs.weight || !inputs.quantity) {
+      useToastError("Chưa điền đủ thông tin sản phẩm");
+      return false;
+    } else if (!validateInt(inputs.price)) {
+      useToastError("Sai định dạng đơn giá");
+      return false;
+    } else if (!validateInt(inputs.quantity)) {
+      useToastError("Sai định dạng số lượng");
+      return false;
+    } else if (!validateFloat(inputs.weight)) {
+      useToastError("Sai định dạng cân nặng");
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const handleInputsChange = (e) => {
     setInputs({
       ...inputs,
@@ -35,19 +58,15 @@ export const AddProductModal = ({
     return uploadedImgURL;
   };
   const addProduct = async () => {
-    setIsLoading(true);
-    const imgURL = await handleUploadImg();
-
-    if (!imgURL) {
+    if (!validateInputs()) {
+      return;
+    } else {
+      setIsLoading(true);
+      const imgURL = await handleUploadImg();
       handleAddProduct(
         { ...inputs, id: v4() },
-        "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+        imgURL ? imgURL : imgPlaceholder
       );
-      setIsLoading(false);
-      setInputs({});
-      closeModal();
-    } else {
-      handleAddProduct({ ...inputs, id: v4() }, imgURL);
       setIsLoading(false);
       setInputs({});
       closeModal();

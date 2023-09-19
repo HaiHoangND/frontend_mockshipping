@@ -74,10 +74,9 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState("");
-  const isEditing = (record) => record.productCode === editingKey;
+  const isEditing = (record) => record.id === editingKey;
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  
 
   const getProducts = async (currentPage) => {
     try {
@@ -114,7 +113,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       ...record,
     });
     console.log(record);
-    setEditingKey(record.productCode);
+    setEditingKey(record.id);
   };
   const cancel = () => {
     setEditingKey("");
@@ -123,7 +122,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
     try {
       const row = await form.validateFields();
       const newData = [...data];
-      const index = newData.findIndex((item) => key === item.productCode);
+      const index = newData.findIndex((item) => key === item.id);
       let item;
       if (index > -1) {
         item = newData[index];
@@ -134,8 +133,12 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
         item = newData[index];
         let res = await handleUpdateProduct(item);
         console.log(res);
-        setData(newData);
-        setEditingKey("");
+        if (res) {
+          return useToastError(res);
+        } else {
+          setData(newData);
+          setEditingKey("");
+        }
       } else {
         newData.push(row);
         setData(newData);
@@ -162,7 +165,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       console.log(res);
       if (res.data.type === "success") {
         navigate(0);
-      } else return useToastError("Cập nhật sản phẩm thất bại");
+      } else return res.data.message;
     } catch (error) {
       console.log(error);
     }
@@ -171,11 +174,14 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
     {
       title: "Hình ảnh",
       dataIndex: "image",
-      align:"center",
+      align: "center",
       // editable: true,
       render: (image) => {
         return (
-          <div style={{ maxWidth: "100px", height: "130px" }}>
+          <div
+            style={{ maxWidth: "100px", height: "130px" }}
+            className="flex justify-center items-center"
+          >
             <img style={{ width: "100%" }} src={image} />
           </div>
         );
@@ -185,31 +191,27 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       title: "Tên mặt hàng",
       dataIndex: "name",
       editable: true,
-      align:"center",
+      align: "center",
     },
     {
       title: "Mã mặt hàng",
       dataIndex: "productCode",
-      // editable: true,
-      align:"center",
+      editable: true,
+      align: "center",
     },
     {
       title: "Cân nặng",
       dataIndex: "weight",
       editable: true,
-      align:"center",
-      render:(text)=>(
-        <span>{text} kg</span>
-      )
+      align: "center",
+      render: (text) => <span>{text} kg</span>,
     },
     {
       title: "Đơn giá",
       dataIndex: "price",
       editable: true,
-      align:"center",
-      render:(text)=>(
-        <span>{convertCurrency(text)}</span>
-      )
+      align: "center",
+      render: (text) => <span>{convertCurrency(text)}</span>,
     },
     {
       title: "Mô tả sản phẩm",
@@ -220,20 +222,20 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       title: "Số lượng",
       dataIndex: "quantity",
       editable: true,
-      align:"center",
+      align: "center",
     },
     {
       title: "Sửa",
       dataIndex: "action",
       width: "18vw",
-      align:"center",
+      align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
           <span className="flex">
             <Button
               type="primary"
-              onClick={() => save(record.productCode)}
+              onClick={() => save(record.id)}
               style={{
                 marginRight: 8,
               }}
@@ -264,7 +266,6 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
             onClick={() => edit(record)}
             icon={<EditOutlined />}
           />
-          
         );
       },
     },
@@ -304,7 +305,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
   return (
     <Form form={form} component={false}>
       <Table
-        rowKey={(_, record) => record.productCode}
+        rowKey={(_, record) => record.id}
         components={{
           body: {
             cell: EditableCell,
