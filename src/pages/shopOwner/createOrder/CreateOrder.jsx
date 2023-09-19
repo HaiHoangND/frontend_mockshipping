@@ -150,17 +150,18 @@ const CreateOrder = () => {
           receiverId: receiver,
           serviceFee: calculateServiceFee(),
         });
+        console.log(shippingOrder);
         // Create routes
         await userRequest.post("/orderRoute", {
           address: currentShop.address,
-          shippingOrderId: shippingOrder.data.data.id,
+          shippingOrderId: shippingOrder.data.data,
           routeId: 1,
         });
         await userRequest.post("/orderRoute", {
           address: receiverInfo.id
             ? receiverInfo.address
             : `${receiverInfo.detailedAddress}, ${receiverInfo.districts}`,
-          shippingOrderId: shippingOrder.data.data.id,
+          shippingOrderId: shippingOrder.data.data,
           routeId: 2,
         });
         // Create products
@@ -172,7 +173,7 @@ const CreateOrder = () => {
             image: product.image,
             weight: product.weight,
             description: product.description,
-            shippingOrderId: shippingOrder.data.data.id,
+            shippingOrderId: shippingOrder.data.data,
           });
         }
 
