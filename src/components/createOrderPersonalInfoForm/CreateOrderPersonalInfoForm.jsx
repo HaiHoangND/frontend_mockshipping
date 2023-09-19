@@ -153,17 +153,6 @@ export const CreateOrderPersonalInfoForm = ({
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={12}>
-            <Col span={12}>
-              <Form.Item label="Email">
-                <Input
-                  placeholder="example@email.com"
-                  name="email"
-                  onChange={handleInputsChange}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
         </Form>
       ) : (
         <OldCustomerTable

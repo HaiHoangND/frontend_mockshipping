@@ -233,20 +233,39 @@ const addShopOwners = async () => {
 };
 
 const addReceivers = async () => {
+  const user = await axios.post("http://localhost:8080/api/authenticate", {
+    email: "admin",
+    password: "admin",
+  });
+  const token = user.data.access_token;
+
   const getShopOwners = await axios.get(
-    "http://localhost:8080/api/user/getAllShopOwnerNoPage"
+    "http://localhost:8080/api/user/getAllShopOwnerNoPage",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   );
 
   const shopOwners = getShopOwners.data.data;
 
   for (const owner of shopOwners) {
     for (const person of vietnameseNamesWithDiacritics) {
-      await axios.post("http://localhost:8080/api/receiver", {
-        name: person,
-        address: generateRandomAddress(streets, districts),
-        phone: generatePhoneNumber(),
-        shopOwnerId: owner.id,
-      });
+      await axios.post(
+        "http://localhost:8080/api/receiver",
+        {
+          name: person,
+          address: generateRandomAddress(streets, districts),
+          phone: generatePhoneNumber(),
+          shopOwnerId: owner.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     }
   }
 };
@@ -394,37 +413,69 @@ export const generateProductCode = (number) => {
 };
 
 const addProducts = async () => {
-  const getShopOwners = await axios.get(
-    "http://localhost:8080/api/user/getAllShopOwnerNoPage"
-  );
+  try {
+    const user = await axios.post("http://localhost:8080/api/authenticate", {
+      email: "admin",
+      password: "admin",
+    });
 
-  const shopOwners = getShopOwners.data.data;
-  for (const owner of shopOwners) {
-    for (const product of products) {
-      const res = await axios.post("http://localhost:8080/api/productShop", {
-        productCode: v4(),
-        name: product.name,
-        quantity: product.quantity,
-        price: product.price,
-        image: product.image,
-        weight: product.weight,
-        description: product.description,
-        shopOwnerId: owner.id,
-      });
+    const token = user.data.access_token;
 
-      const productId = res.data.data.id;
+    const getShopOwners = await axios.get(
+      "http://localhost:8080/api/user/getAllShopOwnerNoPage",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      await axios.put(`http://localhost:8080/api/productShop/${productId}`, {
-        productCode: generateProductCode(productId),
-        name: product.name,
-        quantity: product.quantity,
-        price: product.price,
-        image: product.image,
-        weight: product.weight,
-        description: product.description,
-        shopOwnerId: owner.id,
-      });
+    const shopOwners = getShopOwners.data.data;
+    for (const owner of shopOwners) {
+      for (const product of products) {
+        const res = await axios.post(
+          "http://localhost:8080/api/productShop",
+          {
+            productCode: v4(),
+            name: product.name,
+            quantity: product.quantity,
+            price: product.price,
+            image: product.image,
+            weight: product.weight,
+            description: product.description,
+            shopOwnerId: owner.id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const productId = res.data.data.id;
+
+        await axios.put(
+          `http://localhost:8080/api/productShop/${productId}`,
+          {
+            productCode: generateProductCode(productId),
+            name: product.name,
+            quantity: product.quantity,
+            price: product.price,
+            image: product.image,
+            weight: product.weight,
+            description: product.description,
+            shopOwnerId: owner.id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
     }
+  } catch (error) {
+    console.log(error);
   }
 };
 
