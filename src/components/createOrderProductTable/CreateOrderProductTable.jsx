@@ -14,6 +14,7 @@ import { convertCurrency } from "../../utils/formatStrings";
 import { v4 } from "uuid";
 import { generateProductCode } from "../../utils/addData";
 import { useNavigate } from "react-router-dom";
+import { getIndexOfItem } from "../../utils/getLastArrayItem";
 
 const EditableCell = ({
   editing,
@@ -195,6 +196,7 @@ export const CreateOrderProductTable = () => {
     {
       title: "Mô tả sản phẩm",
       dataIndex: "description",
+      align: "center",
       editable: true,
     },
     {
@@ -271,7 +273,8 @@ export const CreateOrderProductTable = () => {
     for (let i = 0; i < data.length; ++i) {
       try {
         let res = await userRequest.get(
-          `/productShop/checkNotExistedProductCode?ShopOwnerId=${authUser().id
+          `/productShop/checkNotExistedProductCode?ShopOwnerId=${
+            authUser().id
           }&productCode=${data[i].productCode}`
         );
         if (res && res.data.type === "failed") {
@@ -285,9 +288,39 @@ export const CreateOrderProductTable = () => {
     return messArray;
   };
 
+  const validateProducts = (products) => {
+    for (const product of products) {
+      const productIndex = getIndexOfItem(products, product.id);
+      if (!product.name) {
+        useToastError(`Chưa điền tên sản phẩm thứ ${productIndex + 1}`);
+        return false;
+      } else if (!product.price) {
+        useToastError(`Chưa điền đơn giá sản phẩm ${product.name}`);
+        return false;
+      } else if (!product.quantity) {
+        useToastError(`Chưa điền số lượng sản phẩm ${product.name}`);
+        return false;
+      } else if (product.quantity <= 0) {
+        useToastError(`Số lượng của sản phẩm ${product.name} sai định dạng`);
+        return false;
+      } else if (!product.weight) {
+        useToastError(`Chưa điền cân nặng sản phẩm ${product.name}`);
+        return false;
+      } else if (!product.description) {
+        useToastError(`Chưa điền mô tả sản phẩm ${product.name}`);
+        return false;
+      } else {
+        continue;
+      }
+    }
+    return true;
+  };
+
   const handlePostProducts = async () => {
     if (data && data.length === 0) {
       useToastError("Hàng chưa được tải lên !");
+    } else if (!validateProducts(data)) {
+      return;
     } else {
       let checkedArray = await handleCheckProductCode();
       if (checkedArray.length === 0) {
@@ -354,6 +387,7 @@ export const CreateOrderProductTable = () => {
       const parsedDataWithId = parsedData.map((item) => ({
         ...item,
         id: v4(), // Replace 'someValue' with the actual value you want to set
+        image: item.image ? item.image : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg',
       }));
       setProducts((prevProducts) => [...prevProducts, ...parsedDataWithId]);
     };

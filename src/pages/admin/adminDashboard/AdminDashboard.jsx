@@ -71,7 +71,6 @@ const AdminDashboard = () => {
   useEffect(() => {
     getStats();
   }, [date]);
-  console.log(date);
   return (
     <div className="bodyContainer">
       <Sidebar />

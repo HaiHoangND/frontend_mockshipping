@@ -46,6 +46,7 @@ export const ProfitChart = ({ month, year }) => {
             grid: {
               display: false,
             },
+            beginAtZero: true,
           },
         },
       }}

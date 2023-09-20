@@ -17,6 +17,7 @@ export const OrderListTableAnt = ({ searchQuery }) => {
   const [isLoading, setIsLoading] = useState(true);
   const authUser = useAuthUser();
   const role = authUser().role;
+  const pageSize = 10
 
   const getOrders = async (currentPage) => {
     let res;
@@ -24,7 +25,7 @@ export const OrderListTableAnt = ({ searchQuery }) => {
       if (role === "ADMIN" || role === "COORDINATOR") {
         setIsLoading(true);
         res = await userRequest.get(
-          `/order?pageNumber=${currentPage}&pageSize=${5}&orderCode=${searchQuery}`
+          `/order?pageNumber=${currentPage}&pageSize=${pageSize}&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
           setOrders(res.data.data.content);
@@ -36,7 +37,7 @@ export const OrderListTableAnt = ({ searchQuery }) => {
         setIsLoading(true);
         res = await userRequest.get(
           `/order/getByShopOwnerId?ShopOwnerId=${authUser().id
-          }&pageNumber=${currentPage}&pageSize=${5}&orderCode=${searchQuery}`
+          }&pageNumber=${currentPage}&pageSize=${pageSize}&orderCode=${searchQuery}`
         );
         if (res.data.type === "success") {
           setOrders(res.data.data.content);
@@ -167,7 +168,7 @@ export const OrderListTableAnt = ({ searchQuery }) => {
       loading={isLoading}
       rowKey={(record) => record.id}
       pagination={{
-        pageSize: 5,
+        pageSize: pageSize,
         current: page,
         total: totalCount,
         onChange: (page) => {

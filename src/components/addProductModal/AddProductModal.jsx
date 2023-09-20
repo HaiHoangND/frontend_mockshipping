@@ -26,8 +26,9 @@ export const AddProductModal = ({
     handleOpenChange(false);
   }
 
+
   const validateInputs = () => {
-    if (!inputs.name || !inputs.price || !inputs.weight || !inputs.quantity) {
+    if (!inputs.name || !inputs.price || !inputs.weight || !inputs.quantity || !inputs.description) {
       useToastError("Chưa điền đủ thông tin sản phẩm");
       return false;
     } else if (!validateInt(inputs.price)) {
@@ -43,6 +44,7 @@ export const AddProductModal = ({
       return true;
     }
   };
+
 
   const handleInputsChange = (e) => {
     setInputs({
