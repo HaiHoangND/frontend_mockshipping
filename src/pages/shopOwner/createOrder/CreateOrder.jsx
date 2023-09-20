@@ -82,7 +82,6 @@ const CreateOrder = () => {
     }
   };
 
-
   const validateProductQuantity = (products) => {
     for (const product of products) {
       if (product.shipQuantity === 0) {
@@ -137,7 +136,11 @@ const CreateOrder = () => {
             phone: receiverInfo.phone,
             shopOwnerId: authUser().id,
           });
-          receiver = receiverData.data.data.id;
+          if (receiverData.data.type === "failed") {
+            return useToastError(receiverData.data.message);
+          } else {
+            receiver = receiverData.data.data.id;
+          }
         } else {
           receiver = receiverInfo.id;
         }
