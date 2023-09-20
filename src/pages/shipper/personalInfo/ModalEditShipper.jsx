@@ -3,6 +3,9 @@ import { WarningAmber } from "@mui/icons-material";
 import { Modal, Input } from "antd";
 import { Fragment, useState, useEffect } from "react";
 
+
+
+
 export const ShipperModal = ({
     InitiateComponent,
     warningContent,
@@ -12,9 +15,9 @@ export const ShipperModal = ({
     typeName
 }) => {
     let [isOpen, setIsOpen] = useState(false);
-    const [info, setInfo] = useState('');
+    let [isOpenPass, setIsOpenPass] = useState(false);
 
-    console.log(info);
+    const [info, setInfo] = useState('');
 
     useEffect(() => {
         setInfo(parameters);
@@ -63,6 +66,8 @@ export const ShipperModal = ({
                     </div>
                 </div>
             </Modal>
+
+
         </>
     );
 };

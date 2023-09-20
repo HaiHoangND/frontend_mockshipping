@@ -11,7 +11,106 @@ import { Fragment, useState, useEffect } from 'react';
 import { publicRequest, userRequest } from "../../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
 import { ShipperModal } from './ModalEditShipper';
-import { DeleteOutlined, SaveOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SaveOutlined, EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Modal, Input, Form } from "antd";
+import { useToastError } from '../../../utils/toastSettings';
+
+const UpdatePasswordModal = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [inputs, setInputs] = useState({});
+    const authUser = useAuthUser();
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleInputsChange = (e) => {
+        setInputs({ ...inputs, [e.target.name]: e.target.value });
+    };
+    const closeModal = () => {
+        setIsOpen(false);
+    };
+    const openModal = () => {
+        setIsOpen(true);
+    };
+
+    const validatePassword = () => {
+        if (!inputs.password || !inputs.confirmPassword) {
+            useToastError("Chưa điền đầy đủ thông tin");
+            return false;
+        } else if (inputs.password.length < 8) {
+            useToastError("Mật khẩu chưa đủ độ dài");
+            return false;
+        } else if (inputs.password !== inputs.confirmPassword) {
+            useToastError("Mật khẩu chưa trùng khớp");
+            return false;
+        } else {
+            return true;
+        }
+    };
+    const handleConfirm = async () => {
+        try {
+            if (!validatePassword()) {
+                return;
+            } else {
+                setIsLoading(true);
+                const res = await userRequest.put(
+                    `/user/updatePassword?id=${authUser().id}&password=${inputs.password}`
+                );
+                if (res.data.type === "success") {
+                    navigate(0);
+                    setIsLoading(false);
+                } else {
+                    useToastError("Có lỗi xảy ra");
+                    setIsLoading(false);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    return (
+        <>
+            <span onClick={openModal}>
+                <Button
+                    style={{ color: 'black' }}
+                >
+                    <ModeEdit />
+                </Button>
+            </span>
+            <Modal
+                title={"Thay đổi mật khẩu"}
+                open={isOpen}
+                onOk={handleConfirm}
+                onCancel={closeModal}
+                confirmLoading={isLoading}
+                cancelText="Hủy"
+                okText="Xác nhận"
+                width={570}
+            >
+                <Form
+                    labelCol={{ span: 7 }}
+                    wrapperCol={{ span: 20 }}
+                    layout="horizontal"
+                    className="mt-5"
+                >
+                    <Form.Item label="Mật khẩu">
+                        <Input.Password
+                            name="password"
+                            placeholder={inputs.password}
+                            onChange={handleInputsChange}
+                        />
+                    </Form.Item>
+                    <Form.Item label="Xác nhận mật khẩu">
+                        <Input.Password
+                            name="confirmPassword"
+                            placeholder={inputs.confirmPassword}
+                            onChange={handleInputsChange}
+                        />
+                    </Form.Item>
+                </Form>
+            </Modal>
+        </>
+    );
+};
 
 
 const UpdateBtn = () => {
@@ -205,6 +304,19 @@ const ShipperInfo = () => {
                         </div>
                     </div>
                     <div className='info'>
+                        <div className='orderTitle'>Mật khẩu</div>
+                        <div className='orderItem'>
+                            <div className='infoData'>
+
+                                ******
+                            </div>
+                            <div className='infoEdit'
+                            >
+                                <UpdatePasswordModal />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='info'>
                         <div className='orderTitle'>Vai trò</div>
                         <div className='orderItem'>
                             <div className='infoData'>
@@ -216,12 +328,6 @@ const ShipperInfo = () => {
                         </div>
                     </div>
 
-                    {/* 
-                    <div className='orderChangeStatus'>
-                        <Button variant="contained"
-                            disabled={statusButton === 'Hoàn thành' ? true : false}
-                            onClick={() => openModal()}>Chuyển trạng thái</Button>
-                    </div> */}
                 </div>
             }
 
