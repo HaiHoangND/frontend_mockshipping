@@ -259,7 +259,6 @@ export const Topbar = () => {
         {pathname[1] === "orderDetail" ? `Mã vận đơn: ${pathname[2]}` : ""}
       </div>
       <div className="flex items-center justify-center">
-        <div className="profilePictureWrapper">
           <Dropdown
             menu={{
               items,
@@ -268,11 +267,12 @@ export const Topbar = () => {
             trigger={["click"]}
             className=" cursor-pointer"
           >
-            <Avatar size={40} icon={<UserOutlined />} className="mr-3" />
+            <div >
+              <Avatar size={40} icon={<UserOutlined />} className="mr-3" />
+              {user.fullName}
+            </div>
           </Dropdown>
         </div>
-        {user.fullName}
       </div>
-    </div>
   );
 };
