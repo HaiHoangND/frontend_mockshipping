@@ -46,6 +46,13 @@
                 width: 25vw;
                 height: 25vw;
                 border: 1px solid #0088ff;
+                display: flex;
+
+                img {
+                    flex: 1;
+                    max-width: 100%;
+                    height: auto;
+                }
             }
 
             .orderDetailInfo {
