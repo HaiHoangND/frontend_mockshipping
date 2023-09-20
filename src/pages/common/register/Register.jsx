@@ -5,6 +5,7 @@ import { districts } from "../../../utils/shortestPath";
 import { publicRequest, userRequest } from "../../../requestMethods";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import { Link, useNavigate } from "react-router-dom";
+import { validatePhoneNumber } from "../../shopOwner/createOrder/CreateOrder";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,22 +17,52 @@ const Register = () => {
   const handleInputsChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
-  const handleRegister = async () => {
-    const res = await userRequest.post("/register", {
-      fullName: inputs.fullName,
-      email: inputs.email,
-      password: inputs.password,
-      role: "SHOP",
-      address: `${inputs.detailedAddress}, ${inputs.district}`,
-      gender: inputs.gender,
-      phone: inputs.phone,
-      workingStatus: true,
-    });
-    if (res.data.type === "success") {
-      useToastSuccess("Đăng kí thành công");
-      navigate("/login");
+
+  const validateInputs = () => {
+    if (
+      !inputs.fullName ||
+      !inputs.phone ||
+      !inputs.email ||
+      !inputs.detailedAddress ||
+      !inputs.password
+    ) {
+      useToastError("Chưa điền đủ thông tin");
+      return false;
+    } else if (!validatePhoneNumber(inputs.phone)) {
+      useToastError("Số điện thoại sai định dạng");
+      return false;
+    } else if (inputs.password.length < 8) {
+      useToastError("Mật khẩu phải từ 8 kí tự trở lên");
+      return false;
     } else {
-      return useToastError(res.data.message);
+      return true;
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      if (!validateInputs()) {
+        return;
+      } else {
+        const res = await userRequest.post("/register", {
+          fullName: inputs.fullName,
+          email: inputs.email,
+          password: inputs.password,
+          role: "SHOP",
+          address: `${inputs.detailedAddress}, ${inputs.district}`,
+          gender: inputs.gender,
+          phone: inputs.phone,
+          workingStatus: true,
+        });
+        if (res.data.type === "success") {
+          useToastSuccess("Đăng kí thành công");
+          navigate("/login");
+        } else {
+          return useToastError(res.data.message);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

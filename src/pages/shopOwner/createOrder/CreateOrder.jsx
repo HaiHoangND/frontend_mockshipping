@@ -53,10 +53,7 @@ const CreateOrder = () => {
     else return routeFee;
   };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  
 
   const validateReceiverInfo = () => {
     if (!receiverInfo) {
@@ -212,7 +209,7 @@ const CreateOrder = () => {
         </div>
         <div className="createOrderProductTableContainer">
           <h3>
-            <ReceiptLong fontSize="inherit" /> Danh sách sản phẩm
+            <ReceiptLong fontSize="inherit" /> Sản phẩm
           </h3>
           <ProductTable
             onProductWeightChange={handleProductWeightChange}
