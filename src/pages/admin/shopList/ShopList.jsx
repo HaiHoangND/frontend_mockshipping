@@ -62,12 +62,12 @@ const ShopList = () => {
       title: "Địa chỉ",
       dataIndex: "address",
     },
-    {
-      title: "Số lượng khách hàng",
-      dataIndex: "receiverList",
-      render: (list) => list?.length,
-      align: "center",
-    },
+    // {
+    //   title: "Số lượng khách hàng",
+    //   dataIndex: "receiverList",
+    //   render: (list) => list?.length,
+    //   align: "center",
+    // },
     // {
     //   title: "Sản phẩm trong kho",
     //   dataIndex: "productShops",

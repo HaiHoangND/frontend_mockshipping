@@ -129,7 +129,6 @@ const CreateOrder = () => {
       if (!validateReceiverInfo() || !validateProductInfo()) {
         return;
       } else {
-        console.log("chạy");
         let receiver;
         if (!receiverInfo.id) {
           const receiverData = await userRequest.post("/receiver", {
@@ -138,7 +137,6 @@ const CreateOrder = () => {
             phone: receiverInfo.phone,
             shopOwnerId: authUser().id,
           });
-          console.log(receiverData.data);
           receiver = receiverData.data.data.id;
         } else {
           receiver = receiverInfo.id;
@@ -150,7 +148,6 @@ const CreateOrder = () => {
           receiverId: receiver,
           serviceFee: calculateServiceFee(),
         });
-        console.log(shippingOrder);
         // Create routes
         await userRequest.post("/orderRoute", {
           address: currentShop.address,
@@ -189,8 +186,6 @@ const CreateOrder = () => {
             shopOwnerId: authUser().id,
           });
         }
-
-        useToastSuccess("Order created");
         navigate("/shop");
       }
     } catch (error) {
