@@ -10,7 +10,7 @@ export const OldCustomerTable = ({ onCustomerChange, searchQuery }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(1);
-  const pageSize = 10;
+  const pageSize = 6;
 
   const getOldCustomers = async (currentPage) => {
     try {

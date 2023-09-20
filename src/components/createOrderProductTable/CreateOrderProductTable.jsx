@@ -96,6 +96,7 @@ const DeleteSingleProductBtn = () => {
         marginRight: 8,
       }}
       icon={<DeleteOutlined />}
+      ghost
     >
       Xóa
     </Button>
@@ -221,6 +222,7 @@ export const CreateOrderProductTable = () => {
                 marginRight: 8,
               }}
               icon={<SaveOutlined />}
+              ghost
             >
               Lưu
             </Button>
@@ -236,6 +238,7 @@ export const CreateOrderProductTable = () => {
               style={{
                 marginRight: 8,
               }}
+              
             >
               Hủy
             </Button>

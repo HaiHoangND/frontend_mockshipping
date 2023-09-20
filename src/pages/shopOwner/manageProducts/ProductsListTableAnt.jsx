@@ -7,6 +7,7 @@ import {
   InputNumber,
   Typography,
   Upload,
+  Tag,
 } from "antd";
 import { DeleteOutlined, SaveOutlined, EditOutlined } from "@ant-design/icons";
 import { useAuthUser } from "react-auth-kit";
@@ -59,6 +60,7 @@ const DeleteOneProductBtn = () => {
       danger
       style={{ marginRight: "8px" }}
       icon={<DeleteOutlined />}
+      ghost
     >
       Xóa
     </Button>
@@ -68,7 +70,7 @@ const DeleteOneProductBtn = () => {
 export const ProductsListTableAnt = ({ searchQuery }) => {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
-  const pageSize = 10;
+  const pageSize = 6;
   const [totalCount, setTotalCount] = useState(1);
   const authUser = useAuthUser();
   const [form] = Form.useForm();
@@ -82,7 +84,8 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
     try {
       setIsLoading(true);
       let res = await userRequest.get(
-        `/productShop/getByShopOwnerId?ShopOwnerId=${authUser().id
+        `/productShop/getByShopOwnerId?ShopOwnerId=${
+          authUser().id
         }&pageNumber=${currentPage}&pageSize=${pageSize}&keyWord=${searchQuery}`
       );
       if (res.data.type === "success") {
@@ -216,6 +219,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       title: "Mô tả sản phẩm",
       dataIndex: "description",
       editable: true,
+      align:"center"
     },
     {
       title: "Số lượng",
@@ -224,10 +228,35 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       align: "center",
     },
     {
+      title: "Tình trạng",
+      align: "center",
+      dataIndex: "quantity",
+      render: (quantity) => {
+        let tagColor;
+        let tagContent;
+        if (quantity > 5) {
+          tagColor = "green";
+          tagContent = "Còn hàng";
+        } else if (quantity <= 5 && quantity > 0) {
+          tagColor = "yellow";
+          tagContent = "Sắp hết hàng";
+        } else if (quantity === 0) {
+          tagColor = "red";
+          tagContent = "Hết hàng";
+        } else {
+          // Handle any other cases here
+          tagColor = "gray";
+          tagContent = "Không rõ tình trạng";
+        }
+        return <Tag color={tagColor}>{tagContent}</Tag>;
+      },
+    },
+    {
       title: "Sửa",
       dataIndex: "action",
       width: "18vw",
       align: "center",
+      width:170,
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
@@ -239,6 +268,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
                 marginRight: 8,
               }}
               icon={<SaveOutlined />}
+              ghost
             >
               Lưu
             </Button>
