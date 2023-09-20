@@ -87,6 +87,7 @@ export const ProductTable = ({
       render: (_, record) => (
         <InputNumber
           min={1}
+          defaultValue={1}
           max={record.quantity}
           value={record.shipQuantity} // Set the value from the product's shipQuantity
           onChange={
@@ -112,6 +113,7 @@ export const ProductTable = ({
     const newArr = removeItemByIndex(orderProducts, index);
     setOrderProducts(newArr);
     onProductChange(newArr);
+    
   };
 
   const onProductQuantityChange = (productId, newQuantity) => {

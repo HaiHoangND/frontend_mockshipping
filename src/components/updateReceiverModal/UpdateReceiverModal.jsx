@@ -45,7 +45,7 @@ export const UpdateReceiverModal = ({ receiver }) => {
   };
   return (
     <>
-      <Button icon={<EditOutlined />} type="primary" onClick={openModal} />
+      <Button icon={<EditOutlined />} type="primary" onClick={openModal} ghost/>
 
       <Modal
         title="Cập nhật khách hàng cũ"

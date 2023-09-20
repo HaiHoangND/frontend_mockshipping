@@ -104,7 +104,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
           className="flex justify-center"
           style={{ cursor: "pointer" }}
         >
-          <Button type="primary" icon={<EditOutlined />} />
+          <Button type="primary" icon={<EditOutlined />} ghost/>
         </div>
       ) : (
         <div className="shipperTableAddEmployeeBtn" onClick={openModal}>

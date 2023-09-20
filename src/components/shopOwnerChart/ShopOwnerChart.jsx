@@ -11,7 +11,8 @@ export const ShopOwnerChart = ({ month, year, onProfitDataChange }) => {
     const getProfitData = async () => {
       try {
         const res = await userRequest.get(
-          `/order/statisticMonthForShop?month=${month}&year=${year}&shopOwnerId=${authUser().id
+          `/order/statisticMonthForShop?month=${month}&year=${year}&shopOwnerId=${
+            authUser().id
           }`
         );
         setProfitData(res.data.data);
@@ -48,6 +49,7 @@ export const ShopOwnerChart = ({ month, year, onProfitDataChange }) => {
             grid: {
               display: false,
             },
+            beginAtZero: true,
           },
         },
       }}

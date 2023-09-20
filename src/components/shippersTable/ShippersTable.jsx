@@ -1,9 +1,17 @@
 import { styled } from "styled-components";
 import "./shippersTable.scss";
 import { UpdateEmployeeInfoModal } from "../updateEmployeeInfoModal/UpdateEmployeeInfoModal";
-import { Table, Tag } from "antd";
+import { Button, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { publicRequest, userRequest } from "../../requestMethods";
+import { RetweetOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { useToastError } from "../../utils/toastSettings";
+import { WarningModal } from "../warningModal/WarningModal";
+
+const ResetPasswordBtn = () => {
+  return <Button icon={<RetweetOutlined />} />;
+};
 
 export const ShippersTable = ({ searchQuery }) => {
   const [shippers, setShippers] = useState([]);
@@ -11,6 +19,7 @@ export const ShippersTable = ({ searchQuery }) => {
   const [totalCount, setTotalCount] = useState(1);
   const pageSize = 10;
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getShippers = async (currentPage) => {
     try {
@@ -22,6 +31,21 @@ export const ShippersTable = ({ searchQuery }) => {
       setTotalCount(res.data.data.totalElements);
       setPage(currentPage);
       setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleResetPassword = async (id) => {
+    try {
+      const res = await userRequest.put(
+        `/user/updatePassword?id=${id}&password=12345678`
+      );
+      if (res.data.type === "success") {
+        navigate(0);
+      } else {
+        useToastError("Có lỗi xảy ra");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -86,9 +110,21 @@ export const ShippersTable = ({ searchQuery }) => {
     {
       title: "Cập nhật thông tin",
       align: "center",
-      render: (_, record) => (
-        <UpdateEmployeeInfoModal type={"update"} employeeInfo={record} />
-      ),
+      render: (_, record) => {
+        return (
+          <div className="flex items-center justify-center gap-3">
+            <UpdateEmployeeInfoModal type={"update"} employeeInfo={record} />
+            <WarningModal
+              InitiateComponent={ResetPasswordBtn}
+              confirmFunction={handleResetPassword}
+              parameters={record.user.id}
+              warningContent={
+                "Bạn có chắc chắn muốn đặt lại mật khẩu cho tài khoản này?"
+              }
+            />
+          </div>
+        );
+      },
     },
   ];
   return (

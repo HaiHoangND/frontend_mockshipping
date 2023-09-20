@@ -106,7 +106,7 @@ const ShopOwnerDashboard = () => {
                     />
                   </div>
                 </div>
-                <div className="shopOwnerOverviewTile flex-1" >
+                <div className="shopOwnerOverviewTile flex-1">
                   <div className="left">
                     <span>Đang vận chuyển</span>
                     <div className="bigNumber">{statistics.Delivering}</div>
@@ -126,7 +126,8 @@ const ShopOwnerDashboard = () => {
                 <div className="left">
                   <span>Doanh thu trong ngày</span>
                   <div className="bigNumber">
-                    {convertCurrency(displayProfitPerDay(profit, date.day))}
+                    {profit.length !== 0 &&
+                      convertCurrency(displayProfitPerDay(profit, parseInt(date.day)))}
                   </div>
                 </div>
                 <div className="right">

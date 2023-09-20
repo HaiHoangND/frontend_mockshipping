@@ -87,9 +87,10 @@ const CreateOrder = () => {
       if (product.shipQuantity === 0) {
         return false;
       } else {
-        return true;
+        continue;
       }
     }
+    return true;
   };
   // console.log(receiverInfo);
   // console.log(products);
@@ -195,7 +196,7 @@ const CreateOrder = () => {
       console.log(error);
     }
   };
-
+  console.log(products);
   return (
     <div className="bodyContainer">
       <Sidebar />

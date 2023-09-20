@@ -156,18 +156,18 @@ const getArrayLastItem = (array) => {
   return array[array.length - 1];
 };
 
-const renderEmployee = (invoice) => {
-  if (!invoice) return;
-  if (invoice.orderStatusList.length === 0) return;
+// const renderEmployee = (invoice) => {
+//   if (!invoice) return;
+//   if (invoice.orderStatusList.length === 0) return;
 
-  const shipper = getArrayLastItem(invoice.orderStatusList).shipper;
+//   const shipper = getArrayLastItem(invoice.orderStatusList).shipper;
 
-  infoEmployee.innerHTML = `
-  ${shipper.fullName}<br />
-  ${shipper.phone}<br />
-  ${shipper.email}<br />
-  `;
-};
+//   infoEmployee.innerHTML = `
+//   ${shipper.fullName}<br />
+//   ${shipper.phone}<br />
+//   ${shipper.email}<br />
+//   `;
+// };
 
 const renderTableService = (invoice) => {
   if (!invoice) return;
@@ -247,7 +247,7 @@ const renderInvoice = (invoice) => {
   renderCustomer(invoice);
   renderStore(invoice);
   renderMotorbike(invoice);
-  renderEmployee(invoice);
+  // renderEmployee(invoice);
   renderTableService(invoice);
 };
 
