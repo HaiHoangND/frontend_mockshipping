@@ -1,0 +1,54 @@
+.topOrderMenu {
+    background-color: rgb(228, 228, 228);
+
+    .backToAllOrders {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        margin-top: 30px;
+        height: 60px;
+        align-items: center;
+        width: 90vw;
+
+
+        .backTitle {
+            margin: 0 auto;
+            font-size: 25px;
+        }
+    }
+}
+
+.orderDetailContainer {
+    width: 90vw;
+    margin: 0 auto;
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        margin-top: 20px;
+
+        .orderTitle {
+            font-weight: bold;
+        }
+
+        .orderItem {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: row;
+
+            .infoData {
+                width: 95%;
+            }
+        }
+
+    }
+
+
+
+}
+
+.orderChangeStatus button {
+    width: 90vw;
+    background-color: #0088ff;
+}

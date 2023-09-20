@@ -16,6 +16,7 @@ import Register from "./pages/common/register/Register";
 import ManageProducts from "./pages/shopOwner/manageProducts/manageProducts";
 import ReceiverList from "./pages/shopOwner/receiverList/ReceiverList";
 import ShopOwnerDashboard from "./pages/shopOwner/shopOwnerDashboard/ShopOwnerDashboard";
+import ShipperInfo from "./pages/shipper/personalInfo/shipperInfo";
 
 
 function App() {
@@ -97,6 +98,11 @@ function App() {
         <Route
           path="/shipper/shipperOrderDetail/:orderCode"
           element={<ShipperRoute Component={ShipperOrderDetail} />}
+        />
+
+        <Route
+          path="/shipper/shipperPersonalInfo/:id"
+          element={<ShipperRoute Component={ShipperInfo} />}
         />
 
         <Route

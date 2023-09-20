@@ -1,4 +1,4 @@
-import { KeyboardReturn, WarningAmber } from "@mui/icons-material";
+import { KeyboardReturn, WarningAmber, Settings } from "@mui/icons-material";
 import { Button, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
@@ -266,6 +266,13 @@ const ShipperAllOrders = () => {
         <div className="botBar">
           <div className="botBarItem" onClick={() => signOut()}>
             <KeyboardReturn /> Đăng xuất
+          </div>
+
+          <div className="botBarItem">
+            <Link to={`/shipper/shipperPersonalInfo/${authUser().id}`}>
+              <Settings />
+            </Link>
+            Tài khoản
           </div>
         </div>
       </div>

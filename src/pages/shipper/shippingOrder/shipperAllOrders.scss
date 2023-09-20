@@ -21,7 +21,7 @@
             width: 100%;
             display: flex;
             flex-direction: row;
-            
+
             button {
                 border: none;
                 width: 50%;
@@ -106,7 +106,8 @@
     .botBar {
         display: flex;
         flex-direction: row;
-        width: 100%;
+        margin: 0 auto;
+        width: 90vw;
         height: 10vh;
         position: fixed;
         bottom: 0;
@@ -116,7 +117,7 @@
         .botBarItem {
             flex-grow: 0;
             flex-shrink: 0;
-            width: 90vw;
+            width: 50%;
             display: flex;
             flex-direction: column;
             text-align: center;
