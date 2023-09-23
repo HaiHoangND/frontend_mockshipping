@@ -53,8 +53,7 @@ const CreateOrder = () => {
     else return routeFee;
   };
 
-  
-
+  console.log(products);
   const validateReceiverInfo = () => {
     if (!receiverInfo) {
       useToastError("Chưa điền thông tin khách hàng");
@@ -171,6 +170,7 @@ const CreateOrder = () => {
             image: product.image,
             weight: product.weight,
             description: product.description,
+            productCode: product.productCode,
             shippingOrderId: shippingOrder.data.data,
           });
         }
