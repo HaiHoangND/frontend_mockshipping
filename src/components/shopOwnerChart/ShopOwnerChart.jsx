@@ -32,6 +32,7 @@ export const ShopOwnerChart = ({ month, year, onProfitDataChange }) => {
       {
         label: "Profit", // Use 'label' instead of 'labels' for the dataset label
         data: profitData.map((data) => data.profit),
+        pointRadius: 0,
       },
     ],
   };

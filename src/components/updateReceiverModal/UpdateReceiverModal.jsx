@@ -45,7 +45,12 @@ export const UpdateReceiverModal = ({ receiver }) => {
   };
   return (
     <>
-      <Button icon={<EditOutlined />} type="primary" onClick={openModal} ghost/>
+      <Button
+        icon={<EditOutlined />}
+        type="primary"
+        onClick={openModal}
+        ghost
+      />
 
       <Modal
         title="Cập nhật khách hàng cũ"
@@ -68,6 +73,7 @@ export const UpdateReceiverModal = ({ receiver }) => {
               placeholder={receiver.name}
               name="name"
               onChange={handleInputsChange}
+              defaultValue={receiver.name}
             />
           </Form.Item>
           <Form.Item label="Số điện thoại">
@@ -75,6 +81,7 @@ export const UpdateReceiverModal = ({ receiver }) => {
               placeholder={receiver.phone}
               name="phone"
               onChange={handleInputsChange}
+              defaultValue={receiver.phone}
             />
           </Form.Item>
           <Form.Item label="Địa chỉ">
@@ -82,6 +89,7 @@ export const UpdateReceiverModal = ({ receiver }) => {
               placeholder={receiver.address}
               name="address"
               onChange={handleInputsChange}
+              defaultValue={receiver.address}
             />
           </Form.Item>
         </Form>

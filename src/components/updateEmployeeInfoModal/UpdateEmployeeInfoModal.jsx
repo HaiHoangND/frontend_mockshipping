@@ -104,7 +104,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
           className="flex justify-center"
           style={{ cursor: "pointer" }}
         >
-          <Button type="primary" icon={<EditOutlined />} ghost/>
+          <Button type="primary" icon={<EditOutlined />} ghost />
         </div>
       ) : (
         <div className="shipperTableAddEmployeeBtn" onClick={openModal}>
@@ -133,13 +133,14 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
               name="fullName"
               placeholder={employeeInfo ? inputs.fullName : "Trần Phi Long"}
               onChange={handleInputsChange}
+              defaultValue={employeeInfo ? inputs.fullName : ""}
             />
           </Form.Item>
           <Form.Item label="Giới tính">
             <Select
               placeholder={employeeInfo ? inputs.gender : "Nam"}
               onChange={handleGenderChange}
-              defaultValue={"Nam"}
+              defaultValue={employeeInfo ? inputs.gender : "Nam"}
             >
               <Option value={"Nam"} label={"Nam"}>
                 <Space>Nam</Space>
@@ -161,6 +162,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
               name="email"
               placeholder={employeeInfo ? inputs.email : "example@email.com"}
               onChange={handleInputsChange}
+              defaultValue={employeeInfo ? inputs.email : ""}
             />
           </Form.Item>
           <Form.Item label="Địa chỉ">
@@ -170,6 +172,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
                 employeeInfo ? inputs.address : "256 Đội Cấn, Ba Đình"
               }
               onChange={handleInputsChange}
+              defaultValue={employeeInfo ? inputs.address : ""}
             />
           </Form.Item>
           <Form.Item label="Chức vụ">
@@ -211,9 +214,6 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
               </Select>
             </Form.Item>
           )}
-          <Form.Item label="Mật khẩu">
-            <Input.Password name="password" onChange={handleInputsChange} />
-          </Form.Item>
         </Form>
       </Modal>
     </>

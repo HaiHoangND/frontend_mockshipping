@@ -316,17 +316,6 @@ const ShipperInfo = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='info'>
-                        <div className='orderTitle'>Vai trò</div>
-                        <div className='orderItem'>
-                            <div className='infoData'>
-                                {info?.role}
-                            </div>
-                            <div className='infoEdit'
-                            >
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             }

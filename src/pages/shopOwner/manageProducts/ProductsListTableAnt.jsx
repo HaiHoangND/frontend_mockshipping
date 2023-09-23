@@ -16,6 +16,7 @@ import { publicRequest, userRequest } from "../../../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { WarningModal } from "../../../components/warningModal/WarningModal";
 import { convertCurrency } from "../../../utils/formatStrings";
+import { Excel } from "antd-table-saveas-excel";
 
 const EditableCell = ({
   editing,
@@ -67,6 +68,8 @@ const DeleteOneProductBtn = () => {
   );
 };
 
+
+
 export const ProductsListTableAnt = ({ searchQuery }) => {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -98,6 +101,8 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       console.log(error);
     }
   };
+
+ 
 
   useEffect(() => {
     getProducts(1);
@@ -219,7 +224,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       title: "Mô tả sản phẩm",
       dataIndex: "description",
       editable: true,
-      align:"center"
+      align: "center",
     },
     {
       title: "Số lượng",
@@ -256,7 +261,7 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
       dataIndex: "action",
       width: "18vw",
       align: "center",
-      width:170,
+      width: 170,
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
@@ -332,28 +337,31 @@ export const ProductsListTableAnt = ({ searchQuery }) => {
   }, [products]);
 
   return (
-    <Form form={form} component={false}>
-      <Table
-        rowKey={(_, record) => record.id}
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        bordered
-        loading={isLoading}
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          pageSize: pageSize,
-          current: page,
-          total: totalCount,
-          onChange: (page) => {
-            getProducts(page);
-          },
-        }}
-      />
-    </Form>
+    <>
+      
+      <Form form={form} component={false}>
+        <Table
+          rowKey={(_, record) => record.id}
+          components={{
+            body: {
+              cell: EditableCell,
+            },
+          }}
+          bordered
+          loading={isLoading}
+          dataSource={data}
+          columns={mergedColumns}
+          rowClassName="editable-row"
+          pagination={{
+            pageSize: pageSize,
+            current: page,
+            total: totalCount,
+            onChange: (page) => {
+              getProducts(page);
+            },
+          }}
+        />
+      </Form>
+    </>
   );
 };

@@ -1,6 +1,6 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { TextField } from "@mui/material";
-import { Button, Modal, Upload } from "antd";
+import { Button, Form, Input, Modal, Upload } from "antd";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRef, useState } from "react";
 import { v4 } from "uuid";
@@ -18,6 +18,7 @@ export const AddProductModal = ({
   handleOpenChange,
 }) => {
   const [inputs, setInputs] = useState({});
+  const [numberInputs, setNumberInputs] = useState({});
   const [imgFile, setImgFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const uploadRef = useRef();
@@ -26,9 +27,14 @@ export const AddProductModal = ({
     handleOpenChange(false);
   }
 
-
   const validateInputs = () => {
-    if (!inputs.name || !inputs.price || !inputs.weight || !inputs.quantity || !inputs.description) {
+    if (
+      !inputs.name ||
+      !inputs.price ||
+      !inputs.weight ||
+      !inputs.quantity ||
+      !inputs.description
+    ) {
       useToastError("Chưa điền đủ thông tin sản phẩm");
       return false;
     } else if (!validateInt(inputs.price)) {
@@ -44,7 +50,6 @@ export const AddProductModal = ({
       return true;
     }
   };
-
 
   const handleInputsChange = (e) => {
     setInputs({
@@ -74,7 +79,29 @@ export const AddProductModal = ({
       closeModal();
     }
   };
+  const handleInputNumberChange = (e) => {
+    const rawValue = e.target.value;
+    const unformattedValue = rawValue.replace(/,/g, "");
+    // Remove existing commas and parse the number
+    const parsedValue = parseFloat(unformattedValue);
 
+    // Check if the parsed value is a valid number
+    if (!isNaN(parsedValue)) {
+      // Format the number with commas and update the input value
+      setInputs({ ...inputs, [e.target.name]: unformattedValue });
+      setNumberInputs({
+        ...numberInputs,
+        [e.target.name]: parsedValue.toLocaleString(),
+      });
+    } else {
+      // Handle invalid input (optional)
+      setInputs({ ...inputs, [e.target.name]: "" });
+      setNumberInputs({
+        ...numberInputs,
+        [e.target.name]: "",
+      });
+    }
+  };
   return (
     <>
       <Modal
@@ -87,8 +114,53 @@ export const AddProductModal = ({
         okText="Xác nhận"
         width={570}
       >
-        <div className="mt-2">
-          <div className="createProductModalInputsWrapper">
+        <div className="mt-5">
+          <Form
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 19 }}
+            layout="horizontal"
+          >
+            <Form.Item label="Tên">
+              <Input
+                name="name"
+                placeholder="Áo khoác da"
+                onChange={handleInputsChange}
+              />
+            </Form.Item>
+            <Form.Item label="Số lượng">
+              <Input
+                name="quantity"
+                placeholder="10"
+                value={numberInputs.quantity}
+                onChange={handleInputNumberChange}
+              />
+            </Form.Item>
+            <Form.Item label="Cân nặng">
+              <Input
+                name="weight"
+                placeholder="10"
+                onChange={handleInputsChange}
+                addonAfter="kg"
+              />
+            </Form.Item>
+            <Form.Item label="Đơn giá">
+              <Input
+                name="price"
+                placeholder="200,000"
+                value={numberInputs.price}
+                onChange={handleInputNumberChange}
+                addonAfter="₫"
+              />
+            </Form.Item>
+            <Form.Item label="Mô tả">
+              <Input
+                name="description"
+                placeholder="Áo khoác ấm"
+                onChange={handleInputsChange}
+              />
+            </Form.Item>
+          </Form>
+          {/* <div className="createProductModalInputsWrapper">
             <div className="createProductModalInputWrapper col-span-2">
               <TextField
                 name="name"
@@ -131,6 +203,7 @@ export const AddProductModal = ({
                 onChange={handleInputsChange}
                 size="small"
                 value={inputs.price || ""}
+                type="number"
               />
             </div>
             <div className="createProductModalInputWrapper col-span-2">
@@ -158,7 +231,7 @@ export const AddProductModal = ({
                 Chọn hình ảnh sản phẩm
               </Button>
             </Upload>
-          </div>
+          </div> */}
         </div>
       </Modal>
     </>
