@@ -5,8 +5,6 @@ import { publicRequest, userRequest } from "../../requestMethods";
 
 export const ProfitChart = ({ month, year }) => {
   const [profitData, setProfitData] = useState([]);
-  console.log(profitData);
-
   useEffect(() => {
     const getProfitData = async () => {
       try {
@@ -27,7 +25,7 @@ export const ProfitChart = ({ month, year }) => {
     labels: profitData.map((data) => data.date),
     datasets: [
       {
-        label: "Profit", // Use 'label' instead of 'labels' for the dataset label
+        label: "Doanh thu", // Use 'label' instead of 'labels' for the dataset label
         data: profitData.map((data) => data.profit),
         pointRadius: 0,
       },

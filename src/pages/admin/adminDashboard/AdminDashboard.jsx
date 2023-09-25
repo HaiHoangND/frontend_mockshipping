@@ -2,6 +2,7 @@ import {
   AttachMoney,
   CheckCircle,
   DeliveryDining,
+  PeopleAlt,
   ReceiptLong,
   TrendingUp,
 } from "@mui/icons-material";
@@ -16,6 +17,9 @@ import { convertCurrency } from "../../../utils/formatStrings";
 import { Searchbar } from "../../../components/searchbar/Searchbar";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
+import { PercentageOutlined } from "@ant-design/icons";
+import { AdminPieChart } from "../../../components/adminPieChart/AdminPieChart";
+import { TopShopTable } from "../../../components/topShopTable/TopShopTable";
 
 const AdminDashboard = () => {
   const [successfulOrders, setSuccessfulOrders] = useState(0);
@@ -25,10 +29,6 @@ const AdminDashboard = () => {
   const currentDay = currentDate.getDate().toString().padStart(2, "0"); // Get the day and pad it with leading zeros if needed
   const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Get the month (Note: Month is zero-based, so we add 1) and pad it
   const currentYear = currentDate.getFullYear();
-  const [searchQuery, setSearchQuery] = useState("");
-  const handleSearchQueryChange = (newQuery) => {
-    setSearchQuery(newQuery);
-  };
 
   const [date, setDate] = useState({
     day: currentDay,
@@ -142,17 +142,35 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="adminListTableContainer">
-            <div className="titleWrapper">
+          <div
+            className="grid grid-cols-2 gap-7"
+            style={{ padding: "0px 120px" }}
+          >
+            <div className="adminLowerItem">
               <h3>
-                <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
+                <PercentageOutlined />
+                Tỉ lệ đơn
               </h3>
-              <Searchbar
-                onInputChange={handleSearchQueryChange}
-                placeholderText={"Mã vận đơn"}
-              />
+              <div
+                className="flex justify-center"
+                style={{height:"100%"}}
+              >
+                <AdminPieChart
+                  day={date.day}
+                  month={date.month}
+                  year={date.year}
+                />
+              </div>
             </div>
-            <OrderListTableAnt searchQuery={searchQuery} />
+            <div className="adminLowerItem">
+              <h3>
+                <PeopleAlt />
+                Top đối tác
+              </h3>
+              <div className="mt-5">
+                <TopShopTable />
+              </div>
+            </div>
           </div>
         </div>
       </div>

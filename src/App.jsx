@@ -1,5 +1,11 @@
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
-import { BrowserRouter, HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  HashRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "./pages/admin/adminDashboard/AdminDashboard";
@@ -17,7 +23,7 @@ import ManageProducts from "./pages/shopOwner/manageProducts/manageProducts";
 import ReceiverList from "./pages/shopOwner/receiverList/ReceiverList";
 import ShopOwnerDashboard from "./pages/shopOwner/shopOwnerDashboard/ShopOwnerDashboard";
 import ShipperInfo from "./pages/shipper/personalInfo/shipperInfo";
-
+import OrderList from "./pages/common/orderList/OrderList";
 
 function App() {
   const isAuthenticated = useIsAuthenticated();
@@ -115,8 +121,7 @@ function App() {
         />
         <Route
           path="/shop"
-          element
-          ={<ShopRoute Component={ShopOwnerDashboard} />}
+          element={<ShopRoute Component={ShopOwnerDashboard} />}
         />
         <Route
           path="/shop/manageProducts"
@@ -125,6 +130,10 @@ function App() {
         <Route
           path="/shop/clients"
           element={<ShopRoute Component={ReceiverList} />}
+        />
+        <Route
+          path="/orderList"
+          element={<CommonRoute Component={OrderList} />}
         />
       </Routes>
     </BrowserRouter>

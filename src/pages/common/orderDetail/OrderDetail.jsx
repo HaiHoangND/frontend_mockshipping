@@ -147,7 +147,9 @@ const OrderDetail = () => {
   };
 
   const cancelable = () => {
-    if (
+    if (role !== "ADMIN" && role !== "COORDINATOR") {
+      return false;
+    } else if (
       order.orderStatusList.length !== 0 &&
       order.orderStatusList[0].status === "Đơn hủy"
     ) {
@@ -185,10 +187,10 @@ const OrderDetail = () => {
     } else if (
       order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
       getArrayLastItem(order.orderStatusList).status ===
-      "Đã đưa tiền cho chủ shop" ||
+        "Đã đưa tiền cho chủ shop" ||
       order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
       getArrayLastItem(order.orderStatusList).status ===
-      "Giao hàng thành công" ||
+        "Giao hàng thành công" ||
       order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
       getArrayLastItem(order.orderStatusList).status === "Quản lý đã nhận tiền"
     ) {
@@ -229,7 +231,7 @@ const OrderDetail = () => {
                 <div
                   className={
                     order.orderStatusList.length > 0 &&
-                      getArrayLastItem(order.orderStatusList).status ===
+                    getArrayLastItem(order.orderStatusList).status ===
                       "Đang lấy hàng"
                       ? "statusBubble inProgress"
                       : "statusBubble"
@@ -247,7 +249,7 @@ const OrderDetail = () => {
                 <div
                   className={
                     order.orderStatusList.length > 0 &&
-                      getArrayLastItem(order.orderStatusList).status ===
+                    getArrayLastItem(order.orderStatusList).status ===
                       "Lấy hàng thành công"
                       ? "statusBubble inProgress"
                       : "statusBubble"
@@ -265,7 +267,7 @@ const OrderDetail = () => {
                 <div
                   className={
                     order.orderStatusList.length > 0 &&
-                      getArrayLastItem(order.orderStatusList).status ===
+                    getArrayLastItem(order.orderStatusList).status ===
                       "Đang giao hàng"
                       ? "statusBubble inProgress"
                       : "statusBubble"
@@ -283,7 +285,7 @@ const OrderDetail = () => {
                 <div
                   className={
                     order.orderStatusList.length > 0 &&
-                      getArrayLastItem(order.orderStatusList).status ===
+                    getArrayLastItem(order.orderStatusList).status ===
                       "Giao hàng thành công"
                       ? "statusBubble success"
                       : "statusBubble"
@@ -301,7 +303,7 @@ const OrderDetail = () => {
                 <div
                   className={
                     order.orderStatusList.length > 0 &&
-                      getArrayLastItem(order.orderStatusList).status ===
+                    getArrayLastItem(order.orderStatusList).status ===
                       "Quản lý đã nhận tiền"
                       ? "statusBubble success"
                       : "statusBubble"
@@ -319,7 +321,7 @@ const OrderDetail = () => {
                 <div
                   className={
                     order.orderStatusList.length > 0 &&
-                      getArrayLastItem(order.orderStatusList).status ===
+                    getArrayLastItem(order.orderStatusList).status ===
                       "Đã đưa tiền cho chủ shop"
                       ? "statusBubble success"
                       : "statusBubble"
@@ -364,12 +366,6 @@ const OrderDetail = () => {
                   </div>
                   {order.orderStatusList.length !== 0 ? (
                     <>
-                      <div className="shipperDetailItem">
-                        <span>Mã số nhân viên:</span>
-                        <span>
-                          {getArrayLastItem(order.orderStatusList).shipper.id}
-                        </span>
-                      </div>
                       <div className="shipperDetailItem">
                         <span>Tên:</span>
                         <span>
@@ -422,8 +418,8 @@ const OrderDetail = () => {
                         </div>
                         <div className={chooseClassName(status)}>
                           {status.status === "Giao hàng thành công" ||
-                            status.status === "Quản lý đã nhận tiền" ||
-                            status.status === "Đã đưa tiền cho chủ shop" ? (
+                          status.status === "Quản lý đã nhận tiền" ||
+                          status.status === "Đã đưa tiền cho chủ shop" ? (
                             <DoneOutlined />
                           ) : status.status === "Đơn hủy" ? (
                             <Clear />

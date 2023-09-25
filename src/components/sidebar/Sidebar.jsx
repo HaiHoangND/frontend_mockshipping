@@ -70,6 +70,17 @@ export const Sidebar = () => {
                 <Home /> Trang chủ
               </div>
             </Link>
+            <Link to="/orderList">
+              <div
+                className={
+                  pathname[1] === "orderList"
+                    ? "sidebarItem selected"
+                    : "sidebarItem"
+                }
+              >
+                <ReceiptLong /> Danh sách đơn hàng
+              </div>
+            </Link>
             <Link to="/coordinator/shipperList">
               <div
                 className={
@@ -89,7 +100,7 @@ export const Sidebar = () => {
                     : "sidebarItem"
                 }
               >
-                <ShoppingCart/> Danh sách các shop
+                <ShoppingCart /> Danh sách các shop
               </div>
             </Link>
           </>
@@ -105,6 +116,17 @@ export const Sidebar = () => {
                 }
               >
                 <Home /> Trang chủ
+              </div>
+            </Link>
+            <Link to="/orderList">
+              <div
+                className={
+                  pathname[1] === "orderList"
+                    ? "sidebarItem selected"
+                    : "sidebarItem"
+                }
+              >
+                <ReceiptLong /> Danh sách đơn hàng
               </div>
             </Link>
             <Link to={"/shop/createOrder"}>

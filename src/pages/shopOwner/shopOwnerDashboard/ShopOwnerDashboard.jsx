@@ -3,8 +3,10 @@ import {
   AttachMoney,
   BackupTable,
   DoneAll,
+  LocalAtm,
   LocalShippingRounded,
   ReceiptLong,
+  RemoveShoppingCart,
 } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
@@ -19,15 +21,12 @@ import { OrderListTableAnt } from "../../../components/orderListTable/OrderListT
 import { ShopOwnerChart } from "../../../components/shopOwnerChart/ShopOwnerChart";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
+import { ShopOwnerProductStatTable } from "../../../components/shopOwnerProductStatTable/ShopOwnerProductStatTable";
 
 const ShopOwnerDashboard = () => {
   const [statistics, setStatistics] = useState({});
   const [profit, setProfit] = useState([]);
   const authUser = useAuthUser();
-  const [searchQuery, setSearchQuery] = useState("");
-  const handleSearchQueryChange = (newQuery) => {
-    setSearchQuery(newQuery);
-  };
   const currentDate = new Date();
   const currentDay = currentDate.getDate().toString().padStart(2, "0"); // Get the day and pad it with leading zeros if needed
   const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Get the month (Note: Month is zero-based, so we add 1) and pad it
@@ -127,11 +126,13 @@ const ShopOwnerDashboard = () => {
                   <span>Doanh thu trong ngày</span>
                   <div className="bigNumber">
                     {profit.length !== 0 &&
-                      convertCurrency(displayProfitPerDay(profit, parseInt(date.day)))}
+                      convertCurrency(
+                        displayProfitPerDay(profit, parseInt(date.day))
+                      )}
                   </div>
                 </div>
                 <div className="right">
-                  <DoneAll
+                  <AttachMoney
                     style={{
                       backgroundColor: "#14ae5c",
                       borderColor: "#14ae5c",
@@ -143,17 +144,28 @@ const ShopOwnerDashboard = () => {
           </div>
         </div>
 
-        <div className="shopOwnerOrderListTableContainer">
-          <div className="titleWrapper">
+        <div
+          className="grid grid-cols-2 gap-7 mb-7"
+          style={{ padding: "0px 120px" }}
+        >
+          <div className="shopOwnerLowerItem">
             <h3>
-              <ReceiptLong fontSize="inherit" /> Danh sách đơn hàng
+              <RemoveShoppingCart />
+              Sản phẩm sắp hết
             </h3>
-            <Searchbar
-              onInputChange={handleSearchQueryChange}
-              placeholderText={"Mã vận đơn"}
-            />
+            <div className="mt-5">
+              <ShopOwnerProductStatTable type={"soldOut"}/>
+            </div>
           </div>
-          <OrderListTableAnt searchQuery={searchQuery} />
+          <div className="shopOwnerLowerItem">
+            <h3>
+              <LocalAtm />
+              Sản phẩm bán chạy
+            </h3>
+            <div className="mt-5">
+              <ShopOwnerProductStatTable />
+            </div>
+          </div>
         </div>
       </div>
     </div>

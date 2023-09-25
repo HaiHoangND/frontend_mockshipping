@@ -159,6 +159,21 @@ export const AddProductModal = ({
                 onChange={handleInputsChange}
               />
             </Form.Item>
+            <Form.Item label="Hình ảnh">
+              <Upload
+                ref={uploadRef}
+                listType="picture"
+                maxCount={1}
+                beforeUpload={(file) => {
+                  setImgFile(file);
+                  return false;
+                }}
+              >
+                <Button icon={<UploadOutlined />} type="primary">
+                  Chọn hình ảnh sản phẩm
+                </Button>
+              </Upload>
+            </Form.Item>
           </Form>
           {/* <div className="createProductModalInputsWrapper">
             <div className="createProductModalInputWrapper col-span-2">
