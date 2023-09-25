@@ -243,20 +243,14 @@ const ShipperAllOrders = () => {
                   </div>
                 </Link>
                 <div className="orderChangeStatus">
-                  <Button
-                    variant="contained "
-                    onClick={() => handleVerified(index)}
-                    disabled={type === "Hoàn thành" ? true : false}
-                    style={
-                      type === "Hoàn thành"
-                        ? {
-                          backgroundColor: "grey",
-                        }
-                        : {}
-                    }
-                  >
-                    Chuyển trạng thái
-                  </Button>
+                  {type !== "Hoàn thành" && (
+                    <Button
+                      variant="contained "
+                      onClick={() => handleVerified(index)}
+                    >
+                      Chuyển trạng thái
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -267,12 +261,11 @@ const ShipperAllOrders = () => {
           <div className="botBarItem" onClick={() => signOut()}>
             <KeyboardReturn /> Đăng xuất
           </div>
-
           <div className="botBarItem">
             <Link to={`/shipper/shipperPersonalInfo/${authUser().id}`}>
-              <Settings />
+              <div><Settings /></div>
+              <div>Tài khoản</div>
             </Link>
-            Tài khoản
           </div>
         </div>
       </div>
