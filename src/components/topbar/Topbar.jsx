@@ -102,6 +102,7 @@ const UpdateUserInfoModal = () => {
               name="fullName"
               placeholder={inputs.fullName}
               onChange={handleInputsChange}
+              defaultValue={inputs.fullName}
             />
           </Form.Item>
           <Form.Item label="Email">
@@ -109,6 +110,7 @@ const UpdateUserInfoModal = () => {
               name="email"
               placeholder={inputs.email}
               onChange={handleInputsChange}
+              defaultValue={inputs.email}
             />
           </Form.Item>
           <Form.Item label="Số điện thoại">
@@ -116,6 +118,7 @@ const UpdateUserInfoModal = () => {
               name="phone"
               placeholder={inputs.phone}
               onChange={handleInputsChange}
+              defaultValue={inputs.phone}
             />
           </Form.Item>
           <Form.Item label="Địa chỉ">
@@ -123,6 +126,7 @@ const UpdateUserInfoModal = () => {
               name="address"
               placeholder={inputs.address}
               onChange={handleInputsChange}
+              defaultValue={inputs.address}
             />
           </Form.Item>
         </Form>
@@ -259,20 +263,20 @@ export const Topbar = () => {
         {pathname[1] === "orderDetail" ? `Mã vận đơn: ${pathname[2]}` : ""}
       </div>
       <div className="flex items-center justify-center">
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottom"
-            trigger={["click"]}
-            className=" cursor-pointer"
-          >
-            <div >
-              <Avatar size={40} icon={<UserOutlined />} className="mr-3" />
-              {user.fullName}
-            </div>
-          </Dropdown>
-        </div>
+        <Dropdown
+          menu={{
+            items,
+          }}
+          placement="bottom"
+          trigger={["click"]}
+          className=" cursor-pointer"
+        >
+          <div>
+            <Avatar size={40} icon={<UserOutlined />} className="mr-3" />
+            {user.fullName}
+          </div>
+        </Dropdown>
       </div>
+    </div>
   );
 };

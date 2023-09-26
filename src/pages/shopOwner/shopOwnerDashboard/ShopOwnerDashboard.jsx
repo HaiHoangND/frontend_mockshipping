@@ -153,8 +153,8 @@ const ShopOwnerDashboard = () => {
               <RemoveShoppingCart />
               Sản phẩm sắp hết
             </h3>
-            <div className="mt-5">
-              <ShopOwnerProductStatTable type={"soldOut"}/>
+            <div className="mt-5 " style={{ height: "100%", minHeight:"300px" }}>
+              <ShopOwnerProductStatTable type={"soldOut"} />
             </div>
           </div>
           <div className="shopOwnerLowerItem">
@@ -162,7 +162,7 @@ const ShopOwnerDashboard = () => {
               <LocalAtm />
               Sản phẩm bán chạy
             </h3>
-            <div className="mt-5">
+            <div className="mt-5" style={{ height: "100%" }}>
               <ShopOwnerProductStatTable />
             </div>
           </div>

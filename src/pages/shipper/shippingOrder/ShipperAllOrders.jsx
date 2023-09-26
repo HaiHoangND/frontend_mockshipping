@@ -60,14 +60,16 @@ const ShipperAllOrders = () => {
     console.log(tab);
     if (tab === "Chưa hoàn thành") {
       const res = await userRequest.get(
-        `/user/getFilterShippingOrders?shipperId=${authUser().id
+        `/user/getFilterShippingOrders?shipperId=${
+          authUser().id
         }&statusFilter=unSuccessful`
       );
       console.log(res.data);
       setOrder(res.data.data);
     } else {
       const res = await userRequest.get(
-        `/user/getFilterShippingOrders?shipperId=${authUser().id
+        `/user/getFilterShippingOrders?shipperId=${
+          authUser().id
         }&statusFilter=successful`
       );
       console.log(res.data);
@@ -176,10 +178,18 @@ const ShipperAllOrders = () => {
                   </Dialog.Title>
 
                   <div className="confirmModalBtns mt-4">
-                    <button type="button" className="border-none cursor-pointer" onClick={() => setAccepted(true)}>
+                    <button
+                      type="button"
+                      className="border-none cursor-pointer"
+                      onClick={() => setAccepted(true)}
+                    >
                       Xác nhận
                     </button>
-                    <button type="button" className="border-none cursor-pointer" onClick={() => closeModal()}>
+                    <button
+                      type="button"
+                      className="border-none cursor-pointer"
+                      onClick={() => closeModal()}
+                    >
                       Hủy
                     </button>
                   </div>
@@ -199,9 +209,9 @@ const ShipperAllOrders = () => {
                 style={
                   type === tab
                     ? {
-                      color: "white",
-                      backgroundColor: "#0088ff",
-                    }
+                        color: "white",
+                        backgroundColor: "#0088ff",
+                      }
                     : {}
                 }
                 key={tab}
@@ -264,7 +274,9 @@ const ShipperAllOrders = () => {
           </div>
           <div className="botBarItem">
             <Link to={`/shipper/shipperPersonalInfo/${authUser().id}`}>
-              <div><Settings /></div>
+              <div>
+                <Settings />
+              </div>
               <div>Tài khoản</div>
             </Link>
           </div>

@@ -149,7 +149,7 @@ const AdminDashboard = () => {
             <div className="adminLowerItem">
               <h3>
                 <PercentageOutlined />
-                Tỉ lệ đơn
+                Tỉ lệ đơn trong ngày
               </h3>
               <div
                 className="flex justify-center"
