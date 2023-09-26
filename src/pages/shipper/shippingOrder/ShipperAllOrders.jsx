@@ -81,6 +81,7 @@ const ShipperAllOrders = () => {
 
   useEffect(() => {
     handleUpdateFinalStatus();
+    getOrders(type);
   }, [isAccepted]);
 
   const handleChangeStatus = async (index) => {

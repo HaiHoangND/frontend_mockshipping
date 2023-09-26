@@ -1,10 +1,6 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { WarningAmber } from "@mui/icons-material";
-import { Modal, Input } from "antd";
+
+import { Modal, Input, Select } from "antd";
 import { Fragment, useState, useEffect } from "react";
-
-
-
 
 export const ShipperModal = ({
     InitiateComponent,
@@ -15,8 +11,6 @@ export const ShipperModal = ({
     typeName
 }) => {
     let [isOpen, setIsOpen] = useState(false);
-    let [isOpenPass, setIsOpenPass] = useState(false);
-
     const [info, setInfo] = useState('');
 
     useEffect(() => {
@@ -44,30 +38,75 @@ export const ShipperModal = ({
         });
     };
 
+    const onChangeGender = (e) => {
+        console.log(info);
+        setInfo({
+            ...info,
+            [[typeName]]: e,
+        });
+    };
+
+
     return (
-        <>
+        <Fragment>
             <div onClick={openModal} style={{ cursor: "pointer" }}>
                 <InitiateComponent />
             </div>
+            {typeName && typeName !== "gender" ? (
+                <Modal
+                    title={`Thay đổi ${warningContent}`}
+                    open={isOpen}
+                    onOk={handleConfirm}
+                    onCancel={closeModal}
+                    cancelText="Hủy"
+                    okText="Cập nhật"
+                    width={570}
+                >
 
-            <Modal
-                title={`Thay đổi ${warningContent}`}
-                open={isOpen}
-                onOk={handleConfirm}
-                onCancel={closeModal}
-                cancelText="Hủy"
-                okText="Cập nhật"
-                width={570}
-            >
-                <div className="mt-2">
-                    <div className='orderTitle'>{titleContent}</div>
-                    <div className='orderItem'>
-                        <Input placeholder={parameters[typeName]} onChange={onChange} />
+
+                    <div className="mt-2">
+                        <div className='orderTitle'>{titleContent}</div>
+                        <div className='orderItem'>
+                            <Input placeholder={parameters[typeName]} onChange={onChange} />
+                        </div>
                     </div>
-                </div>
-            </Modal>
+                </Modal>
+            ) : (
+                <Modal
+                    title={`Thay đổi ${warningContent}`}
+                    open={isOpen}
+                    onOk={handleConfirm}
+                    onCancel={closeModal}
+                    cancelText="Hủy"
+                    okText="Cập nhật"
+                    width={570}
+                >
+                    <div className="mt-2">
+                        <div className='orderTitle'>{titleContent}</div>
+                        <div className='orderItem'>
+                            <Select
+                                defaultValue={parameters[typeName]}
+                                style={{
+                                    width: 120,
+                                }}
+                                onChange={onChangeGender}
+                                options={[
+                                    {
+                                        value: 'Nam',
+                                        label: 'Nam',
+                                    },
+                                    {
+                                        value: 'Nữ',
+                                        label: 'Nữ',
+                                    },
+                                ]}
+                            />
 
-
-        </>
+                        </div>
+                    </div>
+                </Modal>
+            )
+            }
+        </Fragment>
     );
 };
