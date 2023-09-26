@@ -9,7 +9,7 @@ export const OrderDetailPersonalInfo = ({ person, type }) => {
       </div>
       <div className="orderDetailPersonalInfoItem">
         <span>Tên:</span>
-        <span>{person.name}</span>
+        <span>{type === "Người gửi" ? person.fullName : person.name}</span>
       </div>
       <div className="orderDetailPersonalInfoItem">
         <span>Địa chỉ:</span>

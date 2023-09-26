@@ -342,6 +342,12 @@ const OrderDetail = () => {
               </div>
               <div className="orderDetailJourneyContent">
                 <div className="orderDetailShipperDetail">
+                  {(role === "ADMIN" || role === "COORDINATOR") && (
+                    <OrderDetailPersonalInfo
+                      person={order.shopOwner}
+                      type={"Người gửi"}
+                    />
+                  )}
                   <OrderDetailPersonalInfo
                     person={order.receiver}
                     type={"Người nhận"}

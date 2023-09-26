@@ -64,8 +64,8 @@ export const ShipperModal = ({
                 >
 
 
-                    <div className="mt-2">
-                        <div className='orderTitle'>{titleContent}</div>
+                    <div className="mt-2 flex items-center">
+                        <div className='orderTitle mr-3'>{titleContent}: </div>
                         <div className='orderItem'>
                             <Input placeholder={parameters[typeName]} onChange={onChange} />
                         </div>
@@ -81,8 +81,8 @@ export const ShipperModal = ({
                     okText="Cập nhật"
                     width={570}
                 >
-                    <div className="mt-2">
-                        <div className='orderTitle'>{titleContent}</div>
+                    <div className="mt-2 flex items-center">
+                        <div className='orderTitle mr-3'>{titleContent}</div>
                         <div className='orderItem'>
                             <Select
                                 defaultValue={parameters[typeName]}
