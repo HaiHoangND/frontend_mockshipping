@@ -189,14 +189,14 @@ const ShipperOrderDetail = () => {
             </div>
             {orderInfo && orderInfo.length !== 0 &&
                 <div className='orderDetailContainer'>
-                    <div className='orderInfo'>
+                    {/* <div className='orderInfo'>
                         <div className='orderTitle'>Giao tới</div>
                         <div className='orderItem'>
                             <Place /> {orderInfo && orderInfo.orderStatusList &&
                                 getArrayLastItem(orderInfo.orderStatusList).orderRoute.address
                             }
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className='orderInfo'>
                         <div className='orderTitle'>Thông tin người nhận</div>

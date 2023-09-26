@@ -2,6 +2,7 @@ import { Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { userRequest } from "../../requestMethods";
 import { useAuthUser } from "react-auth-kit";
+import { InsertEmoticon, SentimentVeryDissatisfied } from "@mui/icons-material";
 
 export const ShopOwnerProductStatTable = ({ type }) => {
   const [productStats, setProductStats] = useState([]);
@@ -26,7 +27,9 @@ export const ShopOwnerProductStatTable = ({ type }) => {
       } else {
         setIsLoading(true);
         const res = await userRequest.get(
-          `/productShop/getBestSelling?ShopOwnerId=${authUser().id}&numberOfProducts=${7}`
+          `/productShop/getBestSelling?ShopOwnerId=${
+            authUser().id
+          }&numberOfProducts=${7}`
         );
         setProductStats(res.data.data);
         setIsLoading(false);
@@ -39,6 +42,17 @@ export const ShopOwnerProductStatTable = ({ type }) => {
   useEffect(() => {
     getProductStats(1);
   }, []);
+
+  let sumSoldProduct;
+
+  if (type !== "soldOut" && productStats.length !== 0) {
+    sumSoldProduct = productStats.map((stat) => {
+      stat.sumSoldProduct;
+    });
+    const sold = sumSoldProduct.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    });
+  }
 
   const columns = [
     {
@@ -61,25 +75,55 @@ export const ShopOwnerProductStatTable = ({ type }) => {
   ];
 
   return (
-    <Table
-      columns={columns}
-      dataSource={productStats}
-      rowKey={(record) =>
-        type === "soldOut" ? record.id : record.productShop.id
-      }
-      loading={isLoading}
-      pagination={
-        type === "soldOut"
-          ? {
-              pageSize: pageSize,
-              current: page,
-              total: totalCount,
-              onChange: (page) => {
-                getProductStats(page);
-              },
-            }
-          : false
-      }
-    />
+    <>
+      {productStats.length === 0 ? (
+        <div style={{ height: "100%" }} className="flex justify-center">
+          <div className="flex items-center">
+            {type === "soldOut" ? (
+              <div className="flex flex-col items-center">
+                <InsertEmoticon
+                  fontSize="inherit"
+                  style={{ fontSize: "50px" }}
+                />
+                <span style={{ fontSize: "20px", marginTop: "10px" }}>
+                  Không có mặt hàng nào sắp hết
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <SentimentVeryDissatisfied
+                  fontSize="inherit"
+                  style={{ fontSize: "50px" }}
+                />
+                <span style={{ fontSize: "20px", marginTop: "10px" }}>
+                  Chưa có đơn hàng nào
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={productStats}
+          rowKey={(record) =>
+            type === "soldOut" ? record.id : record.productShop.id
+          }
+          loading={isLoading}
+          pagination={
+            type === "soldOut"
+              ? {
+                  pageSize: pageSize,
+                  current: page,
+                  total: totalCount,
+                  onChange: (page) => {
+                    getProductStats(page);
+                  },
+                }
+              : false
+          }
+        />
+      )}
+    </>
   );
 };

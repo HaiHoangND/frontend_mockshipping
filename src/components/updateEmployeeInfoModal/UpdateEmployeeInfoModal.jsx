@@ -44,7 +44,6 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
       if (
         !inputs.fullName ||
         !inputs.email ||
-        !inputs.password ||
         !inputs.role ||
         !inputs.address ||
         !inputs.gender ||
@@ -56,7 +55,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
         const res = await publicRequest.post("/register", {
           fullName: inputs.fullName,
           email: inputs.email,
-          password: inputs.password,
+          password: "12345678",
           role: inputs.role,
           address: inputs.address,
           gender: inputs.gender,
@@ -155,6 +154,7 @@ export const UpdateEmployeeInfoModal = ({ employeeInfo, type }) => {
               name="phone"
               placeholder={employeeInfo ? inputs.phone : "0123456789"}
               onChange={handleInputsChange}
+              defaultValue={employeeInfo ? inputs.phone : ""}
             />
           </Form.Item>
           <Form.Item label="Email">
