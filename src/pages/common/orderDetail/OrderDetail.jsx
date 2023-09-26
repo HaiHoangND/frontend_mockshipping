@@ -130,21 +130,6 @@ const OrderDetail = () => {
       </Button>
     );
   };
-  const isDisabled = (type) => {
-    if (order.orderStatusList.length === 0) {
-      return false;
-    } else if (order.orderStatusList[0].status === "Đơn hủy") {
-      return true;
-    } else if (
-      (order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
-        order.orderStatusList[0].status === "Giao hàng thành công") &&
-      (role === "COORDINATOR" || role === "ADMIN" || role === "SHOP")
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   const cancelable = () => {
     if (role !== "ADMIN" && role !== "COORDINATOR") {
@@ -193,6 +178,11 @@ const OrderDetail = () => {
         "Giao hàng thành công" ||
       order.orderStatusList[0].status === "Đã đưa tiền cho chủ shop" ||
       getArrayLastItem(order.orderStatusList).status === "Quản lý đã nhận tiền"
+    ) {
+      return false;
+    } else if (
+      order.orderStatusList[0].status === "Đơn hủy" ||
+      getArrayLastItem(order.orderStatusList).status === "Đơn hủy"
     ) {
       return false;
     } else {

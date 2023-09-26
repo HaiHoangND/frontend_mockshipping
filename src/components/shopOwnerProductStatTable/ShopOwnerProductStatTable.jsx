@@ -86,7 +86,7 @@ export const ShopOwnerProductStatTable = ({ type }) => {
                   style={{ fontSize: "50px" }}
                 />
                 <span style={{ fontSize: "20px", marginTop: "10px" }}>
-                  Không có mặt hàng nào sắp hết
+                  Không có sản phẩm nào sắp hết
                 </span>
               </div>
             ) : (
